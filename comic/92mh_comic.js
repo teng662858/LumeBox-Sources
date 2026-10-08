@@ -25,6 +25,9 @@
 // 仍然保留多套兜底：站点模板换版时先按老结构试，再按新结构试。
 
 var BASE_URL = 'https://www.92mh.com';
+
+// 上一页里站点自己给的「下一页」地址（按分类记，页号对得上才用）。
+var NEXT_PAGE_URL = {};
 var PAGE_SIZE = 30;
 var MAX_CHAPTER_PAGES = 30;
 
@@ -109,15 +112,54 @@ var LumeSource = {
     var keyword = argument && argument.keyword ? String(argument.keyword).trim() : '';
     var category = argument && argument.categoryId ? String(argument.categoryId) : '';
 
-    var url = keyword
-      ? BASE_URL + '/search?q=' + this.__encode(keyword) + (page > 1 ? '&page=' + page : '')
-      : this.__listUrl(category, page);
+    // 分页地址优先用**上一页里站点自己给的「下一页」链接**（同一分类内记住）：
+    // 站点换分页写法（路径式 / 查询串式）都不用改脚本——真机反馈过
+    // 「翻到底就不再加载」，根因就是拼的地址与站点不一致。
+    var url = null;
+    if (!keyword && page > 1) {
+      var key = category || '';
+      var known = NEXT_PAGE_URL[key];
+      if (known && known.page === page) url = known.url;
+    }
+    if (!url) {
+      url = keyword
+        ? BASE_URL + '/search?q=' + this.__encode(keyword) + (page > 1 ? '&page=' + page : '')
+        : this.__listUrl(category, page);
+    }
     var html = await this.__get(url);
     var items = this.__listItems(html);
+    if (!keyword) {
+      var next = this.__nextPageUrl(html, page);
+      if (next) {
+        NEXT_PAGE_URL[category || ''] = { page: page + 1, url: next };
+      }
+    }
     return {
       items: items,
       hasMore: this.__hasNextPage(html, page) || items.length >= PAGE_SIZE
     };
+  },
+
+  /// 从这一页里就地取「下一页」地址：`a[rel=next]`、文案是「下一页」的链接，
+  /// 或指向 `.../{page+1}/` 的链接。取不到返回空串（调用方照旧自己拼）。
+  __nextPageUrl(html, page) {
+    var wanted = page + 1;
+    var patterns = [
+      /<a[^>]+rel=["']next["'][^>]+href=["']([^"']+)["']/i,
+      /<a[^>]+href=["']([^"']+)["'][^>]*>[^<]{0,6}下一页/i
+    ];
+    for (var i = 0; i < patterns.length; i++) {
+      var found = this.__match(html, patterns[i]);
+      if (found) return this.__absolute(found);
+    }
+    var escaped = String(wanted);
+    // 指向第 page+1 页的链接（路径式 `.../{n}/` 或查询串式 `page={n}`）。
+    // 用双引号包正则、内部单双引号各自转义——单引号串里塞 `["']` 会把自己截断。
+    var link = this.__match(
+      html,
+      new RegExp('href=["\\\']([^"\\\']*(?:/' + escaped + '/|page=' + escaped + ')[^"\\\']*)["\\\']', 'i')
+    );
+    return link ? this.__absolute(link) : '';
   },
 
   async detail(argument) {
