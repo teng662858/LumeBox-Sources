@@ -17,7 +17,7 @@ function loadSource(file) {
 
 test('daniao5 ranking snapshot parses title-before-href anchors', async function () {
   var source = loadSource('daniao5_comic.js');
-  var html = fs.readFileSync(path.join(__dirname, '..', 'daniao5.html'), 'utf8');
+  var html = fs.readFileSync(path.join(__dirname, '..', 'snapshots', 'daniao5.html'), 'utf8');
   // The checked-in file is the homepage snapshot. Restrict it to the embedded
   // ranking section so the normal update cards cannot satisfy the first parser.
   var rankingStart = html.indexOf('<div class="rank_hom');
