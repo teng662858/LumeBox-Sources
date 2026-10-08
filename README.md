@@ -11,7 +11,8 @@ LumeBox 的内置源**不随 App 打包**，统一放在这里。App 侧「导�
 | 漫画 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/sources.js` |
 | 视频 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/sources.js` |
 
-`sources.js` 是**地址清单**：一行一个脚本地址（`//` 开头是注释）。App 认得两种订阅：
+>`sources.js` 是**地址清单**：一行一个脚本地址（`//` 开头是注释）。同目录下的
+>`sources.txt` 是**同内容别名**，给早前拿到的旧链接用——两个地址都能拉。App 认得两种订阅：
 **正文就是脚本**，或**正文是一行一个地址的清单**——所以这一个链接会把这板块的
 源全部拉进来。想只订某一个源，直接粘那个源的 `.js` 地址（见下表）。
 
