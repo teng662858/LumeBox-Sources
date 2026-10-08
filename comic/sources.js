@@ -8,3 +8,4 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/92mh_com
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/daniao5_comic.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/p5mh_comic.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/seyoumanhua_comic.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/nnhanman_comic.js
