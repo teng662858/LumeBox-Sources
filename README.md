@@ -25,6 +25,7 @@ LumeBox 的内置源**不随 App 打包**，统一放在这里。App 侧「导�
 | P5漫画 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/p5mh_comic.js` |
 | 色友漫画 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/seyoumanhua_comic.js` |
 | NN韩漫 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/nnhanman_comic.js` |
+| 18禁漫 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/jm18_comic.js` |
 | CA情色小说 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/99xs_novel.js` |
 | xChina 小说 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/xchina_novel.js` |
 | X小说 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/xxiaoshuo_novel.js` |
@@ -59,7 +60,8 @@ tools/   快照自检脚本（Node：node --test tools/snapshot_test.js）
 | comic/daniao5_comic.js | `daniao5_comic` | 大鸟禁漫 | 2.0.0 | 直连可用 |
 | comic/p5mh_comic.js | `p5mh_comic` | P5漫画 | 1.0.0 | 直连可用 |
 | comic/seyoumanhua_comic.js | `seyoumanhua_comic` | 色友漫画 | 1.0.0 | 直连可用 |
-| comic/nnhanman_comic.js | `nnhanman_comic` | NN韩漫 | 1.0.0 | 容错解析版（写脚本时本机到不了该站，见文件头） |
+| comic/nnhanman_comic.js | `nnhanman_comic` | NN韩漫 | 1.2.0 | qTcms 手机模板：解析按**真站快照**写（列表走 `/comics/<类>/ob/time/st/all/page/N`，封面 `img src`） |
+| comic/jm18_comic.js | `jm18_comic` | 18禁漫 | 1.0.0 | MacCMS + conch 主题：列表 `li.hl-list-item`（封面只在 `data-original`）、`/comic-lists/{类}/ob/time/st/all/page/N` 分页 |
 | novel/99xs_novel.js | `99xs_novel` | CA情色小说 | 2.1.0 | 根路径有「继续访问」拦截页，源自带 cookie |
 | novel/xchina_novel.js | `xchina_novel` | xChina 小说 | 1.0.0 | 详情/正文常被 CF 拦：抛标记走网页视图 |
 | novel/xxiaoshuo_novel.js | `xxiaoshuo_novel` | X小说 | 1.0.0 | 直连可用 |
