@@ -1,6 +1,9 @@
 // LumeSource: {"id":"daniao5_comic","name":"大鸟禁漫","version":"2.0.0","category":"comic"}
 
 var BASE_URL = 'https://daniao5.com';
+// 首页软截止：超过这个耗时就不再抓后面的板块，先把已有内容交出去。
+// 沙箱默认预算 10 秒（含网络等待），留一半给「解析 + 回传」。
+var SOFT_DEADLINE_MS = 4500;
 
 var LumeSource = {
   id: 'daniao5_comic',
@@ -17,15 +20,46 @@ var LumeSource = {
   /// 标题由本脚本给出（App 不硬编码）；`moreUrl` 是「更多」的标识，用户在首页点
   /// 「更多」时 App 会带着它回头调 `list({categoryId: 'moreUrl'})`——这里直接复用
   /// 本站自己的分类 id（`new` / `rank`），所以「更多」进来就是同一个列表的分页。
+  /// 首页 = 两个板块（最新更新 + 排行榜）。
+  ///
+  /// **容错口径**（真机反馈：首页报「执行超时:调用超时」整块空白）：
+  /// 沙箱对一次调用是一份**含网络等待**的墙钟预算，两个板块各来一次慢请求就顶满了。
+  /// 因此这里：
+  ///   1. 每个板块各自 try/catch ——一个板块慢/失败，另一个照常出；
+  ///   2. 每个板块都设**软截止**（SOFT_DEADLINE_MS）：第一个板块拖太久就直接收工，
+  ///      把已经拿到的内容交给 App，不赌第二个板块能在预算内回来；
+  ///   3. 拿不到任何板块时抛错（界面照旧给重试），绝不返回「假成功」的空首页。
   async home() {
+    var started = Date.now();
     var boards = [];
-    var fresh = await this.list({ categoryId: 'new', page: 1 });
-    if (fresh && fresh.items && fresh.items.length) {
-      boards.push({ title: '最新更新', moreUrl: 'new', items: fresh.items.slice(0, 12) });
+    var errors = [];
+    var plans = [
+      { category: 'new', title: '最新更新' },
+      { category: 'rank', title: '排行榜' }
+    ];
+    for (var i = 0; i < plans.length; i++) {
+      var elapsed = Date.now() - started;
+      // 已经花掉大半预算：先把手上这些交出去（剩下的下次进首页再补）。
+      if (boards.length && elapsed > SOFT_DEADLINE_MS) {
+        console.warn('[daniao5] 首页软截止（已 ' + elapsed + 'ms），返回 ' + boards.length + ' 个板块');
+        break;
+      }
+      try {
+        var board = await this.list({ categoryId: plans[i].category, page: 1 });
+        if (board && board.items && board.items.length) {
+          boards.push({
+            title: plans[i].title,
+            moreUrl: plans[i].category,
+            items: board.items.slice(0, 12)
+          });
+        }
+      } catch (error) {
+        errors.push(plans[i].category + ': ' + error);
+        console.warn('[daniao5] 首页板块失败（' + plans[i].category + '）：' + error);
+      }
     }
-    var rank = await this.list({ categoryId: 'rank', page: 1 });
-    if (rank && rank.items && rank.items.length) {
-      boards.push({ title: '排行榜', moreUrl: 'rank', items: rank.items.slice(0, 12) });
+    if (!boards.length) {
+      throw new Error('大鸟禁漫：首页两个板块都没拿到（' + (errors.join('；') || '站点没返回条目') + '）');
     }
     return boards;
   },
