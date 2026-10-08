@@ -21,7 +21,6 @@ LumeBox 的内置源**不随 App 打包**，统一放在这里。App 侧「导�
 | 源 | 订阅地址 |
 |----|----------|
 | 92漫画 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/92mh_comic.js` |
-| 大鸟禁漫 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/daniao5_comic.js` |
 | P5漫画 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/p5mh_comic.js` |
 | 色友漫画 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/seyoumanhua_comic.js` |
 | NN韩漫 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/nnhanman_comic.js` |
@@ -32,7 +31,6 @@ LumeBox 的内置源**不随 App 打包**，统一放在这里。App 侧「导�
 | 瓜子影视 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/gztv5_video.js` |
 | 大哥视频 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/dage_video.js` |
 | 北觅影视 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/luttt_video.js` |
-| 金牌影院 | `https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/vv3nwjk_video.js` |
 
 要点：
 
@@ -57,7 +55,6 @@ tools/   快照自检脚本（Node：node --test tools/snapshot_test.js）
 | 文件 | id | 名称 | 版本 | 备注 |
 |------|----|------|------|------|
 | comic/92mh_comic.js | `mh92_comic` | 92漫画 | 1.0.0 | 整站 Cloudflare：被拦时抛 `NEED_WEBVIEW_VERIFY`，App 拉起网页视图过校验 |
-| comic/daniao5_comic.js | `daniao5_comic` | 大鸟禁漫 | 2.0.0 | 直连可用 |
 | comic/p5mh_comic.js | `p5mh_comic` | P5漫画 | 1.0.0 | 直连可用 |
 | comic/seyoumanhua_comic.js | `seyoumanhua_comic` | 色友漫画 | 1.0.0 | 直连可用 |
 | comic/nnhanman_comic.js | `nnhanman_comic` | NN韩漫 | 1.2.0 | qTcms 手机模板：解析按**真站快照**写（列表走 `/comics/<类>/ob/time/st/all/page/N`，封面 `img src`） |
@@ -68,7 +65,6 @@ tools/   快照自检脚本（Node：node --test tools/snapshot_test.js）
 | video/gztv5_video.js | `gztv5_video` | 瓜子影视 | 3.0.0 | Nuxt SPA + 独立 API；偶发 CF |
 | video/dage_video.js | `dage_video` | 大哥视频 | 2.3.0 | 响应是「编码信封」，脚本内含纯 JS 解码 |
 | video/luttt_video.js | `luttt_video` | 北觅影视 | 1.0.0 | 苹果CMS，直连可用 |
-| video/vv3nwjk_video.js | `vv3nwjk_video` | 金牌影院 | 1.0.1 | reCAPTCHA v3 WAF：抛 `WAF_RECAPTCHA_V3`，需配桥接服务 |
 
 ## 写一个源（契约速查）
 
