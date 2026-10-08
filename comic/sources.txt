@@ -1,0 +1,8 @@
+# LumeBox comic 源订阅清单
+# 一行一个地址；App 里「导入 → 订阅地址」粘贴本文件的 raw 地址即可。
+# 每份脚本记自己的来源地址，之后「更新订阅源」按各自地址更新。
+
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/92mh_comic.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/daniao5_comic.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/p5mh_comic.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/seyoumanhua_comic.js
