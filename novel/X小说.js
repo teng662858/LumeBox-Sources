@@ -28,16 +28,22 @@ var LumeSource = {
   category: 'novel',
 
   async categories() {
-    return [
-      { id: 'books', title: '全部小说' },
-      { id: 'category-1', title: '短篇情色' },
-      { id: 'category-2', title: '长篇情色' },
-      { id: 'category-3', title: '人妻美妇' },
-      { id: 'category-8', title: '都市小说' },
-      { id: 'category-11', title: '奇幻小说' },
-      { id: 'category-23', title: '粗野性交' },
-      { id: 'category-48', title: '学生校园' }
-    ];
+    // 分类从站点**导航**实时读，不写死：站点自己有 50 多个 `/category/N`
+    // （先前写死 8 个，用户看到的就是「分类筛选不全」）。
+    // id 用 `category-N`，列表侧 __listPath 认这个形状拼 `/category/N`。
+    var html = await this.__get(BASE_URL + '/books');
+    var pattern = /<a href="\/category\/(\d+)"[^>]*>([^<]{1,30})<\/a>/g;
+    var result = [{ id: 'books', title: '全部小说' }];
+    var seen = {};
+    var match;
+    while ((match = pattern.exec(html)) !== null) {
+      var id = 'category-' + match[1];
+      if (seen[id]) continue;
+      seen[id] = true;
+      var title = this.__clean(match[2]);
+      if (title) result.push({ id: id, title: title });
+    }
+    return result;
   },
 
   async home() {

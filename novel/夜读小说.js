@@ -74,6 +74,19 @@ var LumeSource = {
       var title = this.__clean(match[2]) || slug;
       result.push({ id: slug, title: title });
     }
+    // 补宫格之外的标签：`audio`（有声小说）只在顶部工具条与区块标题里出现，
+    // class 不是 home-tag-pill，只按药丸抓会漏掉它（实测分类少一个）。
+    // 只补 __tagTitle 认得（有中文名）的 slug，不往分类里塞没见过的标签。
+    var extra = /<a[^>]+href="\/tag\/([a-z0-9-]+)"/g;
+    var more;
+    while ((more = extra.exec(html)) !== null) {
+      var other = more[1];
+      if (!other || seen[other]) continue;
+      var known = this.__tagTitle(other);
+      if (known === other) continue;
+      seen[other] = true;
+      result.push({ id: other, title: known });
+    }
     return result;
   },
 

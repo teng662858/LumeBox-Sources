@@ -10,3 +10,14 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/中文�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/HHH书屋.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/爱丽丝书屋.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/禁书阁.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/追书神器吧.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/完本神站.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/精品小说网.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/无忧小说网.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/PO18.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/随看书.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/顶点小说.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/101小说.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/PO文屋.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/采墨阁.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/novel/小說狂人.js

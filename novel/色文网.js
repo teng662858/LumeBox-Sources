@@ -13,10 +13,21 @@ var H = {
   get: async function(u) {return this.response(await LumeSource.http.get(this.abs(u,this.base+'/'),{headers:this.headers()}));},
   post: async function(u,data) {var h=this.headers();h['Content-Type']='application/x-www-form-urlencoded';h['X-Requested-With']='XMLHttpRequest';return this.response(await LumeSource.http.post(this.abs(u,this.base+'/'),data,{headers:h}));},
   json: async function(u) {try{return JSON.parse(await this.get(u));}catch(e){if(/NEED_WEBVIEW_VERIFY|HTTP/.test(String(e)))throw e;throw new Error(this.name+'：数据格式已变化');}},
-  tree: function(html) {html=String(html).replace(/<!--[^]*?-->/g,'').replace(/<script\b[^]*?<\/script>|<style\b[^]*?<\/style>/gi,'');var root={tag:'root',attrs:{},children:[],raw:''},stack=[root],re=/<\/?([a-z][\w:-]*)\b([^>]*)>|([^<]+)/gi,m;while((m=re.exec(html))){var parent=stack[stack.length-1];if(m[3]){parent.children.push({tag:'#text',raw:m[3],attrs:{},children:[]});continue;}var tag=m[1].toLowerCase();if(m[0].charAt(1)==='/'){for(var i=stack.length-1;i>0;i--)if(stack[i].tag===tag){stack.length=i;break;}continue;}var attrs={},ar=/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g,a;while((a=ar.exec(m[2])))attrs[a[1].toLowerCase()]=H.entity(a[2]!==undefined?a[2]:a[3]!==undefined?a[3]:a[4]);var node={tag:tag,attrs:attrs,children:[],raw:'',parent:parent};parent.children.push(node);if(!/^(?:img|input|br|hr|meta|link|source|area|embed|wbr)$/.test(tag)&&! /\/$/.test(m[2]))stack.push(node);}return root;},
-  all: function(node,pred) {var out=[];function visit(n){if(pred(n))out.push(n);if(n.tag==='script'||n.tag==='style')return;n.children.forEach(visit);}visit(node);return out;},
+  // 剔除注释与 script/style 块：用 indexOf 扫描，**不用**懒惰星号正则。
+  // QuickJS 的正则回溯是递归实现，`<!--[^]*?-->` / `<script[^]*?</script>`
+  // 在长内联脚本上会一路递归吃栈，页面到几万字节就抛
+  // `RangeError: Maximum call stack size exceeded`（实测 aaccoo / 色文网 的
+  // 列表页必挂，整块解析失败）——「列表/分类空白」的根因之一。
+  prune: function(html) {var s=String(html),out='',i=0;while(i<s.length){var lt=s.indexOf('<',i);if(lt<0){out+=s.slice(i);break;}out+=s.slice(i,lt);if(s.substr(lt,4)==='<!--'){var ce=s.indexOf('-->',lt+4);i=ce<0?s.length:ce+3;continue;}var low=s.substr(lt,8).toLowerCase();var nm=low.indexOf('<script')===0?'script':(low.indexOf('<style')===0?'style':'');if(nm){var nb=low.charAt(nm.length+1);if(nb&&nb!=='>'&&nb!=='/'&&nb!==' '&&nb!=='\t'&&nb!=='\n')nm='';}if(nm){var cl=s.toLowerCase().indexOf('</'+nm,lt);if(cl<0){i=s.length;break;}var gt=s.indexOf('>',cl);i=gt<0?s.length:gt+1;continue;}out+='<';i=lt+1;}return out;},
+  tree: function(html) {html=this.prune(html);var root={tag:'root',attrs:{},children:[],raw:''},stack=[root],re=/<\/?([a-z][\w:-]*)\b([^>]*)>|([^<]+)/gi,m;while((m=re.exec(html))){var parent=stack[stack.length-1];if(m[3]){parent.children.push({tag:'#text',raw:m[3],attrs:{},children:[]});continue;}var tag=m[1].toLowerCase();if(m[0].charAt(1)==='/'){for(var i=stack.length-1;i>0;i--)if(stack[i].tag===tag){stack.length=i;break;}continue;}var attrs={},ar=/([\w:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g,a;while((a=ar.exec(m[2])))attrs[a[1].toLowerCase()]=H.entity(a[2]!==undefined?a[2]:a[3]!==undefined?a[3]:a[4]);var node={tag:tag,attrs:attrs,children:[],raw:'',parent:parent};parent.children.push(node);if(!/^(?:img|input|br|hr|meta|link|source|area|embed|wbr)$/.test(tag)&&! /\/$/.test(m[2]))stack.push(node);}return root;},
+  // 遍历改成**显式栈**：QuickJS 的可用递归深度很小（实测这个沙箱里普通函数只能
+  // 递归约 20 层、带 forEach 的约 10 层），而真实页面随便就有 9~14 层嵌套——
+  // 原来的 `visit` 递归在列表页必抛 RangeError，整块解析失败（列表/分类全空）。
+  all: function(node,pred) {var out=[],stack=[node];while(stack.length){var n=stack.pop();if(pred(n))out.push(n);if(n.tag==='script'||n.tag==='style')continue;var ch=n.children;for(var i=ch.length-1;i>=0;i--)stack.push(ch[i]);}return out;},
   cls: function(n,c) {return (' '+(n.attrs.class||'')+' ').indexOf(' '+c+' ')>=0;},
-  text: function(node) {if(!node)return '';if(node.tag==='#text')return this.entity(node.raw);if(node.tag==='script'||node.tag==='style')return '';return this.clean(node.children.map(function(n){return H.text(n);}).join(/^(?:p|div|section|article|li|br)$/.test(node.tag)?'\n':''));},
+  // 同上：`text` 原来是按层递归拼孩子，改成一棵显式帧栈的后序聚合（先算完孩子再拼，
+  // 与递归版逐个字符等价）。
+  text: function(node) {if(!node)return '';var frames=[{n:node,i:0,parts:[]}],result='';while(frames.length){var fr=frames[frames.length-1],n=fr.n,t=n.tag;if(t==='#text'){var leaf=this.entity(n.raw);frames.pop();if(frames.length)frames[frames.length-1].parts.push(leaf);else result=leaf;continue;}if(t==='script'||t==='style'){frames.pop();if(frames.length)frames[frames.length-1].parts.push('');else result='';continue;}var ch=n.children;if(fr.i<ch.length){frames.push({n:ch[fr.i++],i:0,parts:[]});continue;}var joined=fr.parts.join(/^(?:p|div|section|article|li|br)$/.test(t)?'\n':'');var done=this.clean(joined);frames.pop();if(frames.length)frames[frames.length-1].parts.push(done);else result=done;}return result;},
   first: function(node,pred) {return this.all(node,pred)[0];},
   links: function(node,pattern) {return this.all(node,function(n){return n.tag==='a'&&pattern.test(n.attrs.href||'');});},
   image: function(node) {var img=this.first(node,function(n){return n.tag==='img';});return img?this.abs(img.attrs['data-original']||img.attrs['data-src']||img.attrs['data-lazy-src']||img.attrs.src,this.base+'/'):null;},
@@ -32,7 +43,9 @@ H.base="https://www.book18.org";H.name="色文网";
 var LumeSource={id:"book18_novel",name:"色文网",version:"1.0.1",category:"novel",
 async home(){var r=await this.list({page:1});return [{title:'最新',items:r.items.slice(0,12)}];},
 
-async categories(){var t=H.tree(await H.get('/'));return [{id:'/',title:'最新'}].concat(H.unique(H.links(t,/^\/category\/\d+$/).map(function(n){return {id:n.attrs.href,title:H.text(n)};})));},
+// 分类名后面站点自己带了个收录数（`都市激情 (22445)`），
+// 那不是分类名，抹掉——否则筛选面板里每个分类都拖着一串数字。
+async categories(){var t=H.tree(await H.get('/'));return [{id:'/',title:'最新'}].concat(H.unique(H.links(t,/^\/category\/\d+$/).map(function(n){return {id:n.attrs.href,title:H.text(n).replace(/\s*[（(]\s*\d+\s*[)）]\s*$/,'')};})));},
 async list(a){a=a||{};var p=Number(a.page)||1;var u=a.categoryId||'/';u+=(u.indexOf('?')>=0?'&':'?')+'page='+p+(a.keyword?'&q='+encodeURIComponent(a.keyword):'');var t=H.tree(await H.get(u));var items=H.unique(H.links(t,/^\/chapters\//).map(function(n){return {id:n.attrs.href,title:H.text(n),cover:H.image(n),coverHeaders:H.headers()};}));return {items:items,hasMore:H.next(t,p)};},
 async detail(a){var t=H.tree(await H.get(a.id));return {id:a.id,title:H.title(t),cover:H.cover(t),coverHeaders:H.headers()};},
 async chapters(a){var t=H.tree(await H.get(a.id));var scope=H.first(t,function(n){return n.tag==='ul'&&H.cls(n,'list-group');})||t;return H.unique(H.links(scope,/^\/\d+$/).map(function(n){return {id:n.attrs.href,title:H.text(n)};}));},
