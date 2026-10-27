@@ -30,3 +30,5 @@ node --test $sourceTests
 ## 线路
 
 `subscriptions/all.json` 是原站总订阅；`subscriptions/cdn/all.json` 是国内 CDN 总订阅，子清单和脚本也走 CDN。可用性取决于当地网络；CDN 更新可能延迟。
+
+推送到`main`后，发布工作流会刷新本次变更的CDN脚本和清单，检查各服务商的确认结果。发布后仍需抽查国内镜像实际返回的源版本。详见[CDN更新说明](CDN更新说明.md)。

@@ -1,0 +1,29 @@
+name: Refresh domestic subscription CDN
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: source-cdn-publication
+  cancel-in-progress: false
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify CDN publishing logic
+        run: python3 -m unittest discover -s tools -p test_cdn_purge.py -v
+      - name: Refresh every changed script and manifest
+        env:
+          SOURCE_REPOSITORY: ${{ github.repository }}
+          SOURCE_BEFORE: ${{ github.event.before }}
+          SOURCE_AFTER: ${{ github.sha }}
+        run: python3 tools/purge_cdn_cache.py --repository "$SOURCE_REPOSITORY" --before "$SOURCE_BEFORE" --after "$SOURCE_AFTER"
