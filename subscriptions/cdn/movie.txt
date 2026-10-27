@@ -1,5 +1,6 @@
 # 影视
 # 自动生成；修改脚本后运行 python tools/build_catalog.py
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/movie/360资源站.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/movie/A123TV.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/movie/北觅影视.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/movie/华视影院.js

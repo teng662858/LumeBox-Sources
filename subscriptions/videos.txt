@@ -1,5 +1,6 @@
 # videos
 # 自动生成；修改脚本后运行 python tools/build_catalog.py
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/360资源站.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/A123TV.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/北觅影视.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/华视影院.js
@@ -49,6 +50,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ThePornJ
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/TwiXive推特.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/TXXX.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/UNCams.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ViralPorn.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/VoyeurHit.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/xHamster.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/xHamsterLive.js
@@ -66,6 +68,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/啪啪�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/嗨碰.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/四虎.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/大哥视频.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/奶香香资源网.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/好妻网.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/好色TV.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Fcw.js
@@ -75,6 +78,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/成人�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/月色视频.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/杏吧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/查特直播.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/栀莲短剧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/汤头条.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js
@@ -82,6 +86,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.j
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/绅游巴士.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蜜糖助眠.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/逆次元ACG.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/野果短剧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/麻豆社.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/黄果剧场.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/13听书网.js

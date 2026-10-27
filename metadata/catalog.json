@@ -4,8 +4,8 @@
   "counts": {
     "comic": 49,
     "photo": 4,
-    "movie": 10,
-    "video": 74,
+    "movie": 11,
+    "video": 78,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -647,6 +647,18 @@
       "iconDeclared": true
     },
     {
+      "id": "web-07a5a1a92631",
+      "name": "360资源站",
+      "version": "1.0.1",
+      "kind": "movie",
+      "appSection": "video",
+      "path": "movie/360资源站.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/360资源站.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": false
+    },
+    {
       "id": "a123tv",
       "name": "A123TV",
       "version": "1.0.0",
@@ -1235,6 +1247,18 @@
       "iconDeclared": false
     },
     {
+      "id": "web-c2a8ddefdb15",
+      "name": "ViralPorn",
+      "version": "1.0.1",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/ViralPorn.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ViralPorn.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
       "id": "voyeurhit_video",
       "name": "VoyeurHit",
       "version": "1.0.0",
@@ -1439,6 +1463,18 @@
       "iconDeclared": false
     },
     {
+      "id": "web-73acc40f9217",
+      "name": "奶香香资源网",
+      "version": "1.0.1",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/奶香香资源网.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/奶香香资源网.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
       "id": "haoqi7_video",
       "name": "好妻网 18+",
       "version": "1.0.0",
@@ -1547,6 +1583,18 @@
       "iconDeclared": false
     },
     {
+      "id": "zhilian-duanju",
+      "name": "栀莲短剧",
+      "version": "1.0.1",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/栀莲短剧.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/栀莲短剧.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "tangtoutiao_video",
       "name": "汤头条 18+",
       "version": "1.0.0",
@@ -1626,6 +1674,18 @@
       "appSection": "video",
       "path": "video/逆次元ACG.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/逆次元ACG.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "web-1e3f9c2e80c4",
+      "name": "野果短剧",
+      "version": "1.0.2",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/野果短剧.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/野果短剧.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
