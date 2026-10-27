@@ -4,8 +4,8 @@
   "counts": {
     "comic": 50,
     "photo": 5,
-    "movie": 11,
-    "video": 88,
+    "movie": 12,
+    "video": 89,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -743,6 +743,18 @@
       "iconDeclared": true
     },
     {
+      "id": "gaze_video",
+      "name": "注视影视",
+      "version": "1.0.0",
+      "kind": "movie",
+      "appSection": "video",
+      "path": "movie/注视影视.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/注视影视.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": false
+    },
+    {
       "id": "gztv5_video",
       "name": "瓜子影视",
       "version": "3.1.1",
@@ -1254,6 +1266,18 @@
       "appSection": "video",
       "path": "video/SpankBang.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/SpankBang.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "theavporn_video",
+      "name": "TheAVPorn",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/TheAVPorn.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/TheAVPorn.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
