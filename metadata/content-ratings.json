@@ -71,6 +71,9 @@
     "fuzhaiboylove_comic": {
       "rating": "18+"
     },
+    "fxcomic_comic": {
+      "rating": "18+"
+    },
     "gamebus_comic": {
       "rating": "18+"
     },
@@ -227,6 +230,9 @@
     "nnhanman_comic": {
       "rating": "18+"
     },
+    "p5mh_comic": {
+      "rating": "18+"
+    },
     "p85_video": {
       "rating": "18+"
     },
@@ -281,6 +287,9 @@
     "tangtoutiao_video": {
       "rating": "18+"
     },
+    "tanhua_video": {
+      "rating": "18+"
+    },
     "thepornjoy_video": {
       "rating": "18+"
     },
@@ -300,6 +309,15 @@
       "rating": "18+"
     },
     "voyeurhit_video": {
+      "rating": "18+"
+    },
+    "web-1e3f9c2e80c4": {
+      "rating": "18+"
+    },
+    "web-73acc40f9217": {
+      "rating": "18+"
+    },
+    "web-c2a8ddefdb15": {
       "rating": "18+"
     },
     "wnacg_comic": {
@@ -365,25 +383,10 @@
     "yunlaopo_video": {
       "rating": "18+"
     },
-    "zoosexfarm_video": {
-      "rating": "18+"
-    },
-    "web-73acc40f9217": {
-      "rating": "18+"
-    },
-    "web-1e3f9c2e80c4": {
-      "rating": "18+"
-    },
     "zhilian-duanju": {
       "rating": "18+"
     },
-    "web-c2a8ddefdb15": {
-      "rating": "18+"
-    },
-    "fxcomic_comic": {
-      "rating": "18+"
-    },
-    "p5mh_comic": {
+    "zoosexfarm_video": {
       "rating": "18+"
     }
   },
@@ -482,6 +485,7 @@
     "cg1_video": "91吃瓜视频（www.91cg1.com 短片板块，成人吃瓜短片，全站 18+）",
     "betareel_video": "BetaTok（betareel.com，竖屏成人短片 Feed，Firebase paidspace 项目）",
     "gamebus_comic": "绅游巴士漫画（gamebus001.cc，H 漫板块，全站 18+）",
-    "gamebus_video": "绅游巴士（gamebus001.cc，成人短片板块，全站 18+）"
+    "gamebus_video": "绅游巴士（gamebus001.cc，成人短片板块，全站 18+）",
+    "tanhua_video": "探花视频.com / 91大神.com（同一套内容库的两个域名，吃瓜探花类成人短片，全站 18+）"
   }
 }

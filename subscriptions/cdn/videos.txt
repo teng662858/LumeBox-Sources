@@ -75,6 +75,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/Fcw.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/快猫.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/快猫镜像站.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/成人动漫.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/探花视频.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/月色视频.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/杏吧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/查特直播.js
