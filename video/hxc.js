@@ -1,9 +1,12 @@
-// LumeSource: {"id":"h4dh3_video","name":"hxc 18+","version":"1.0.0","category":"video","mirrors":["https://www.h4dh3.com","https://a84i.ux51l.com","https://a96u.t3nwc.com"]}
+// LumeSource: {"id":"h4dh3_video","name":"hxc 18+","version":"1.0.1","category":"video","mirrors":["https://www.h4dh3.com","https://a84i.ux51l.com","https://a96u.t3nwc.com"]}
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 一、站点与前端（2026-10-25 实测）
 // ════════════════════════════════════════════════════════════════════════════
-//   页面宿主  https://www.h4dh3.com/home      （title = hxc，4.6KB 空壳）
+//   页面宿主  https://www.h4dh3.com/home      （title = hxc，4.4KB 空壳）
+//   同后端壳  https://www.d2y7j.com/home      （title = 含羞草，HTML 与 h4dh3 **逐字节相同**，
+//                                              静态资源 / 接口主机 / 播放器全一样；2026-10-27 复核）
+//   注：mirrors 里放的是**接口主机**（a84i / a96u），不是页面壳；换壳域名不影响本源
 //   静态资源  https://j04l.nasuiyile.com/pc/  （Vue3 + Vite，index.412ae7a8.js 930KB，
 //                                                播放器 ckplayer，另有 jumpOfDeviceType）
 //   接口主机  https://a84i.ux51l.com / https://a96u.t3nwc.com   ← 前端里写死的两台
