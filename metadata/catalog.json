@@ -2,10 +2,10 @@
   "format": "lume.source-catalog",
   "version": 1,
   "counts": {
-    "comic": 49,
-    "photo": 4,
+    "comic": 50,
+    "photo": 5,
     "movie": 11,
-    "video": 82,
+    "video": 83,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -282,6 +282,18 @@
       "appSection": "comic",
       "path": "comic/大人漫画.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/大人漫画.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "tianlula_novel",
+      "name": "天撸啦小说",
+      "version": "1.0.0",
+      "kind": "comic",
+      "appSection": "comic",
+      "path": "comic/天撸啦小说.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/天撸啦小说.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
@@ -621,6 +633,18 @@
       "aliases": [],
       "rating": "unknown",
       "iconDeclared": true
+    },
+    {
+      "id": "tianlula_photo",
+      "name": "天撸啦图集",
+      "version": "1.0.0",
+      "kind": "photo",
+      "appSection": "comic",
+      "path": "photo/天撸啦图集.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/photo/天撸啦图集.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
     },
     {
       "id": "xchina_photo",
@@ -1482,6 +1506,18 @@
       "appSection": "video",
       "path": "video/大哥视频.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/大哥视频.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "tianlula_video",
+      "name": "天撸啦",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/天撸啦.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/天撸啦.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

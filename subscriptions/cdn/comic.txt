@@ -23,6 +23,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/十八漫画.j
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/十八韩漫.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/啵乐.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/大人漫画.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/天撸啦小说.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/妖精漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/巴卡漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/开心看漫画.js
