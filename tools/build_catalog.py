@@ -4,6 +4,7 @@ Run: python tools/build_catalog.py [--check]
 Only reads source headers; never executes adapters or requests media.
 """
 import argparse
+import hashlib
 import json
 import pathlib
 import re
@@ -19,6 +20,11 @@ MOVIES = {'luttt_video', 'gztv5_video', 'jpyy2_video', 'ysxq-boju',
 # than letting directory order silently replace them with a different adapter.
 PREFERRED = {'hstv_video': 'video/好色TV.js',
              'jiuse91_video': 'video/九色91Porny.js'}
+
+
+def short_hash(text):
+    """内容指纹（8 位）——给 CDN 清单生成不可变文件名，绕开边缘缓存。"""
+    return hashlib.sha1(text.encode('utf-8')).hexdigest()[:8]
 
 
 def url(path):
@@ -99,19 +105,30 @@ def build():
         raw = manifest(groups[kind], label)
         out['subscriptions/' + kind + '.txt'] = raw
         # Every script URL is CDN-hosted too; the route never falls back to raw.
-        out['subscriptions/cdn/' + kind + '.txt'] = raw.replace(RAW, CDN)
+        cdn_text = raw.replace(RAW, CDN)
+        out['subscriptions/cdn/' + kind + '.txt'] = cdn_text
+        # 内容寻址副本：jsDelivr 对同名文件长期缓存，换指纹名即新 URL，边缘必须回源
+        out['subscriptions/cdn/' + kind + '.' + short_hash(cdn_text) + '.txt'] = cdn_text
     for name, kinds in [('comics', ('comic','photo')), ('videos', ('movie','video','audiobook'))]:
         raw = manifest([row for kind in kinds for row in groups[kind]], name)
         out['subscriptions/' + name + '.txt'] = raw
-        out['subscriptions/cdn/' + name + '.txt'] = raw.replace(RAW, CDN)
+        cdn_text = raw.replace(RAW, CDN)
+        out['subscriptions/cdn/' + name + '.txt'] = cdn_text
+        out['subscriptions/cdn/' + name + '.' + short_hash(cdn_text) + '.txt'] = cdn_text
     for is_cdn in (False, True):
         prefix = CDN if is_cdn else RAW
         folder = 'subscriptions/cdn/' if is_cdn else 'subscriptions/'
+        def entry(kind):
+            name = folder + kind + '.txt'
+            if is_cdn:
+                return prefix + folder + kind + '.' + short_hash(out[name]) + '.txt'
+            return prefix + name
+
         out[folder + 'all.json'] = json.dumps({
             'format': 'lume.total-subscription', 'version': 1,
             'sections': {
-                'comic': [prefix + folder + kind + '.txt' for kind in ('comic','photo')],
-                'video': [prefix + folder + kind + '.txt' for kind in ('movie','video','audiobook')],
+                'comic': [entry(kind) for kind in ('comic','photo')],
+                'video': [entry(kind) for kind in ('movie','video','audiobook')],
             },
         }, ensure_ascii=False, indent=2) + '\n'
     out['metadata/catalog.json'] = json.dumps({

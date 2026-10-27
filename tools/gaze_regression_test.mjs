@@ -1,0 +1,44 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+
+const code = fs.readFileSync(new URL('../movie/注视影视.js', import.meta.url), 'utf8');
+const page = 'https://gaze.red/play/6be8f9058d86abfc118d707883186ac2';
+// Reduced observed DOM, 2026-10-28. No player tokens, cookies or media retained.
+const card = (title, hash) => `<article><img src="/static/img/svg/colorful.svg"><img alt="${title}" data-src="https://image.example/cover.jpg"><a href="play/${hash}"></a><h3>${title}</h3></article>`;
+const home = card('铁拳教育', page.split('/').pop());
+const detail = `<h5 itemprop="name">铁拳教育</h5><meta property="og:image" content="https://image.example/cover.jpg"><div id="play-source-panel-g1">${Array.from({length:10},(_,i)=>`<button type="button" class="playbtn W" data-id="${74595+i}">第${i+1}集</button>`).join('')}</div><div id="play-source-panel-g5"><button class="playbtn" data-id="999">其他线路</button></div><video src="blob:https://gaze.red/random"></video>`;
+let calls=[], rendered=detail;
+const context=vm.createContext({console, setTimeout});
+vm.runInContext(code, context);
+const source=context.LumeSource;
+source.http={get:async()=>({status:200,body:home})};
+source.web={render:async options=>{calls.push(options);return {url:options.url,html:options.url.includes('/play/')?rendered:home+'<nav id="pagination2"><button data-page="1"></button><button data-page="2"></button></nav>'};}};
+assert.equal((await source.home())[0].items[0].cover,'https://image.example/cover.jpg');
+assert.equal((await source.categories()).length,5);
+assert.equal((await source.filters()).groups[0].id,'sort');
+const list=await source.list({categoryId:'2',keyword:'铁拳 教育',filters:{sort:'grade'},page:2});
+assert.equal(list.items.length,1);
+assert.match(calls.at(-1).url,/mform=2&sort=grade&search=/);
+assert.match(calls.at(-1).script,/var target=2/);
+const work=await source.detail({id:page});
+assert.equal(work.title,'铁拳教育');
+assert.equal(work.chapters.length,10);
+const chapters=await source.chapters({id:page});
+const content=await source.content({id:page,chapterId:chapters[1].id});
+assert.equal(content.kind,'webplayer');
+assert.equal(content.pageUrl,page);
+assert.equal(content.webPlayerOptions.episodeSelector,'#play-source-panel-g1 button.playbtn[data-id="74596"]');
+assert.equal(content.url,undefined);
+assert.equal(calls.filter(c=>c.url===page).length,1,'detail/chapters reuse the short-lived DOM cache');
+await assert.rejects(()=>source.content({id:page,chapterId:'https://evil.example/#episode=1'}));
+await assert.rejects(()=>source.list({categoryId:'other'}));
+context.gazeCache={}; rendered='<title>访问验证</title>';
+await assert.rejects(()=>source.detail({id:page}),/默认线路选集/);
+// Exercise the exact generated pagination program with an asynchronous DOM.
+let current=1,busy=false,clicks=0;
+const nav={querySelector:()=>({dataset:{page:String(current)}}),querySelectorAll:()=>[2,3].map(n=>({dataset:{page:String(n)},disabled:false,click(){clicks++;busy=true;current=n;setTimeout(()=>busy=false,10);}}))};
+const document={querySelector:s=>s==='#pagination2'?nav:s==='[aria-busy=true]'?(busy?{}:null):null};
+await vm.runInNewContext('(async()=>{'+calls[0].script+'})()', {document,setTimeout});
+assert.equal(current,2); assert.equal(clicks,1); assert.equal(busy,false);
+console.log('Gaze regression passed: cards, categories/search, paging, 10 default episodes, episode 2, cache, challenge and invalid IDs.');

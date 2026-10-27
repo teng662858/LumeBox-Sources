@@ -1,0 +1,8 @@
+# 有声小说
+# 自动生成；修改脚本后运行 python tools/build_catalog.py
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/13听书网.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/听书吧.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/夜读小说听书.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/小黄书听书.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/悦听吧.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/麒麟听书.js
