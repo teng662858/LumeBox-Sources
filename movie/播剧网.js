@@ -1,4 +1,4 @@
-// LumeSource: {"id":"ysxq-boju","name":"播剧网（ysxq）","version":"1.0.0","category":"video","mirrors":["https://ysxq.cc"]}
+// LumeSource: {"id":"ysxq-boju","name":"播剧网（ysxq）","version":"1.0.1","category":"video","mirrors":["https://ysxq.cc"],"icon":"https://ysxq.cc/template/dsn2/static/img/ico.png"}
 //
 // 站点：ysxq.cc（页脚自报「播剧网」，同源主站 www.boju.cc）
 // 数据源：苹果CMS（MacCMS v10）标准 vod 接口 —— /api.php/provide/vod/
@@ -141,7 +141,7 @@ async function detailVod(id) {
 var LumeSource = {
   id: 'ysxq-boju',
   name: '播剧网（ysxq）',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://ysxq.cc'],
 

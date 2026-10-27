@@ -1,4 +1,4 @@
-// LumeSource: {"id":"olehdtv","name":"欧乐影院","version":"1.0.0","category":"video","mirrors":["https://www.olehdtv.com"]}
+// LumeSource: {"id":"olehdtv","name":"欧乐影院","version":"1.0.1","category":"video","mirrors":["https://www.olehdtv.com"],"icon":"https://www.olehdtv.com/favicon.ico"}
 //
 // 站点：欧乐影院（https://www.olehdtv.com，面向海外华人的影视站，模板 conch）
 // 结构：苹果 CMS（MacCMS v10）。**/api.php/provide/vod/ 接口被关掉（返回 closed）**，只能抓 HTML：
@@ -162,7 +162,7 @@ function parseItems(html) {
 var LumeSource = {
   id: 'olehdtv',
   name: '欧乐影院',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.olehdtv.com'],
 

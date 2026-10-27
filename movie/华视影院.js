@@ -1,4 +1,4 @@
-// LumeSource: {"id":"huavod","name":"华视影院","version":"1.0.0","category":"video","mirrors":["https://huavod.com"]}
+// LumeSource: {"id":"huavod","name":"华视影院","version":"1.0.1","category":"video","mirrors":["https://huavod.com"],"icon":"https://huavod.com/static/favicon/favicon-96x96.png"}
 //
 // 站点：华视影院（https://huavod.com，海外华人影视站，模板 ds3）
 // 结构：苹果 CMS（MacCMS v10）定制模板。**vod JSON 接口 404**，只能抓 HTML：
@@ -167,7 +167,7 @@ function parseItems(html) {
 var LumeSource = {
   id: 'huavod',
   name: '华视影院',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://huavod.com'],
 

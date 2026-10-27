@@ -38,6 +38,11 @@ for (const name of names.filter(n => !only || n === only)) {
   assert.equal(JSON.parse(virtual[34].id).offset, 4);
   assert.equal(T.chapters('<div id="playlist"><a href="/play/1">第一集</a><a href="/play/2">第二集</a></div><a href="/play/ad">推荐</a>', /^\/play\//).length, 2);
   assert.equal(T.items('<a href="/book/1"><img alt="真书名" src="/cover.jpg"><span>824万</span></a><a href="/book/1">真书名</a>', /^\/book\//)[0].title, '真书名');
+  const lazy = T.items('<a href="/book/2"><img alt="延迟加载封面" src="/loading.gif" data-lazy-src="/covers/book2.jpg"></a>', /^\/book\//)[0];
+  assert.equal(new URL(lazy.cover).pathname, '/covers/book2.jpg');
+  const responsive = T.items('<a href="/book/3"><img alt="响应式封面" src="/blank.gif" srcset="/small.jpg 100w, /large.jpg 800w"></a>', /^\/book\//)[0];
+  assert.equal(new URL(responsive.cover).pathname, '/large.jpg');
+  assert.equal(T.items('<a href="/book/4"><img alt="只有占位图" src="/loading.gif"></a>', /^\/book\//)[0].cover, null);
   assert.throws(() => T.body({ status: 200, body: '<title>系统安全验证</title>' }), /NEED_WEBVIEW_VERIFY/);
   if (!live && name === '麒麟听书') {
     const calls = [];

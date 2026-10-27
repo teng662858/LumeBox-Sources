@@ -1,4 +1,4 @@
-// LumeSource: {"id":"fxcomic_comic","name":"漫小肆","version":"1.0.0","category":"comic"}
+// LumeSource: {"id":"fxcomic_comic","name":"漫小肆","version":"1.0.1","category":"comic","contentRating":"18+"}
 //
 // 漫小肆韓漫（freexcomic.com 是它的**地址发布页**，当前站址 jjmhw9.top）。
 // 本文件对着**真站响应**写（首页 / 书库 / 更新页 / 详情 / 阅读页 / 搜索全取回来存档核过）。
@@ -44,7 +44,7 @@ var H = {
 };
 
 H.base="https://www.jjmhw9.top";H.name="漫小肆";
-var LumeSource={id:"fxcomic_comic",name:"漫小肆",version:"1.0.0",category:"comic",
+var LumeSource={id:"fxcomic_comic",name:"漫小肆",version:"1.0.1",category:"comic",
 
 /// 已知域名（发布页会给出最新一个；这里是兜底）。
 __hosts: ['https://www.jjmhw9.top'],

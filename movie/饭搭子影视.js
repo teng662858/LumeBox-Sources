@@ -1,4 +1,4 @@
-// LumeSource: {"id":"fdzys","name":"饭搭子影视","version":"1.0.0","category":"video","mirrors":["https://fdzys.com"]}
+// LumeSource: {"id":"fdzys","name":"饭搭子影视","version":"1.0.1","category":"video","mirrors":["https://fdzys.com"],"icon":"https://fdzys.com/template/mizhiady/statics/images/favicon.ico"}
 //
 // 站点：饭搭子影视（https://fdzys.com）
 // 结构：苹果 CMS（MacCMS v10）的定制模板 mizhiady —— **vod JSON 接口是关的**，走 HTML：
@@ -183,7 +183,7 @@ function parsePlayer(html) {
 var LumeSource = {
   id: 'fdzys',
   name: '饭搭子影视',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://fdzys.com'],
 

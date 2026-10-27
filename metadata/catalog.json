@@ -169,13 +169,13 @@
     {
       "id": "p5mh_comic",
       "name": "P5韩漫",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "kind": "comic",
       "appSection": "comic",
       "path": "comic/P5韩漫.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/P5韩漫.js",
       "aliases": [],
-      "rating": "unknown",
+      "rating": "18+",
       "iconDeclared": false
     },
     {
@@ -373,13 +373,13 @@
     {
       "id": "fxcomic_comic",
       "name": "漫小肆",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "comic",
       "appSection": "comic",
       "path": "comic/漫小肆.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/漫小肆.js",
       "aliases": [],
-      "rating": "unknown",
+      "rating": "18+",
       "iconDeclared": false
     },
     {
@@ -661,14 +661,14 @@
     {
       "id": "a123tv",
       "name": "A123TV",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/A123TV.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/A123TV.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "luttt_video",
@@ -685,62 +685,62 @@
     {
       "id": "huavod",
       "name": "华视影院",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/华视影院.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/华视影院.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "ysxq-boju",
       "name": "播剧网（ysxq）",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/播剧网.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/播剧网.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "olehdtv",
       "name": "欧乐影院",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/欧乐影院.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/欧乐影院.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "gztv5_video",
       "name": "瓜子影视",
-      "version": "3.1.0",
+      "version": "3.1.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/瓜子影视.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/瓜子影视.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "duanju2",
       "name": "短剧网",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/短剧网.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/短剧网.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "jpyy2_video",
@@ -757,26 +757,26 @@
     {
       "id": "flixflop",
       "name": "飞流视频",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/飞流视频.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/飞流视频.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "fdzys",
       "name": "饭搭子影视",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/饭搭子影视.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/饭搭子影视.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "v1024_video",
@@ -1717,7 +1717,7 @@
     {
       "id": "ting13_audiobook",
       "name": "13听书网",
-      "version": "1.0.0",
+      "version": "1.0.2",
       "kind": "audiobook",
       "appSection": "video",
       "path": "audiobook/13听书网.js",
@@ -1729,7 +1729,7 @@
     {
       "id": "ting8_audiobook",
       "name": "听书吧",
-      "version": "1.0.0",
+      "version": "1.0.2",
       "kind": "audiobook",
       "appSection": "video",
       "path": "audiobook/听书吧.js",
@@ -1765,7 +1765,7 @@
     {
       "id": "yuetingba_audiobook",
       "name": "悦听吧",
-      "version": "1.0.0",
+      "version": "1.0.2",
       "kind": "audiobook",
       "appSection": "video",
       "path": "audiobook/悦听吧.js",
@@ -1777,7 +1777,7 @@
     {
       "id": "qilin70_audiobook",
       "name": "麒麟听书",
-      "version": "1.0.0",
+      "version": "1.0.2",
       "kind": "audiobook",
       "appSection": "video",
       "path": "audiobook/麒麟听书.js",

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"a123tv","name":"A123TV","version":"1.0.0","category":"video","mirrors":["https://a123tv.com"]}
+// LumeSource: {"id":"a123tv","name":"A123TV","version":"1.0.1","category":"video","mirrors":["https://a123tv.com"],"icon":"https://a123tv.com/s2/icon/favicon-180.png"}
 //
 // 站点：A123TV（https://a123tv.com，繁体镜像 tw.a123tv.com）
 // 结构：服务端渲染的 HTML（模板 w4-*），**没有 JSON 接口**。路由：
@@ -131,7 +131,7 @@ function lineBlock(html) {
 var LumeSource = {
   id: 'a123tv',
   name: 'A123TV',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://a123tv.com'],
 

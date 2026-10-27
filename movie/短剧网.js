@@ -1,4 +1,4 @@
-// LumeSource: {"id":"duanju2","name":"短剧网","version":"1.0.0","category":"video","mirrors":["https://www.duanju2.com"]}
+// LumeSource: {"id":"duanju2","name":"短剧网","version":"1.0.1","category":"video","mirrors":["https://www.duanju2.com"],"icon":"https://www.duanju2.com/template/djw/ripro_static/favicon.ico"}
 //
 // 站点：短剧网（https://www.duanju2.com，主打爽文短剧）
 // 结构：苹果 CMS（MacCMS v10）+ 杂志风模板。**vod JSON 接口被关**（返回 closed），走 HTML：
@@ -166,7 +166,7 @@ function parseItems(html) {
 var LumeSource = {
   id: 'duanju2',
   name: '短剧网',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.duanju2.com'],
 

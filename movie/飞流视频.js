@@ -1,4 +1,4 @@
-// LumeSource: {"id":"flixflop","name":"飞流视频","version":"1.0.0","category":"video","mirrors":["https://www.flixflop.com"]}
+// LumeSource: {"id":"flixflop","name":"飞流视频","version":"1.0.1","category":"video","mirrors":["https://www.flixflop.com"],"icon":"https://www.flixflop.com/favicon.png"}
 //
 // 站点：飞流视频（https://www.flixflop.com）
 // 技术栈：Next.js（App Router）。页面里没有「播放器脚本」，但**服务端把播放串直出在
@@ -134,7 +134,7 @@ function chaptersOf(html) {
 var LumeSource = {
   id: 'flixflop',
   name: '飞流视频',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.flixflop.com'],
 
@@ -178,6 +178,12 @@ var LumeSource = {
     if (keyword) {
       // 站内搜索是 Server Action（POST），脚本化不了；如实返回空而不是乱猜地址。
       return { items: [], hasMore: false };
+    }
+    // The homepage is the actual unfiltered catalogue. /explore/ without a
+    // category is a 404; do not make all default-list thumbnails disappear.
+    if (!category) {
+      if (page > 1) return { items: [], hasMore: false };
+      return { items: parseItems(await fetchHtml('/')), hasMore: false };
     }
     var html = await fetchHtml('/explore/' + encodeURIComponent(category) + '?page=' + page);
     var next = new RegExp('page=' + (page + 1) + '(?!\\d)');

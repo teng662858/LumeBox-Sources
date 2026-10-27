@@ -1,4 +1,4 @@
-// LumeSource: {"id":"gztv5_video","name":"瓜子影视","version":"3.1.0","category":"video"}
+// LumeSource: {"id":"gztv5_video","name":"瓜子影视","version":"3.1.1","category":"video","icon":"https://gztv5.com/favicon.ico"}
 
 // 站点：https://gztv5.com （Nuxt SPA + 独立 API 域名）
 //
@@ -35,7 +35,7 @@ var PAGE_SIZE = 30;
 var LumeSource = {
   id: 'gztv5_video',
   name: '瓜子影视',
-  version: '3.1.0',
+  version: '3.1.1',
   category: 'video',
 
   async categories() {
