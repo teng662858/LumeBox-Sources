@@ -4,7 +4,6 @@ Run: python tools/build_catalog.py [--check]
 Only reads source headers; never executes adapters or requests media.
 """
 import argparse
-import hashlib
 import json
 import pathlib
 import re
@@ -108,19 +107,11 @@ def build():
     for is_cdn in (False, True):
         prefix = CDN if is_cdn else RAW
         folder = 'subscriptions/cdn/' if is_cdn else 'subscriptions/'
-        def entry(kind, prefix=prefix, folder=folder, is_cdn=is_cdn):
-            target = folder + kind + '.txt'
-            if not is_cdn:
-                return prefix + target
-            # CDN 会对同一 URL 长期缓存：用内容哈希做查询串，清单一变 URL 就变，
-            # 各边缘都能立刻拿到新版本（App 原样请求，查询串不影响解析）。
-            digest = hashlib.sha1(out[target].encode('utf-8')).hexdigest()[:10]
-            return prefix + target + '?v=' + digest
         out[folder + 'all.json'] = json.dumps({
             'format': 'lume.total-subscription', 'version': 1,
             'sections': {
-                'comic': [entry(kind) for kind in ('comic','photo')],
-                'video': [entry(kind) for kind in ('movie','video','audiobook')],
+                'comic': [prefix + folder + kind + '.txt' for kind in ('comic','photo')],
+                'video': [prefix + folder + kind + '.txt' for kind in ('movie','video','audiobook')],
             },
         }, ensure_ascii=False, indent=2) + '\n'
     out['metadata/catalog.json'] = json.dumps({
