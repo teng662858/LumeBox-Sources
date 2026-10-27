@@ -1,4 +1,4 @@
-// LumeSource: {"id":"tianlula_video","name":"天撸啦","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://ttbd067.top:51000"]}
+// LumeSource: {"id":"tianlula_video","name":"天撸啦","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://ttbd067.top:51000"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：天撸啦（https://ttbd067.top:51000，tianlula.tv）—— 综合站，本源只做**视频**（精品视频 37 + 电影频道 1）。

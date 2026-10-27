@@ -1,4 +1,4 @@
-// LumeSource: {"id":"haijiaoqing_video","name":"海角情","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.haijiaolove.xyz"]}
+// LumeSource: {"id":"haijiaoqing_video","name":"海角情","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.haijiaolove.xyz"],"network":"proxy"}
 // LumeRuntime: javascript
 //
 // 站点：海角情（https://www.haijiaolove.xyz）—— WordPress 站，帖子就是资源条目。
@@ -16,6 +16,7 @@
 var BASE_URL = 'https://www.haijiaolove.xyz';
 var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 var PAGE_SIZE = 20;
+var CATS_TTL_MS = 6 * 3600 * 1000;
 var DETAIL_TTL_MS = 30 * 60 * 1000;
 
 function base() {
@@ -117,15 +118,30 @@ var LumeSource = {
   mirrors: ['https://www.haijiaolove.xyz'],
 
   async categories() {
-    return [
-      { id: 'all', title: '最新' },
-      { id: 'hjmz', title: '海角名作' },
-      { id: 'hjjd', title: '海角经典' },
-      { id: 'hjfn', title: '海角风女' },
-      { id: 'hjsz', title: '海角素人' },
-      { id: 'hjwf', title: '海角网飞' },
-      { id: 'origin', title: '原创' },
-    ];
+    var cached = await readJson('cats.json');
+    if (cached && Array.isArray(cached.list) && cached.list.length && Date.now() - Number(cached.at) < CATS_TTL_MS) {
+      return cached.list;
+    }
+    var list = [{ id: 'all', title: '全部' }];
+    try {
+      var reply = await LumeSource.http.get(base() + '/wp-json/wp/v2/categories?per_page=100&orderby=count&order=desc', {
+        headers: { 'User-Agent': UA, Accept: 'application/json' },
+      });
+      if (reply && reply.status === 200) {
+        var rows = JSON.parse(reply.body ? String(reply.body) : '[]');
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          if (!row || !row.id) continue;
+          var count = Number(row.count) || 0;
+          if (count <= 0) continue;
+          list.push({ id: String(row.id), title: (row.name || ('分类 ' + row.id)) + '（' + count + '）' });
+        }
+      }
+    } catch (error) {
+      /* 拿不到就只留「全部」 */
+    }
+    await writeJson('cats.json', { at: Date.now(), list: list });
+    return list;
   },
 
   async home() {
@@ -143,7 +159,11 @@ var LumeSource = {
     var args = argument || {};
     var page = Number(args.page || 1) || 1;
     var keyword = String(args.keyword == null ? '' : args.keyword).trim();
-    var path = '/wp-json/wp/v2/posts?per_page=' + PAGE_SIZE + '&page=' + page;
+    var categoryId = String(args.categoryId == null ? '' : args.categoryId).trim();
+    var filters = args.filters || {};
+    if (filters.category) categoryId = String(filters.category).trim();
+    var path = '/wp-json/wp/v2/posts?per_page=' + PAGE_SIZE + '&page=' + page + '&orderby=date&order=desc';
+    if (/^\d+$/.test(categoryId) && categoryId !== 'all') path += '&categories=' + categoryId;
     if (keyword) path += '&search=' + encodeURIComponent(keyword);
     var rows = await getJson(path);
     if (!Array.isArray(rows)) throw new Error('列表返回异常');

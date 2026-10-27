@@ -1,4 +1,4 @@
-// LumeSource: {"id":"theavporn_video","name":"TheAVPorn","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://theavporn.com"]}
+// LumeSource: {"id":"theavporn_video","name":"TheAVPorn","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://theavporn.com"],"network":"proxy"}
 // LumeRuntime: javascript
 //
 // 站点：TheAVPorn（https://theavporn.com）—— KVS（Kernel Video Sharing）站。

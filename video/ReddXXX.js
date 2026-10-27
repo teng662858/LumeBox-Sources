@@ -1,4 +1,4 @@
-// LumeSource: {"id":"reddxxx_video","name":"ReddXXX","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://reddxxx.com"]}
+// LumeSource: {"id":"reddxxx_video","name":"ReddXXX","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://reddxxx.com"],"network":"proxy"}
 // LumeRuntime: javascript
 //
 // 站点：ReddXXX（https://reddxxx.com）—— Reddit 成人视频聚合站，全站被 Cloudflare Turnstile 保护：

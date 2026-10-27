@@ -1,4 +1,4 @@
-// LumeSource: {"id":"f016_video","name":"在线影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://bb.f016video.com","https://ss.99utv.com"]}
+// LumeSource: {"id":"f016_video","name":"在线影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://bb.f016video.com","https://ss.99utv.com"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：在线影院（bb.f016video.com）与 91吃瓜（ss.99utv.com）—— 同一站群，但**是包含关系**：
@@ -149,6 +149,7 @@ function parseCards(html) {
 
 function listPath(cat, page) {
   var n = Number(page) || 1;
+  if (String(cat || '') === 'all') cat = '';
   var prefix = cat && cat !== 'home' ? '/' + cat : '';
   if (n <= 1) return prefix ? prefix + '/' : '/';
   return prefix + '/page/' + n + '/';

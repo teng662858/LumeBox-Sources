@@ -1,4 +1,4 @@
-// LumeSource: {"id":"tianlula_novel","name":"天撸啦小说","version":"1.0.0","category":"comic","contentCategory":"adult","mirrors":["https://ttbd067.top:51000"]}
+// LumeSource: {"id":"tianlula_novel","name":"天撸啦小说","version":"1.0.0","category":"comic","contentCategory":"adult","mirrors":["https://ttbd067.top:51000"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：天撸啦（https://ttbd067.top:51000）的**小说专区**（顶层分类 2，9 个子分类：都市言情 / 校园春色 / 人妻女友 …）。

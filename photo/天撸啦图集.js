@@ -1,4 +1,4 @@
-// LumeSource: {"id":"tianlula_photo","name":"天撸啦图集","version":"1.0.0","category":"comic","contentCategory":"adult","mirrors":["https://ttbd067.top:51000"]}
+// LumeSource: {"id":"tianlula_photo","name":"天撸啦图集","version":"1.0.0","category":"comic","contentCategory":"adult","mirrors":["https://ttbd067.top:51000"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：天撸啦（https://ttbd067.top:51000）的**成人图片**频道（顶层分类 3，9 个子分类：亚洲色图 / 欧美色图 / 偷窥自拍 …）。

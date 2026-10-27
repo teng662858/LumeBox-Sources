@@ -1,4 +1,4 @@
-// LumeSource: {"id":"s618_video","name":"618影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://618208.xyz"]}
+// LumeSource: {"id":"s618_video","name":"618影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://618208.xyz","https://6181029.xyz","https://618600.xyz"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：618 影院（`618<码>.xyz` 全域；入口 https://618208.xyz）
@@ -259,7 +259,7 @@ var LumeSource = {
   version: '1.0.0',
   category: 'video',
   contentCategory: 'adult',
-  mirrors: ['https://618208.xyz'],
+  mirrors: ['https://618208.xyz', 'https://6181029.xyz', 'https://618600.xyz'],
 
   async categories() {
     var list = [];

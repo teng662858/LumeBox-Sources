@@ -1,4 +1,4 @@
-// LumeSource: {"id":"aiboaibo_video","name":"爱播爱播","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.994555.xyz"]}
+// LumeSource: {"id":"aiboaibo_video","name":"爱播爱播","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.994555.xyz"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：爱播爱播（https://www.994555.xyz）—— SvelteKit SSR 的成人视频搜索/播放站。
