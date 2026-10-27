@@ -5,7 +5,7 @@
     "comic": 50,
     "photo": 5,
     "movie": 11,
-    "video": 83,
+    "video": 85,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1691,6 +1691,18 @@
       "iconDeclared": false
     },
     {
+      "id": "haijiaoqing_video",
+      "name": "海角情",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/海角情.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角情.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
       "id": "aqd_video",
       "name": "爱情岛",
       "version": "1.0.0",
@@ -1698,6 +1710,18 @@
       "appSection": "video",
       "path": "video/爱情岛.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "aiboaibo_video",
+      "name": "爱播爱播",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/爱播爱播.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱播爱播.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

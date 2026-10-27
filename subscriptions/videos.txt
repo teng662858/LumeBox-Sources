@@ -85,7 +85,9 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/查特�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/栀莲短剧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/汤头条.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角情.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱播爱播.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/玉羞园.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/绅游巴士.js
