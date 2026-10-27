@@ -5,7 +5,7 @@
     "comic": 50,
     "photo": 5,
     "movie": 11,
-    "video": 85,
+    "video": 87,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -983,6 +983,18 @@
       "iconDeclared": false
     },
     {
+      "id": "jizeyy_video",
+      "name": "AV仓库",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/AV仓库.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/AV仓库.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
       "id": "betareel_video",
       "name": "BetaTok",
       "version": "1.0.0",
@@ -1206,6 +1218,18 @@
       "appSection": "video",
       "path": "video/PTT线上看.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/PTT线上看.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "reddxxx_video",
+      "name": "ReddXXX",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/ReddXXX.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ReddXXX.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
@@ -1547,7 +1571,7 @@
       "iconDeclared": false
     },
     {
-      "id": "hstv_video",
+      "id": "hsex_video",
       "name": "好色TV",
       "version": "1.0.0",
       "kind": "video",
