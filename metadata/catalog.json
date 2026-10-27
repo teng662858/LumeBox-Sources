@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 4,
     "movie": 11,
-    "video": 80,
+    "video": 81,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -897,6 +897,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": true
+    },
+    {
+      "id": "resao_video",
+      "name": "91热爆",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/91热爆.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/91热爆.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
     },
     {
       "id": "jiuxse_video",

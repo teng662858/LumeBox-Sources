@@ -266,6 +266,9 @@
     "relamanhua_comic": {
       "rating": "18+"
     },
+    "resao_video": {
+      "rating": "18+"
+    },
     "rmtt2_comic": {
       "rating": "18+"
     },
@@ -490,6 +493,7 @@
     "gamebus_comic": "绅游巴士漫画（gamebus001.cc，H 漫板块，全站 18+）",
     "gamebus_video": "绅游巴士（gamebus001.cc，成人短片板块，全站 18+）",
     "tanhua_video": "探花视频.com / 91大神.com（同一套内容库的两个域名，吃瓜探花类成人短片，全站 18+）",
-    "f016_video": "在线影院 bb.f016video.com / 91吃瓜 ss.99utv.com（同一站群，前者超集，成人短视频，全站 18+）"
+    "f016_video": "在线影院 bb.f016video.com / 91吃瓜 ss.99utv.com（同一站群，前者超集，成人短视频，全站 18+）",
+    "resao_video": "91热爆 www.resao.com（KVS 成人站，/private/ 为 VIP 专享，全站 18+）"
   }
 }
