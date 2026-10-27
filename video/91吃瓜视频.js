@@ -1,4 +1,4 @@
-// LumeSource: {"id":"cg1_video","name":"91吃瓜视频","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.91cg1.com","https://91cg8.com","https://91cgb21.com"]}
+// LumeSource: {"id":"cg1_video","name":"91吃瓜视频","version":"1.1.0","category":"video","contentCategory":"adult","mirrors":["https://www.91cg1.com","https://91cg8.com","https://91cgb21.com"],"icon":"https://www.91cg1.com/favicon.ico"}
 // LumeRuntime: javascript
 //
 // 站点：91吃瓜网（https://www.91cg1.com，Typecho + Mirages）。同一套页面既发图集也发短片，
@@ -16,7 +16,7 @@
 var BASE_URL = 'https://www.91cg1.com';
 var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 var PAGE_SIZE = 20;
-var CATEGORY_FILE = 'categories.json';
+var CATEGORY_FILE = 'categories-v2.json';
 var POST_TTL_MS = 10 * 60 * 1000;
 var CATEGORY_TTL_MS = 6 * 3600 * 1000;
 
@@ -29,8 +29,19 @@ function absolute(url) {
   var text = String(url == null ? '' : url).trim();
   if (!text) return '';
   if (/^https?:\/\//i.test(text)) return text;
+  if (text.indexOf('//') === 0) return 'https:' + text;
   if (text.charAt(0) === '/') return base() + text;
   return base() + '/' + text;
+}
+
+// Public reader: zzz.js decryptImage uses AES-CBC with PKCS7 padding.
+function imageHeaders() {
+  return {
+    Referer: base() + '/',
+    'X-Lume-Image-Encoding': 'aes-cbc-pkcs7',
+    'X-Lume-Image-Key': 'f5d965df75336270',
+    'X-Lume-Image-IV': '97b60394abc2fbe1',
+  };
 }
 
 async function readJson(file) {
@@ -108,6 +119,7 @@ function parseCards(html) {
       id: pid,
       title: title,
       cover: absolute(coverMatch ? coverMatch[1] : ''),
+      coverHeaders: imageHeaders(),
       subtitle: [catsMatch ? clean(catsMatch[1]) : '', dateMatch ? String(dateMatch[1]).slice(0, 10) : '']
         .filter(Boolean)
         .join(' · '),
@@ -123,7 +135,7 @@ function pidOf(value) {
 }
 
 async function postData(pid) {
-  var cacheFile = 'p-' + pid + '.json';
+  var cacheFile = 'p-v2-' + pid + '.json';
   var cached = await readJson(cacheFile);
   if (cached && cached.at && Date.now() - Number(cached.at) < POST_TTL_MS) return cached;
 
@@ -146,6 +158,7 @@ async function postData(pid) {
     at: Date.now(),
     id: pid,
     title: clean(h1 ? h1[1] : ''),
+    cover: images.length ? images[0] : '',
     description: clean(desc ? desc[1] : ''),
     tags: clean(kw ? kw[1] : ''),
     imageCount: images.length,
@@ -163,7 +176,7 @@ async function categoryList() {
   var html = await fetchHtml('/');
   var list = [];
   var seen = {};
-  var re = /href="\/category\/([a-z0-9]+)\/"[^>]*>([^<]{0,20})</g;
+  var re = /<a\b[^>]*href=["'](?:https?:\/\/[^"'\/]+)?\/category\/([a-z0-9_-]+)\/?["'][^>]*>([\s\S]*?)<\/a>/gi;
   var matched;
   while ((matched = re.exec(html)) !== null) {
     var slug = matched[1];
@@ -186,7 +199,8 @@ function listPath(page, categoryId, keyword) {
 var LumeSource = {
   id: 'cg1_video',
   name: '91吃瓜视频',
-  version: '1.0.0',
+  version: '1.1.0',
+  icon: 'https://www.91cg1.com/favicon.ico',
   category: 'video',
   contentCategory: 'adult',
   mirrors: ['https://www.91cg1.com', 'https://91cg8.com', 'https://91cgb21.com'],
@@ -224,7 +238,7 @@ var LumeSource = {
   },
 
   async filters() {
-    var options = [{ id: '', title: '全部分类' }];
+    var options = [];
     try {
       var cats = await categoryList();
       for (var i = 0; i < cats.length; i++) options.push({ id: cats[i].id.slice(4), title: cats[i].title });
@@ -234,14 +248,7 @@ var LumeSource = {
     return {
       groups: [
         { id: 'category', title: '分类', options: options },
-        {
-          id: 'sort',
-          title: '排序',
-          options: [
-            { id: '', title: '最新' },
-            { id: 'hot', title: '最高点击' },
-          ],
-        },
+
       ],
     };
   },
@@ -278,7 +285,8 @@ var LumeSource = {
     return {
       id: pid,
       title: data.title,
-      cover: '',
+      cover: data.cover || '',
+      coverHeaders: imageHeaders(),
       subtitle: bits.join(' · '),
       description: description,
     };

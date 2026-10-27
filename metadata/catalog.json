@@ -13,14 +13,14 @@
     {
       "id": "manhua127_comic",
       "name": "127漫画",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "comic",
       "appSection": "comic",
       "path": "comic/127漫画.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/127漫画.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "pica177_comic",
@@ -601,14 +601,14 @@
     {
       "id": "cg1_photo",
       "name": "91吃瓜图集",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "photo",
       "appSection": "comic",
       "path": "photo/91吃瓜图集.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/photo/91吃瓜图集.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "z8pt_comic",
@@ -829,14 +829,14 @@
     {
       "id": "xfdxv_video",
       "name": "41看片 18+",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "video",
       "appSection": "video",
       "path": "video/41看片.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/41看片.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "s618208_video",
@@ -889,14 +889,14 @@
     {
       "id": "cg1_video",
       "name": "91吃瓜视频",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "kind": "video",
       "appSection": "video",
       "path": "video/91吃瓜视频.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/91吃瓜视频.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "jiuxse_video",

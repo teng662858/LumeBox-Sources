@@ -1,4 +1,4 @@
-﻿// LumeSource: {"id":"manhua127_comic","name":"127漫画","version":"1.0.0","category":"comic","mirrors":["https://www.127manhua.com"]}
+// LumeSource: {"id":"manhua127_comic","name":"127漫画","version":"1.1.0","category":"comic","mirrors":["https://www.127manhua.com"],"icon":"https://www.127manhua.com/template/wap/default/img/favicon.ico"}
 
 // 站点：https://www.127manhua.com（127漫画网 · McCMS v10 定制 wap 主题）
 // 模板目录 /template/wap/default/，前端逻辑在 /packs/mccms/base_wap.js（jQuery）
@@ -69,6 +69,7 @@
 
 
 var BASE_URL = 'https://www.127manhua.com';
+var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 var DETAIL_PREFIX = '/mh/';                   // 96 那份是 '/dongman/'
 var API_PATH = '/index.php/api/data/comic';   // 站点自己的列表/搜索接口
 var API_PAGE_SIZE = 10;                       // 接口每页条数（实测恒为 10）
@@ -86,7 +87,8 @@ var SKIP_IMAGE = /logo|avatar|banner|advert|placeholder|blank|loading|icon|sprit
 var LumeSource = {
   id: 'manhua127_comic',
   name: '127漫画',
-  version: '1.0.0',
+  version: '1.1.0',
+  icon: 'https://www.127manhua.com/template/wap/default/img/favicon.ico',
   category: 'comic',
 
   // ---------------------------------------------------------------- 契约方法
@@ -106,6 +108,25 @@ var LumeSource = {
     }
     console.warn('[127] 分类 ' + found.length + ' 个（站点四个页签合起来）');
     return found;
+  },
+
+  async filters() {
+    var categories = await this.categories();
+    var labels = { tags: '题材', finish: '进度', list: '受众', pay: '属性' };
+    var groups = [];
+    var keys = Object.keys(labels);
+    for (var k = 0; k < keys.length; k++) {
+      var options = [];
+      for (var i = 0; i < categories.length; i++) {
+        var facet = this.__categoryFacet(categories[i].id);
+        if (facet && facet.key === keys[k]) options.push({ id: facet.value, title: categories[i].title });
+      }
+      if (options.length) groups.push({ id: keys[k], title: labels[keys[k]], options: options });
+    }
+    groups.push({ id: 'order', title: '排序', options: [
+      { id: 'hits', title: '人气' }, { id: 'addtime', title: '最新' }
+    ] });
+    return { groups: groups };
   },
 
   /// 首页：顶部轮播一块 + 站点自己的 div.floor 板块，各 12 条左右。
@@ -142,7 +163,7 @@ var LumeSource = {
     var keyword = argument && argument.keyword ? String(argument.keyword).trim() : '';
     var category = argument && argument.categoryId ? String(argument.categoryId).trim() : '';
 
-    var url = BASE_URL + API_PATH + '?' + this.__apiQuery(keyword, category, page);
+    var url = BASE_URL + API_PATH + '?' + this.__apiQuery(keyword, category, page, argument && argument.filters);
     try {
       var body = await this.__get(url, true);
       var payload = this.__json(body);
@@ -235,14 +256,26 @@ var LumeSource = {
   /// 接口查询串：分类走站点自己的 type[…]，搜索走 key（都是站点 JS 里那套参数）。
   /// 站点首页 JS 还会追加 type[order]=hits / type[list]=0 / type[pay]=0 之类的默认值，
   /// 实测可省（省掉还能避免「list / pay 页签」被 0 覆盖）。
-  __apiQuery(keyword, category, page) {
+  __apiQuery(keyword, category, page, filters) {
     var parts = [];
+    var facets = {};
     if (keyword) {
       parts.push('key=' + this.__encode(keyword));
     } else {
       var facet = this.__categoryFacet(category);
-      if (facet) parts.push('type%5B' + facet.key + '%5D=' + facet.value);
+      if (facet) facets[facet.key] = facet.value;
     }
+    filters = filters || {};
+    var keys = ['tags', 'finish', 'list', 'pay'];
+    for (var i = 0; i < keys.length; i++) {
+      var selected = String(filters[keys[i]] || '');
+      if (/^\d{1,6}$/.test(selected)) facets[keys[i]] = selected;
+    }
+    keys = Object.keys(facets);
+    for (var i = 0; i < keys.length; i++) parts.push('type%5B' + keys[i] + '%5D=' + facets[keys[i]]);
+    // Match the site's popularity listing; its bare API defaults to uploaded
+    // test entries whose IP-hosted covers are no longer reachable.
+    parts.push('type%5Border%5D=' + (filters.order === 'addtime' ? 'addtime' : 'hits'));
     parts.push('page=' + page);
     return parts.join('&');
   },
@@ -334,6 +367,11 @@ var LumeSource = {
         if (id && !seen[id]) {
           var close = block.indexOf('</a>', anchorEnd);
           var title = this.__plain(block.slice(anchorEnd + 1, close > anchorEnd ? close : anchorEnd + 120));
+          if (!title) {
+            var imgAt = block.indexOf('<img', anchorEnd);
+            var imgEnd = imgAt < 0 ? -1 : block.indexOf('>', imgAt);
+            if (imgEnd > imgAt) title = this.__plain(this.__attr(block.slice(imgAt, imgEnd + 1), 'alt'));
+          }
           if (title) {
             seen[id] = true;
             found.push({ id: id, title: this.__cut(title, 16) });
@@ -687,6 +725,7 @@ var LumeSource = {
   /// NEED_WEBVIEW_VERIFY 让 App 拉起网页视图过一次人机校验。
   async __get(url, isApi) {
     var headers = {
+      'User-Agent': UA,
       'Referer': BASE_URL + '/',
       'Accept': isApi ? 'application/json, text/javascript, */*; q=0.01' : 'text/html,application/xhtml+xml',
       'Accept-Language': 'zh-CN,zh;q=0.9'

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"xfdxv_video","name":"41看片 18+","version":"1.0.0","category":"video","mirrors":["https://xfdxv.414459.lifestyle:8283","https://hljhv.412426.lifestyle:8283"]}
+// LumeSource: {"id":"xfdxv_video","name":"41看片 18+","version":"1.1.0","category":"video","mirrors":["https://xfdxv.414459.lifestyle:8283","https://hljhv.412426.lifestyle:8283"],"icon":"https://img.zuoyebang.cc/zyb_513dc6dd137ee8262d370d80d9ad763e.jpg"}
 //
 // 站点：https://xfdxv.414459.lifestyle:8283/ （2026-10-25 逐接口实测）
 //   壳域名：https://www.543786.com:8283/ 与 https://542372.com/ 只做 atob 跳转，本身没有内容/接口，
@@ -73,6 +73,8 @@
 //     硬编码的 sm-api.wieuc.com 是第一顺位。
 //   · 沙箱里没有 crypto/Buffer，Fernet 与 AES 全部是纯 JS（SBOX 现算 + 位运算），
 //     12KB 响应实测解密 ~6ms、55KB ~12ms，远低于单次调用预算。
+//   · 站点标签里有一组明确以未成年为卖点的分类（purpose=10 组：小马/小学/初中/高中/禁区），
+//     本源**不把它接进分类，也不在 filters() 里下发**（见 __bannedGroup），列表接口本身不受影响。
 //
 // 2026-10-25 实测环境：本机直连（站点自签证书已换成正签，curl 不带 -k 也 200；Node fetch 同样 200）。
 
@@ -483,15 +485,27 @@ function itemOf(row, imgHost) {
     id: String(row.id),
     title: String(row.name || row.id),
     cover: absoluteImg(row.pic, imgHost),
+    coverHeaders: imageHeaders(),
     subtitle: bits.join(' · ')
   };
 }
 
+function imageHeaders() {
+  return { 'X-Lume-Image-Encoding': 'fernet', 'X-Lume-Image-Key': FERNET_KEY };
+}
 
+/// 站点有一组 purpose=10 的「小马/小学/初中/高中/禁区」分类，本脚本不接（见文件头）
 var BANNED_GROUP_PURPOSE = 10;
-var BANNED_WORDS = /(?!)/;
+var BANNED_WORDS = /小马|小学|初中|高中|萝莉|正太|幼齿|禁区|未成年/;
 
 function groupAllowed(group) {
+  if (!group) return false;
+  if (Number(group.purpose) === BANNED_GROUP_PURPOSE) return false;
+  if (BANNED_WORDS.test(String(group.name || ''))) return false;
+  var tags = group.tag || [];
+  for (var i = 0; i < tags.length; i++) {
+    if (tags[i] && BANNED_WORDS.test(String(tags[i].name || ''))) return false;
+  }
   return true;
 }
 
@@ -499,29 +513,41 @@ function groupAllowed(group) {
 var LumeSource = {
   id: 'xfdxv_video',
   name: '41看片 18+',
-  version: '1.0.0',
+  version: '1.1.0',
+  icon: 'https://img.zuoyebang.cc/zyb_513dc6dd137ee8262d370d80d9ad763e.jpg',
   category: 'video',
   mirrors: ['https://xfdxv.414459.lifestyle:8283'],
 
-
+  /// 分类和筛选共用完整标签表，保留排序入口；相同标签只显示一次。
   async categories() {
-    return [
+    var categories = [
       { id: 'latest', title: '最新更新' },
       { id: 'hot', title: '最多观看' },
       { id: 'likes', title: '最多点赞' },
-      { id: 'score', title: '高分' },
-      { id: 'tag:291', title: '原创' },
-      { id: 'tag:4562', title: '热门分类' }
+      { id: 'score', title: '高分' }
     ];
+    var groups = (await this.filters()).groups;
+    var seen = {};
+    for (var i = 0; i < groups.length; i++) {
+      for (var t = 0; t < groups[i].options.length; t++) {
+        var option = groups[i].options[t];
+        if (seen[option.id]) continue;
+        seen[option.id] = true;
+        categories.push({ id: 'tag:' + option.id, title: option.title });
+      }
+    }
+    return categories;
   },
 
- 
+  /// 筛选：实时读 /api/vod/tag_group（带 fs 缓存），跳过 purpose=10 那组未成年分类。
+  /// 抓不到就回空组，页面显示「本源不支持筛选」，不影响浏览。
   async filters() {
     try {
       var cached = null;
       try {
-        var text = await LumeSource.fs.readText('tag-groups.json');
-        if (text) cached = JSON.parse(text);
+        var text = await LumeSource.fs.readText('tag-groups-v2.json');
+        var saved = text ? JSON.parse(text) : null;
+        if (saved && Array.isArray(saved.groups) && Date.now() - saved.at < 3600000) cached = saved.groups;
       } catch (error) {
         cached = null;
       }
@@ -534,20 +560,22 @@ var LumeSource = {
           if (!groupAllowed(group)) continue;
           var tags = group.tag || [];
           var options = [];
-          for (var t = 0; t < tags.length && options.length < 40; t++) {
+          var seen = {};
+          for (var t = 0; t < tags.length; t++) {
             if (!tags[t] || tags[t].id == null || String(tags[t].is_ad) === '1') continue;
             if (BANNED_WORDS.test(String(tags[t].name || ''))) continue;
             // 「随机数据」是首页的随机位占位标签，不是真分类
             if (/随机数据/.test(String(tags[t].name || ''))) continue;
+            if (seen[tags[t].id]) continue;
+            seen[tags[t].id] = true;
             options.push({ id: String(tags[t].id), title: String(tags[t].name) });
           }
           if (!options.length) continue;
           groups.push({ id: 'tag:' + group.id, title: String(group.name || ('分组 ' + group.id)), options: options });
-      
         }
         cached = groups;
         try {
-          await LumeSource.fs.writeText('tag-groups.json', JSON.stringify(cached));
+          await LumeSource.fs.writeText('tag-groups-v2.json', JSON.stringify({ at: Date.now(), groups: cached }));
         } catch (error) {
           /* 缓存失败无所谓 */
         }
@@ -596,14 +624,23 @@ var LumeSource = {
         config.siteId;
     } else {
       var order = '';
-      var tagId = '';
-      if (categoryId.indexOf('tag:') === 0) tagId = categoryId.slice(4);
+      var tagIds = [];
+      if (/^tag:\d+$/.test(categoryId)) tagIds.push(categoryId.slice(4));
       else if (categoryId === 'hot') order = 'hits';
       else if (categoryId === 'likes') order = 'likes';
       else if (categoryId === 'score') order = 'score';
+      var filters = args.filters || {};
+      var keys = Object.keys(filters);
+      for (var k = 0; k < keys.length; k++) {
+        if (!/^tag:\d+$/.test(keys[k])) continue;
+        var selected = String(filters[keys[k]] || '').split(',');
+        for (var t = 0; t < selected.length; t++) {
+          if (/^\d+$/.test(selected[t]) && tagIds.indexOf(selected[t]) < 0) tagIds.push(selected[t]);
+        }
+      }
       path = '/api/vod/video?page=' + page + '&per_page=' + PER_PAGE + '&site_id=' + config.siteId;
       if (order) path += '&orderby=' + order;
-      if (tagId) path += '&tag=' + encodeURIComponent(tagId);
+      if (tagIds.length) path += '&tag=' + encodeURIComponent(tagIds.join(','));
     }
 
     var data = (await apiGet(path, false)) || {};
@@ -652,6 +689,7 @@ var LumeSource = {
       id: id,
       title: String(data.name || id),
       cover: absoluteImg(data.pic, config.imgHost),
+      coverHeaders: imageHeaders(),
       subtitle: bits.join(' · '),
       description: description.join('\n')
     };
