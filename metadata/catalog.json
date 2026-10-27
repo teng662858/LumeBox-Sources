@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 4,
     "movie": 11,
-    "video": 81,
+    "video": 82,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1674,6 +1674,18 @@
       "appSection": "video",
       "path": "video/爱豆.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "yuxiu_video",
+      "name": "玉羞园",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/玉羞园.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/玉羞园.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

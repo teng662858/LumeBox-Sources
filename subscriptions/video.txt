@@ -75,6 +75,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/汤头�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/玉羞园.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/绅游巴士.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蜜糖助眠.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/逆次元ACG.js
