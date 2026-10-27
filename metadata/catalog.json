@@ -5,7 +5,7 @@
     "comic": 50,
     "photo": 5,
     "movie": 12,
-    "video": 89,
+    "video": 90,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -745,14 +745,14 @@
     {
       "id": "gaze_video",
       "name": "注视影视",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/注视影视.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/注视影视.js",
       "aliases": [],
       "rating": "unknown",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "gztv5_video",
@@ -882,6 +882,18 @@
       "appSection": "video",
       "path": "video/618208.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/618208.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "s618_video",
+      "name": "618影院",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/618影院.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/618影院.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

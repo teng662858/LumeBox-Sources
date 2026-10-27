@@ -1,4 +1,4 @@
-// LumeSource: {"id": "gaze_video", "name": "注视影视", "category": "video", "version": "1.0.0", "mirrors": ["https://gaze.red/"], "mediaType": "video", "contentCategory": "movie"}
+// LumeSource: {"id": "gaze_video", "name": "注视影视", "category": "video", "version": "1.0.1", "mirrors": ["https://gaze.red/"], "mediaType": "video", "icon": "https://gaze.red/favicon.png", "contentCategory": "movie"}
 // LumeRuntime: javascript
 // Bounded HTML tree + a small, portable CSS subset for generated source files.
 // Supports tag, .class, #id, attributes, descendant, child and comma selectors.
@@ -351,7 +351,7 @@ function feedItems(html,base) {
 }
 
 // 公开目录与默认线路选集。页面播放器持有 blob/临时签名；不导出 Cookie。
-var C={"url": "https://gaze.red/", "id": "gaze_video", "name": "注视影视", "category": "video", "mode": "gaze", "api": "", "list": "https://gaze.red/", "search": "", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "contentCategory": "movie", "profile": "注视影视网页播放器", "useBrowser": true, "version": "1.0.0"}, gazeCache=Object.create(null);
+var C={"url": "https://gaze.red/", "id": "gaze_video", "name": "注视影视", "category": "video", "mode": "gaze", "api": "", "list": "https://gaze.red/", "search": "", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "contentCategory": "movie", "profile": "注视影视网页播放器", "useBrowser": true, "version": "1.0.1"}, gazeCache=Object.create(null);
 function gazeText(s){return String(s||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&#x27;/gi,"'").replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();}
 function gazeAttr(s,k){var m=new RegExp('(?:^|\\s)'+k+'\\s*=\\s*(?:"([^"]*)"|\'([^\']*)\'|([^\\s>]+))','i').exec(s);return m?gazeText(m[1]===undefined?m[2]===undefined?m[3]:m[2]:m[1]):'';}
 function gazeWork(id){var m=/^(?:https:\/\/gaze\.red)?\/?play\/([a-f0-9]{32})\/?$/i.exec(String(id||''));if(!m)throw new Error('注视影视作品地址无效');return 'https://gaze.red/play/'+m[1].toLowerCase();}
