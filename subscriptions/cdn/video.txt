@@ -84,6 +84,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/月色视频.j
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/杏吧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/查特直播.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/栀莲短剧.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/橘汁影视.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/汤头条.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/泥视频.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/海角.js
@@ -101,10 +102,12 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/臻品.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/花卷4K.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/茶杯狐.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/蜜糖助眠.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/蝴蝶影院.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/迷你猫源.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/追剧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/逆次元ACG.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/野果短剧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/闪电4K.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/麻豆社.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/黄果短剧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/黄果剧场.js
