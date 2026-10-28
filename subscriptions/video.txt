@@ -85,6 +85,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱播爱播.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/独播库.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/玉羞园.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/磁力6V.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/红果短剧.js
