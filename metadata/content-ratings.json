@@ -242,6 +242,9 @@
     "nhentai_comic": {
       "rating": "18+"
     },
+    "niacg_photo": {
+      "rating": "18+"
+    },
     "niacg_video": {
       "rating": "18+"
     },
@@ -330,6 +333,9 @@
       "rating": "18+"
     },
     "tianlula_video": {
+      "rating": "18+"
+    },
+    "twitthub_video": {
       "rating": "18+"
     },
     "twixive_video": {
@@ -538,6 +544,8 @@
     "reddxxx_video": "ReddXXX reddxxx.com（Reddit 成人视频聚合，18+）",
     "theavporn_video": "TheAVPorn theavporn.com（KVS 成人站，18+；CDN bytt.jb-aiwei.cc 免登录直连）",
     "s618_video": "618影院 618208.xyz 地址表 → 618<码>.xyz 站群（成人视频，文字 XOR 0x80 混淆，18+）",
-    "kkav_video": "KKAV www.73tfhk.com（原 37tmrj 换域名目标，成人视频，XOR2 加密接口，18+）"
+    "kkav_video": "KKAV www.73tfhk.com（原 37tmrj 换域名目标，成人视频，XOR2 加密接口，18+）",
+    "niacg_photo": "逆ACG www.niacg.com（二次元 COS 图集，Cloudflare 校验，18+）",
+    "twitthub_video": "TwittHub www.twitthub.com（X 公开视频聚合，Vercel 校验，18+）"
   }
 }

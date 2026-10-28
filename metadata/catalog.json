@@ -3,9 +3,9 @@
   "version": 1,
   "counts": {
     "comic": 50,
-    "photo": 5,
+    "photo": 6,
     "movie": 12,
-    "video": 90,
+    "video": 91,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -671,6 +671,18 @@
       "iconDeclared": true
     },
     {
+      "id": "niacg_photo",
+      "name": "逆ACG",
+      "version": "1.0.0",
+      "kind": "photo",
+      "appSection": "comic",
+      "path": "photo/逆ACG.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/photo/逆ACG.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "web-07a5a1a92631",
       "name": "360资源站",
       "version": "1.0.1",
@@ -1305,6 +1317,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "twitthub_video",
+      "name": "TwittHub",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/TwittHub.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/TwittHub.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "twixive_video",

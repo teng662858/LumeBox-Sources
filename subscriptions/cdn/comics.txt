@@ -55,3 +55,4 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/Z8PT图库.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/天撸啦图集.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/小黄书套图.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/小黄书自拍.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/逆ACG.js
