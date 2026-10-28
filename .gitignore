@@ -1,2 +1,3 @@
 .audio-*.log
 __pycache__/
+.tmp*

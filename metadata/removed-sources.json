@@ -1,0 +1,54 @@
+﻿{
+    "reason":  "2026-10-29 用户要求删除「只能播放一集 / 内容不完整」的源",
+    "checked_with":  "tools/episode_audit.mjs（列表→详情→选集→逐集取流探活）",
+    "entries":  [
+                    {
+                        "id":  "duse91_video",
+                        "path":  "video/91毒蛇.js",
+                        "sha256":  "59e368a0ae51969d2d2f62170cb785463f2017cb61335fe037d65e6dfdc6a13d",
+                        "reason":  "列表被站点 JS 挑战拦住（HTTP 850 未通过），列表 0 条"
+                    },
+                    {
+                        "id":  "zhenpin_video",
+                        "path":  "video/臻品.js",
+                        "sha256":  "9d4d92c812b115ad95546ef2b4e27a9c8227999269245d5b1204c4f6e5c8097f",
+                        "reason":  "www.zpcxb.com 解析到 127.0.1.1，站点不可达，列表 0 条"
+                    },
+                    {
+                        "id":  "hmtv_video",
+                        "path":  "video/迷你猫源.js",
+                        "sha256":  "90f0ff4b2f210c06ee217b279cea34d5f21a61db541887058adb3912070cdc86",
+                        "reason":  "指向 127.0.0.1:8888 本地 TVBox 服务端，用户端列表 0 条"
+                    },
+                    {
+                        "id":  "rebo_video",
+                        "path":  "video/热播极速.js",
+                        "sha256":  "311b1d5ac4f228e7a91740545917baa9dae82a6cfca03dcde0976762e9aec15c",
+                        "reason":  "取流返回未解密 token（NBY-XMYAES…），取前 8 集 0 集可播"
+                    },
+                    {
+                        "id":  "huajuan_video",
+                        "path":  "video/花卷4K.js",
+                        "sha256":  "94334d5f52f45769ffa7f339422152ea10985a1d1a67adb8ca6f7f4b2e5b6acd",
+                        "reason":  "详情页无选集链接，chapters 回退成单个「网页播放」"
+                    },
+                    {
+                        "id":  "shandian_video",
+                        "path":  "video/闪电4K.js",
+                        "sha256":  "89191c54147350c129df8ea62f801d68b534e2aca1b1d1cec69ed89ae370d601",
+                        "reason":  "详情页无选集链接，chapters 回退成单个「网页播放」"
+                    },
+                    {
+                        "id":  "hqvod_video",
+                        "path":  "video/点播高清.js",
+                        "sha256":  "0014aaa7fdda256d158790451b3d7c516ac9ecfd11c140df782d9511787cbaa2",
+                        "reason":  "详情页只暴露每条线路第 1 集，播放页 403，只能播一集"
+                    },
+                    {
+                        "id":  "hongguo_video",
+                        "path":  "video/红果短剧.js",
+                        "sha256":  "662e370f99d6443927c02d4b5d4f17953508be2be16438cf4380d911ff741d9b",
+                        "reason":  "第 4 集起 mp4 404，实测每部剧只有前 3 集可播"
+                    }
+                ]
+}

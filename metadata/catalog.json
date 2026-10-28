@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 112,
+    "video": 104,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -932,18 +932,6 @@
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/91吃瓜视频.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": true
-    },
-    {
-      "id": "duse91_video",
-      "name": "91毒蛇",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/91毒蛇.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/91毒蛇.js",
-      "aliases": [],
-      "rating": "unknown",
       "iconDeclared": true
     },
     {
@@ -1883,30 +1871,6 @@
       "iconDeclared": true
     },
     {
-      "id": "hqvod_video",
-      "name": "点播 - 高清",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/点播高清.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/点播高清.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": false
-    },
-    {
-      "id": "rebo_video",
-      "name": "热播·极速",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/热播极速.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/热播极速.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
-    },
-    {
       "id": "aqd_video",
       "name": "爱情岛",
       "version": "1.0.0",
@@ -1979,18 +1943,6 @@
       "iconDeclared": true
     },
     {
-      "id": "hongguo_video",
-      "name": "红果短剧",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/红果短剧.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/红果短剧.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
-    },
-    {
       "id": "gamebus_video",
       "name": "绅游巴士",
       "version": "1.0.0",
@@ -2001,30 +1953,6 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
-    },
-    {
-      "id": "zhenpin_video",
-      "name": "臻品",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/臻品.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/臻品.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
-    },
-    {
-      "id": "huajuan_video",
-      "name": "花卷4K",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/花卷4K.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/花卷4K.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
     },
     {
       "id": "citapa_video",
@@ -2058,18 +1986,6 @@
       "appSection": "video",
       "path": "video/蝴蝶影院.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蝴蝶影院.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
-    },
-    {
-      "id": "hmtv_video",
-      "name": "迷你猫源",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/迷你猫源.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/迷你猫源.js",
       "aliases": [],
       "rating": "unknown",
       "iconDeclared": true
@@ -2109,18 +2025,6 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
-    },
-    {
-      "id": "shandian_video",
-      "name": "闪电4K",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/闪电4K.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/闪电4K.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
     },
     {
       "id": "madou_club_video",
