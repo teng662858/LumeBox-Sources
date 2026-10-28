@@ -2,7 +2,7 @@
   "format": "lume.source-catalog",
   "version": 1,
   "counts": {
-    "comic": 50,
+    "comic": 49,
     "photo": 6,
     "movie": 12,
     "video": 93,
@@ -13,7 +13,7 @@
     {
       "id": "manhua127_comic",
       "name": "127漫画",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "kind": "comic",
       "appSection": "comic",
       "path": "comic/127漫画.js",
@@ -282,18 +282,6 @@
       "appSection": "comic",
       "path": "comic/大人漫画.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/大人漫画.js",
-      "aliases": [],
-      "rating": "18+",
-      "iconDeclared": false
-    },
-    {
-      "id": "tianlula_novel",
-      "name": "天撸啦小说",
-      "version": "1.0.0",
-      "kind": "comic",
-      "appSection": "comic",
-      "path": "comic/天撸啦小说.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/天撸啦小说.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

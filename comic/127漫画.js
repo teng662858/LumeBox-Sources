@@ -1,5 +1,7 @@
-// LumeSource: {"id":"manhua127_comic","name":"127漫画","version":"1.1.0","category":"comic","mirrors":["https://www.127manhua.com"],"icon":"https://www.127manhua.com/template/wap/default/img/favicon.ico"}
+// LumeSource: {"id":"manhua127_comic","name":"127漫画","version":"1.2.0","category":"comic","mirrors":["https://www.127manhua.com"],"icon":"https://www.127manhua.com/template/wap/default/img/favicon.ico"}
 
+// v1.2.0（2026-10-29）修：封面被 http/裸 IP 拖死、VIP 分类空、章节图 http 混用
+//
 // 站点：https://www.127manhua.com（127漫画网 · McCMS v10 定制 wap 主题）
 // 模板目录 /template/wap/default/，前端逻辑在 /packs/mccms/base_wap.js（jQuery）
 // 与 /template/wap/default/js/core.js（comic.search / comic.category）。
@@ -244,6 +246,10 @@ var LumeSource = {
       return { kind: 'images', images: images, headers: { 'Referer': BASE_URL + '/' } };
     }
     var text = this.__pageText(html);
+    if (!text || /VIP|付费|购买|登录|解锁|会员|金币/.test(String(text).slice(0, 400))) {
+      console.warn('[127] 这一话要 VIP/登录，改走网页播放：' + chapterUrl);
+      return { kind: 'webplayer', url: chapterUrl, headers: { 'Referer': BASE_URL + '/' } };
+    }
     if (text) {
       console.warn('[127] 这一话没有图片，按文字返回（' + chapterUrl + '）');
       return { kind: 'text', text: text };
@@ -345,6 +351,18 @@ var LumeSource = {
     if (text.indexOf('http') === 0) return text;
     if (text.charAt(0) === '/') return BASE_URL + text;
     return BASE_URL + '/' + text;
+  },
+
+  /// 封面 / 章节图必须是 https：iOS 的 ATS 会拦掉 http 资源（整页占位图就是这个原因）。
+  /// 裸 IP 主机没有 TLS 也连不上，统一判为不可用，交给 __fillCovers 去详情页补。
+  __httpsUrl(value) {
+    var text = this.__absolute(value);
+    if (!text) return '';
+    var m = /^http:\/\/([^/]+)([\s\S]*)$/i.exec(text);
+    if (!m) return text;
+    var host = m[1];
+    if (/^\d{1,3}(?:\.\d{1,3}){3}(?::\d+)?$/.test(host)) return '';
+    return 'https://' + host + m[2];
   },
 
   // ---------------------------------------------------------------- 分类 / 首页
@@ -455,6 +473,29 @@ var LumeSource = {
   // ---------------------------------------------------------------- 解析
 
   /// 接口返回 → 契约条目。id 用**绝对地址**（detail()/chapters() 原样认）。
+  /// 接口里封面是裸 IP（http://206.237.5.163/…）的条目，图床已经废了；
+  /// 详情页里通常还是好的 https 图，补一次（限量、并发无关，失败就留空）。
+  async __fillCovers(items) {
+    var limit = 8;
+    var done = 0;
+    for (var i = 0; i < items.length && done < limit; i++) {
+      if (items[i].cover) continue;
+      done++;
+      try {
+        var html = await this.__get(items[i].id);
+        var info = this.__detailInfo(html);
+        var cover = this.__httpsUrl(info && info.cover);
+        if (cover) {
+          items[i].cover = cover;
+          items[i].coverHeaders = { 'Referer': BASE_URL + '/' };
+        }
+      } catch (error) {
+        /* 补不到就留空 */
+      }
+    }
+    return items;
+  },
+
   __apiItems(payload) {
     var rows = payload && payload.data && payload.data.length ? payload.data : [];
     var items = [];
@@ -466,7 +507,7 @@ var LumeSource = {
       items.push({
         id: url,
         title: this.__cut(title, 80),
-        cover: this.__absolute(row.pic),
+        cover: this.__httpsUrl(this.__absolute(row.pic)),
         coverHeaders: { 'Referer': BASE_URL + '/' },
         subtitle: this.__cut(this.__plain(row.chapter_name || row.author || row.serialize || ''), 40)
       });
@@ -662,7 +703,7 @@ var LumeSource = {
           this.__attr(tag, 'src'));
         if (url && this.__isImage(url) && !seen[url]) {
           seen[url] = true;
-          images.push(url);
+          images.push(this.__httpsUrl(url));
         }
       }
       at = next;
@@ -688,7 +729,7 @@ var LumeSource = {
         this.__attr(tag, 'src'));
       if (url && this.__isImage(url) && !seen[url]) {
         seen[url] = true;
-        images.push(url);
+        images.push(this.__httpsUrl(url));
       }
       at = area.indexOf('<img', imgEnd);
     }
