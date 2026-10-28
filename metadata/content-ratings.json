@@ -179,6 +179,9 @@
     "kaotic_video": {
       "rating": "18+"
     },
+    "kkav_video": {
+      "rating": "18+"
+    },
     "kxmanhua1_comic": {
       "rating": "18+"
     },
@@ -327,9 +330,6 @@
       "rating": "18+"
     },
     "tianlula_video": {
-      "rating": "18+"
-    },
-    "tmrj37_video": {
       "rating": "18+"
     },
     "twixive_video": {
@@ -491,7 +491,6 @@
     "uncams_video": "UN Cams（uncams.com，成人直播站，全站 18+；房间列表走 /api/ts/roomlist/room-list/，播放给 webplayer）",
     "mfc_video": "MyFreeCams（myfreecams.com，成人直播站，全站 18+；在线列表由 WebSocket 填充，源内用网页渲染取列表、播放走 webplayer）",
     "lu320_video": "320lu 小视频（yd.kmuan.com:66 / 111.62.156.183:66，成人短视频站，全站 18+；播放走 kan.php 现取一次性签名 mp4）",
-    "tmrj37_video": "37tmrj（37tmrj.com，成人影视/小说/图片综合站，全站 18+；接口是 XOR2 加密信封，源内用网页渲染取页面）",
     "x8x8_video": "8x8x（随机跳板域，成人综合站：视频+小说+图库，全站 18+；列表由 AES-GCM 加密接口填充，源内用网页渲染，条目按形态返回 video/text/images）",
     "yunlaopo_video": "云老婆（yunlaopo.com，华人成人短视频平台，全站 18+；KVS 内核，播放串 …xxx.mp4/ 形式，Range 实测 206）",
     "hipeng_video": "嗨碰（scenicembrace 跳板域，成人短视频站，全站 18+；SSR 列表 + hlsdelivery 签名 m3u8）",
@@ -538,6 +537,7 @@
     "hsex_video": "好色TV(hsex) hsex.men（成人短视频站，18+；与 hstv.fun 的好色TV 是两个站）",
     "reddxxx_video": "ReddXXX reddxxx.com（Reddit 成人视频聚合，18+）",
     "theavporn_video": "TheAVPorn theavporn.com（KVS 成人站，18+；CDN bytt.jb-aiwei.cc 免登录直连）",
-    "s618_video": "618影院 618208.xyz 地址表 → 618<码>.xyz 站群（成人视频，文字 XOR 0x80 混淆，18+）"
+    "s618_video": "618影院 618208.xyz 地址表 → 618<码>.xyz 站群（成人视频，文字 XOR 0x80 混淆，18+）",
+    "kkav_video": "KKAV www.73tfhk.com（原 37tmrj 换域名目标，成人视频，XOR2 加密接口，18+）"
   }
 }

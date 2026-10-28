@@ -851,18 +851,6 @@
       "iconDeclared": false
     },
     {
-      "id": "tmrj37_video",
-      "name": "37tmrj",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/37tmrj.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/37tmrj.js",
-      "aliases": [],
-      "rating": "18+",
-      "iconDeclared": false
-    },
-    {
       "id": "xfdxv_video",
       "name": "41看片 18+",
       "version": "1.1.0",
@@ -1158,6 +1146,18 @@
       "appSection": "video",
       "path": "video/Kaotic.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Kaotic.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": false
+    },
+    {
+      "id": "kkav_video",
+      "name": "KKAV",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/KKAV.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/KKAV.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

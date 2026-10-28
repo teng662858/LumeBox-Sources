@@ -3,7 +3,6 @@
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/1024Videos.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/18AV.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/320lu小视频.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/37tmrj.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/41看片.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/618208.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/618影院.js
@@ -29,6 +28,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/H动漫�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/H動漫網.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Iwara视频.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Kaotic.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/KKAV.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/LXXLXX.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/MatureNL.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/MatureTube.js
