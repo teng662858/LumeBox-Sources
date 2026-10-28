@@ -86,6 +86,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/爱情岛.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/爱播爱播.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/爱豆.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/玉羞园.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/磁力6V.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/红果短剧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/绅游巴士.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/蜜糖助眠.js
