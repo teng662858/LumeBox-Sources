@@ -913,7 +913,7 @@
     {
       "id": "x8x8_video",
       "name": "8x8x",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "kind": "video",
       "appSection": "video",
       "path": "video/8x8x.js",

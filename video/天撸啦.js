@@ -171,9 +171,33 @@ function aesCbcDecrypt(base64Cipher, keyText, ivText) {
 // ---------------------------------------------------------------- 站点接口（密文）
 
 var BASE = 'https://ttbd067.top:51000';
-var KEY_TEXT = 'bfd7257d9bee742c';
-var IV_TEXT = '506ecf5490eeb552';
 var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
+
+// ---- 每日 key（站点 2026-10 起改成「按天」的 AES-128-CBC 密钥）----
+// 站点 core.js 的算法（已用真实接口验过）：
+//   key = md5('a9F3sKx8QpLm2025#' + YYYYMMDD + '#kuaishou').slice(0, 16)
+//   iv  = md5(key + '#douyin') 的 hex 前 16 位（按 ASCII 取字节）
+// 跨零点时用昨天的 key 兜底。
+var K0_SALT = 'a9F3sKx8QpLm2025';
+var _keyPairs = null;
+
+function pad2(n) {
+  return (n < 10 ? '0' : '') + n;
+}
+
+async function keyPairs() {
+  if (_keyPairs) return _keyPairs;
+  var out = [];
+  for (var d = 0; d <= 1; d++) {
+    var day = new Date(Date.now() - d * 86400000);
+    var ymd = '' + day.getFullYear() + pad2(day.getMonth() + 1) + pad2(day.getDate());
+    var key = String(await LumeSource.tools.digest('md5', K0_SALT + '#' + ymd + '#kuaishou')).slice(0, 16);
+    var iv = String(await LumeSource.tools.digest('md5', key + '#douyin')).slice(0, 16);
+    out.push({ key: key, iv: iv });
+  }
+  _keyPairs = out;
+  return out;
+}
 var PAGE_SIZE = 20;
 var NAV_TTL_MS = 6 * 3600 * 1000;
 var DETAIL_TTL_MS = 10 * 60 * 1000;
@@ -224,11 +248,16 @@ async function api(action, params) {
   var raw = typeof json.list === 'string' ? json.list : (typeof json.data === 'string' ? json.data : '');
   var data = null;
   if (raw) {
-    try {
-      data = JSON.parse(aesCbcDecrypt(raw, KEY_TEXT, IV_TEXT));
-    } catch (error) {
-      throw new Error('密文解不开（站点换 key 了？）：' + query);
+    var pairs = await keyPairs();
+    for (var pi = 0; pi < pairs.length; pi++) {
+      try {
+        data = JSON.parse(aesCbcDecrypt(raw, pairs[pi].key, pairs[pi].iv));
+        break;
+      } catch (error) {
+        data = null;
+      }
     }
+    if (!data) throw new Error('密文解不开（站点换 key 规则了？）：' + query);
   } else if (json.data && typeof json.data === 'object') {
     data = json.data;
   }
