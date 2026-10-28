@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 107,
+    "video": 108,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1758,6 +1758,18 @@
       "appSection": "video",
       "path": "video/文才影视.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/文才影视.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
+    },
+    {
+      "id": "xingya_video",
+      "name": "星芽短剧",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/星芽短剧.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/星芽短剧.js",
       "aliases": [],
       "rating": "unknown",
       "iconDeclared": true
