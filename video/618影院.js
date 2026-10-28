@@ -1,4 +1,4 @@
-// LumeSource: {"id":"s618_video","name":"618影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://618208.xyz","https://6181029.xyz","https://618600.xyz"],"network":"direct"}
+// LumeSource: {"id":"s618_video","name":"618影院","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://618208.xyz","https://6181029.xyz","https://618600.xyz"],"network":"direct"}
 // LumeRuntime: javascript
 //
 // 站点：618 影院（`618<码>.xyz` 全域；入口 https://618208.xyz）
@@ -256,7 +256,7 @@ async function zoneItems(zone, page) {
 var LumeSource = {
   id: 's618_video',
   name: '618影院',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
   mirrors: ['https://618208.xyz', 'https://6181029.xyz', 'https://618600.xyz'],
@@ -288,9 +288,9 @@ var LumeSource = {
   },
 
   async filters() {
-    var options = [];
-    for (var i = 0; i < ZONES.length; i++) options.push({ id: ZONES[i].id, title: ZONES[i].title });
-    return { groups: [{ id: 'category', title: '区', options: options }] };
+    // 各区已经由 categories() 展示。站点未提供独立的排序/筛选维度，
+    // 不再把相同的区名复制到第二排，也不虚构「最新/最热」。
+    return { groups: [] };
   },
 
   async list(argument) {
@@ -298,7 +298,8 @@ var LumeSource = {
     var page = Number(args.page || 1) || 1;
     var categoryId = String(args.categoryId == null ? '' : args.categoryId).trim();
     var filters = args.filters || {};
-    if (filters.category) categoryId = 'z' + String(filters.category).trim().replace(/^z/, '');
+    // 兼容旧版保存的区筛选；明确点击分类时，以当前分类为准。
+    if (!categoryId && filters.category) categoryId = 'z' + String(filters.category).trim().replace(/^z/, '');
     var zone = zoneOf(categoryId);
     var items = await zoneItems(zone, page);
     return {

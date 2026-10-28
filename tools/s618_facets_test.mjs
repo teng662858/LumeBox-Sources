@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+
+const code = fs.readFileSync(new URL('../video/618影院.js', import.meta.url), 'utf8');
+const context = vm.createContext({});
+vm.runInContext(code, context);
+const source = context.LumeSource;
+const categories = await source.categories();
+assert.equal(categories.length, 10);
+assert.equal(new Set(categories.map(c => c.id)).size, 10);
+assert.equal(categories[0].title, '一区');
+assert.equal(categories.at(-1).title, '漫画');
+assert.equal((await source.filters()).groups.length, 0, '分类只显示一排，不虚构排序/复制区筛选');
+const requests = [];
+context.zoneItems = async (zone, page) => { requests.push({ id: zone.id, page }); return []; };
+await source.list({ categoryId: 'z2', page: 3, filters: { category: 'z5' } });
+assert.deepEqual(requests.pop(), { id: 'z2', page: 3 }, '旧筛选不能覆盖新点击的分类');
+await source.list({ filters: { category: '5' } });
+assert.deepEqual(requests.pop(), { id: 'z5', page: 1 }, '保留旧区筛选配置兼容');
+await source.list({});
+assert.equal(requests.pop().id, 'z1');
+assert.equal(source.version, '1.0.1');
+assert.equal(JSON.parse(code.split('\n')[0].replace('// LumeSource: ', '')).version, source.version);
+console.log('618影院：十区分类单排、无虚构排序、旧筛选兼容与分类优先通过');

@@ -889,7 +889,7 @@
     {
       "id": "s618_video",
       "name": "618影院",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/618影院.js",
