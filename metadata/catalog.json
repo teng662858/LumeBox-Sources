@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 97,
+    "video": 98,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1953,6 +1953,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "shandian_video",
+      "name": "闪电4K",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/闪电4K.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/闪电4K.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
     },
     {
       "id": "madou_club_video",

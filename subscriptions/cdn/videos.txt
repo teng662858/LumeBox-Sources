@@ -107,6 +107,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/蜜糖助眠.j
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/迷你猫源.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/逆次元ACG.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/野果短剧.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/闪电4K.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/麻豆社.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/黄果剧场.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/13听书网.js
