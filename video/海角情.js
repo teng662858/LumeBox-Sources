@@ -144,6 +144,34 @@ var LumeSource = {
     return list;
   },
 
+  async filters() {
+    var catOptions = [{ id: 'all', title: '全部' }];
+    try {
+      var cats = await this.categories();
+      var seenIds = { all: true };
+      for (var i = 0; i < cats.length; i++) {
+        if (!cats[i] || seenIds[cats[i].id]) continue;
+        seenIds[cats[i].id] = true;
+        catOptions.push({ id: cats[i].id, title: cats[i].title });
+      }
+    } catch (error) {
+      /* 分类拿不到就只留全部 */
+    }
+    return {
+      groups: [
+        { id: 'category', title: '分类', options: catOptions },
+        {
+          id: 'sort',
+          title: '排序',
+          options: [
+            { id: 'date', title: '最新' },
+            { id: 'comment_count', title: '最热（评论多）' },
+          ],
+        },
+      ],
+    };
+  },
+
   async home() {
     var boards = [];
     try {
@@ -162,7 +190,7 @@ var LumeSource = {
     var categoryId = String(args.categoryId == null ? '' : args.categoryId).trim();
     var filters = args.filters || {};
     if (filters.category) categoryId = String(filters.category).trim();
-    var path = '/wp-json/wp/v2/posts?per_page=' + PAGE_SIZE + '&page=' + page + '&orderby=date&order=desc';
+    var path = '/wp-json/wp/v2/posts?per_page=' + PAGE_SIZE + '&page=' + page + '&orderby=date&order=desc&_embed=wp:featuredmedia';
     if (/^\d+$/.test(categoryId) && categoryId !== 'all') path += '&categories=' + categoryId;
     if (keyword) path += '&search=' + encodeURIComponent(keyword);
     var rows = await getJson(path);
@@ -171,10 +199,18 @@ var LumeSource = {
     for (var i = 0; i < rows.length; i++) {
       var row = rows[i];
       var content = (row.content && row.content.rendered) || '';
+      var featured = '';
+      try {
+        var emb = row._embedded && row._embedded['wp:featuredmedia'];
+        if (Array.isArray(emb) && emb[0] && emb[0].source_url) featured = String(emb[0].source_url);
+      } catch (error) {
+        featured = '';
+      }
+      if (!featured) featured = String(row.jetpack_featured_media_url || '');
       items.push({
         id: String(row.id),
         title: clean((row.title && row.title.rendered) || ''),
-        cover: firstImage(content),
+        cover: firstImage(content) || featured,
         subtitle: String((row.date || '')).slice(0, 10),
       });
     }
