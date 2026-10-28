@@ -1,4 +1,4 @@
-// LumeSource: {"id":"kkav_video","name":"KKAV","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.73tfhk.com"],"network":"proxy"}
+// LumeSource: {"id":"kkav_video","name":"KKAV","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.73tfhk.com"],"network":"proxy","icon":"https://www.73tfhk.com/static/favicon.ico"}
 // LumeRuntime: javascript
 //
 // 站点：KKAV（https://www.73tfhk.com，原 37tmrj 的换域名目标；成人视频站，全站 18+）

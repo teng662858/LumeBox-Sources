@@ -1,4 +1,4 @@
-// LumeSource: {"id":"lu320_video","name":"320lu小视频","version":"1.0.0","category":"video","mirrors":["https://www.fabu55.cc","http://www.fawu110.com:66","http://218.11.5.233"],"network":"direct"}
+// LumeSource: {"id":"lu320_video","name":"320lu小视频","version":"1.0.0","category":"video","mirrors":["https://www.fabu55.cc","http://www.fawu110.com:66","http://218.11.5.233"],"network":"direct","icon":"https://www.fabu55.cc/favicon.ico"}
 //
 // 站点：320lu 小视频（移动线 http://yd.kmuan.com:66 ，备用 http://111.62.156.183:66 ，
 // title「320lu小视频官网，记录幸福生活，记录你」；成人短视频站，全站 18+）

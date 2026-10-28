@@ -1,4 +1,4 @@
-// LumeSource: {"id":"haijiaoqing_video","name":"海角情","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.haijiaolove.xyz"],"network":"proxy"}
+// LumeSource: {"id":"haijiaoqing_video","name":"海角情","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.haijiaolove.xyz"],"network":"proxy","icon":"https://www.haijiaolove.xyz/wp-content/uploads/2022/06/logo1-100x100.jpg"}
 // LumeRuntime: javascript
 //
 // 站点：海角情（https://www.haijiaolove.xyz）—— WordPress 站，帖子就是资源条目。

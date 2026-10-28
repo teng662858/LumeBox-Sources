@@ -1,4 +1,4 @@
-// LumeSource: {"id":"hsex_video","name":"好色TV(hsex)","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://hsex.men"],"network":"proxy"}
+// LumeSource: {"id":"hsex_video","name":"好色TV(hsex)","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://hsex.men"],"network":"proxy","icon":"https://hsex.men/favicon.ico"}
 // LumeRuntime: javascript
 //
 // 站点：好色™ Tv（https://hsex.men）—— 经典 PHP tube 模板（list-N.htm / video-{id}.htm）。

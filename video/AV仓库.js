@@ -1,4 +1,4 @@
-// LumeSource: {"id":"jizeyy_video","name":"AV仓库","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.jizeyy.com"],"network":"direct"}
+// LumeSource: {"id":"jizeyy_video","name":"AV仓库","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.jizeyy.com"],"network":"direct","icon":"https://www.jizeyy.com/usr/themes/yingshierhao/assets/images/favicon.png"}
 // LumeRuntime: javascript
 //
 // 站点：AV仓库（https://www.jizeyy.com）—— Typecho + 主题 yingshierhao（`/usr/themes/yingshierhao/`）。

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"tanhua_video","name":"探花视频","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://xn--91-mu9cv53j.com","https://xn--dzu640eo1e2qq.com"],"network":"direct"}
+// LumeSource: {"id":"tanhua_video","name":"探花视频","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://xn--91-mu9cv53j.com","https://xn--dzu640eo1e2qq.com"],"network":"direct","icon":"https://xn--91-mu9cv53j.com/favicon.png"}
 // LumeRuntime: javascript
 //
 // 站点：探花视频（探花视频.com）与 91大神（91大神.com）—— **同一套内容库的两个入口**，实测：

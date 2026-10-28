@@ -1,4 +1,4 @@
-// LumeSource: {"id":"resao_video","name":"91热爆","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.resao.com"],"network":"proxy"}
+// LumeSource: {"id":"resao_video","name":"91热爆","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.resao.com"],"network":"proxy","icon":"https://www.resao.com/favicon.ico"}
 // LumeRuntime: javascript
 //
 // 站点：91热爆（https://www.resao.com）—— KVS（Kernel Video Sharing）站，**有 VIP 专享内容**。
