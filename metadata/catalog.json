@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 111,
+    "video": 112,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1881,6 +1881,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": true
+    },
+    {
+      "id": "hqvod_video",
+      "name": "点播 - 高清",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/点播高清.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/点播高清.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": false
     },
     {
       "id": "rebo_video",
