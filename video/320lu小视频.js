@@ -1,4 +1,4 @@
-// LumeSource: {"id":"lu320_video","name":"320lu小视频","version":"1.0.0","category":"video","mirrors":["http://yd.kmuan.com:66","http://111.62.156.183:66"]}
+// LumeSource: {"id":"lu320_video","name":"320lu小视频","version":"1.0.0","category":"video","mirrors":["http://yd.kmuan.com:66","http://111.62.156.183:66"],"network":"direct"}
 //
 // 站点：320lu 小视频（移动线 http://yd.kmuan.com:66 ，备用 http://111.62.156.183:66 ，
 // title「320lu小视频官网，记录幸福生活，记录你」；成人短视频站，全站 18+）
