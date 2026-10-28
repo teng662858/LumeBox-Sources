@@ -81,6 +81,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/杏吧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/查特直播.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/栀莲短剧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/汤头条.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/泥视频.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/海角.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/海角情-2.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/爱情岛.js

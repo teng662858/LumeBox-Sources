@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 102,
+    "video": 103,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1785,6 +1785,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "nivod_video",
+      "name": "泥视频",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/泥视频.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/泥视频.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
     },
     {
       "id": "haijiao_video",
