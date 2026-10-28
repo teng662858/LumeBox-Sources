@@ -5,7 +5,7 @@
     "comic": 50,
     "photo": 6,
     "movie": 12,
-    "video": 91,
+    "video": 93,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1667,6 +1667,18 @@
       "iconDeclared": false
     },
     {
+      "id": "yentan4k_video",
+      "name": "影探4K",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/影探4K.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/影探4K.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
+    },
+    {
       "id": "yue5xi5_video",
       "name": "快猫 18+",
       "version": "1.0.0",
@@ -1845,6 +1857,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "hongguo_video",
+      "name": "红果短剧",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/红果短剧.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/红果短剧.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
     },
     {
       "id": "gamebus_video",
