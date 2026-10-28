@@ -49,6 +49,62 @@
                         "path":  "video/红果短剧.js",
                         "sha256":  "662e370f99d6443927c02d4b5d4f17953508be2be16438cf4380d911ff741d9b",
                         "reason":  "第 4 集起 mp4 404，实测每部剧只有前 3 集可播"
+                    },
+                    {
+                        "id":  "yentan4k_video",
+                        "path":  "video/影探4K.js",
+                        "sha256":  "8f7f2625665a8e8e432b6f45ab78b16d9f6aecf46a10e59948ae49c472489643",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "wencai_video",
+                        "path":  "video/文才影视.js",
+                        "sha256":  "5fc8db71a9454aa9ee654a22a7662c66c3f23eccb24141c189b688560cc0f8e0",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "xingya_video",
+                        "path":  "video/星芽短剧.js",
+                        "sha256":  "6298e71ae0fc644ee40e1173fa9b9c9b9df4436a96809315c5ed2c430f19f6de",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "juzhi_app",
+                        "path":  "video/橘汁影视.js",
+                        "sha256":  "de80eba063f76a94931bc1c31d9aa69cff9f7be0c51100fa759cd2119d01826a",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "nivod_video",
+                        "path":  "video/泥视频.js",
+                        "sha256":  "25c023cb922bf22096551e0c98be2cbe157dfef7ea71942df1184ae82734f0a7",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "xin6v_video",
+                        "path":  "video/磁力6V.js",
+                        "sha256":  "b2d26088bb472729da55ad65be4918249c6665472ea8af6d4c884dba9fc90f2b",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "citapa_video",
+                        "path":  "video/茶杯狐.js",
+                        "sha256":  "611a9c16518d0244cc06f2c35ed18496016e73dd4751fe2f6d0fecd75c4390a9",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
+                    },
+                    {
+                        "id":  "jisu_video",
+                        "path":  "video/追剧.js",
+                        "sha256":  "27b33dca8bcc872771486eddb8400dd7551ba6ceaf96d15d18f2ade4142080db",
+                        "reason":  "用户圈选下架（此前实测可播，按用户要求移除）",
+                        "removed_at":  "2026-10-29"
                     }
                 ]
 }
