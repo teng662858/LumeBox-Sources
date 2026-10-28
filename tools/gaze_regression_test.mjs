@@ -37,7 +37,17 @@ assert.equal(calls.filter(c=>c.url===page).length,1,'detail/chapters reuse the s
 await assert.rejects(()=>source.content({id:page,chapterId:'https://evil.example/#episode=1'}));
 await assert.rejects(()=>source.list({categoryId:'other'}));
 context.gazeCache={}; rendered='<title>访问验证</title>';
-await assert.rejects(()=>source.detail({id:page}),/默认线路选集/);
+await assert.rejects(()=>source.detail({id:page}),/NEED_WEBVIEW_VERIFY/);
+// A server-rendered list avoids browser-only element waits.
+context.gazeCache={}; source.http.get=async()=>({status:200,body:detail});
+const originalRender=source.web.render;
+source.web.render=async()=>{throw new Error('browser should not be needed');};
+assert.equal((await source.detail({id:page})).chapters.length,10);
+// Older App versions still get a useful verification action, not PlatformException.
+context.gazeCache={}; source.http.get=async()=>({status:200,body:'<title>访问验证</title><cap-widget data-cap-api-endpoint="/event/cap/"></cap-widget>'});
+source.web.render=async()=>{throw new Error('PlatformException(element_not_found, 目标元素未找到或等待超时)');};
+await assert.rejects(()=>source.detail({id:page}),/NEED_WEBVIEW_VERIFY/);
+source.web.render=originalRender;
 // Exercise the exact generated pagination program with an asynchronous DOM.
 let current=1,busy=false,clicks=0;
 const nav={querySelector:()=>({dataset:{page:String(current)}}),querySelectorAll:()=>[2,3].map(n=>({dataset:{page:String(n)},disabled:false,click(){clicks++;busy=true;current=n;setTimeout(()=>busy=false,10);}}))};

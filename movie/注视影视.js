@@ -1,4 +1,4 @@
-// LumeSource: {"id": "gaze_video", "name": "注视影视", "category": "video", "version": "1.0.2", "mirrors": ["https://gaze.red/"], "mediaType": "video", "icon": "https://gaze.red/favicon.png", "contentCategory": "movie"}
+// LumeSource: {"id": "gaze_video", "name": "注视影视", "category": "video", "version": "1.0.3", "mirrors": ["https://gaze.red/"], "mediaType": "video", "icon": "https://gaze.red/favicon.png", "contentCategory": "movie"}
 // LumeRuntime: javascript
 // Bounded HTML tree + a small, portable CSS subset for generated source files.
 // Supports tag, .class, #id, attributes, descendant, child and comma selectors.
@@ -351,7 +351,7 @@ function feedItems(html,base) {
 }
 
 // 公开目录与默认线路选集。页面播放器持有 blob/临时签名；不导出 Cookie。
-var C={"url": "https://gaze.red/", "id": "gaze_video", "name": "注视影视", "category": "video", "mode": "gaze", "api": "", "list": "https://gaze.red/", "search": "", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "contentCategory": "movie", "profile": "注视影视网页播放器", "useBrowser": true, "version": "1.0.2"}, gazeCache=Object.create(null);
+var C={"url": "https://gaze.red/", "id": "gaze_video", "name": "注视影视", "category": "video", "mode": "gaze", "api": "", "list": "https://gaze.red/", "search": "", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "contentCategory": "movie", "profile": "注视影视网页播放器", "useBrowser": true, "version": "1.0.3"}, gazeCache=Object.create(null);
 function gazeText(s){return String(s||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&#x27;/gi,"'").replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();}
 function gazeAttr(s,k){var m=new RegExp('(?:^|\\s)'+k+'\\s*=\\s*(?:"([^"]*)"|\'([^\']*)\'|([^\\s>]+))','i').exec(s);return m?gazeText(m[1]===undefined?m[2]===undefined?m[3]:m[2]:m[1]):'';}
 function gazeWork(id){var m=/^(?:https:\/\/gaze\.red)?\/?play\/([a-f0-9]{32})\/?$/i.exec(String(id||''));if(!m)throw new Error('注视影视作品地址无效');return 'https://gaze.red/play/'+m[1].toLowerCase();}
@@ -365,11 +365,24 @@ function gazeCards(html){var rows=[],seen={},re=/<article\b[^>]*>([\s\S]*?)<\/ar
 function gazeMeta(html,name){var tags=html.match(/<meta\b[^>]*>/gi)||[];for(var i=0;i<tags.length;i++)if(gazeAttr(tags[i],'property')===name||gazeAttr(tags[i],'name')===name)return gazeAttr(tags[i],'content');return '';}
 function gazeEpisodes(html,page){var start=/\bid=["']play-source-panel-g1["']/.exec(html);if(!start)return [];html=html.slice(start.index+start[0].length);var end=/\bid=["']play-source-panel-g\d+["']/.exec(html);if(end)html=html.slice(0,end.index);var re=/<button\b([^>]*)>([\s\S]*?)<\/button>/gi,m,out=[],seen={};while((m=re.exec(html))){var eid=gazeAttr(m[1],'data-id'),cls=gazeAttr(m[1],'class'),title=gazeText(m[2]);if(!/(^|\s)playbtn(?:\s|$)/.test(cls)||!/^\d+$/.test(eid)||!title||seen[eid])continue;seen[eid]=1;out.push({id:page+'#episode='+eid,title:title});}return out;}
 async function gazeRender(url,selector,script){if(!LumeSource.web||typeof LumeSource.web.render!=='function')throw new Error('注视影视需要支持浏览器渲染的新版 LumeBox');var r=await LumeSource.web.render({url:url,headers:{Referer:'https://gaze.red/'},timeoutMs:8000,elementTimeoutMs:6500,waitForSelector:selector,script:script||'',includeHtml:true});var final=String(r.url||url);if(!/^https:\/\/gaze\.red(?:\/|$)/.test(final))throw new Error('注视影视跳转到了其他网站，请检查网址');return r;}
+function gazeVerification(html){return /<cap-widget\b|data-cap-api-endpoint|<title[^>]*>\s*(?:访问验证|安全验证|Just a moment)/i.test(String(html||''));}
+function gazeVerificationError(){return new Error('NEED_WEBVIEW_VERIFY：注视影视需要完成站点访问验证，请打开网页视图验证后重试。');}
 async function gazeDetail(id){var page=gazeWork(id),cached=gazeCache[page];if(cached&&Date.now()-cached.time<120000)return cached.row;
- var response=await gazeRender(page,'#play-source-panel-g1 .playbtn'),html=response.html||'',episodes=gazeEpisodes(html,page),h=/<h5\b[^>]*itemprop=["']name["'][^>]*>([\s\S]*?)<\/h5>/i.exec(html);
+ var html='',episodes=[],challenge=false;
+ // Reuse a normal server-rendered episode list without waiting on a browser selector.
+ try{var raw=await LumeSource.http.get(page,{headers:{Referer:'https://gaze.red/'}});html=raw.body||'';challenge=gazeVerification(html);if(!challenge)episodes=gazeEpisodes(html,page);}
+ catch(error){if(/cancel/i.test(String(error&&error.message||error)))throw error;}
+ if(!episodes.length){
+  try{var response=await gazeRender(page,'#play-source-panel-g1 .playbtn');html=response.html||'';}
+  catch(error){if(challenge&&/element_not_found|ELEMENT_NOT_FOUND|page_timeout|等待超时/.test(String(error&&error.message||error)))throw gazeVerificationError();throw error;}
+  if(gazeVerification(html))throw gazeVerificationError();
+  episodes=gazeEpisodes(html,page);
+ }
  if(!episodes.length)throw new Error('未读取到默认线路选集；请在网页视图完成验证后重试');
+ var h=/<h5\b[^>]*itemprop=["']name["'][^>]*>([\s\S]*?)<\/h5>/i.exec(html);
  var row={id:page,title:h?gazeText(h[1]):gazeMeta(html,'og:title').split(' - ')[0],cover:gazeImage(gazeMeta(html,'og:image')),coverHeaders:{Referer:'https://gaze.red/'},description:gazeMeta(html,'description'),chapters:episodes};
  if(Object.keys(gazeCache).length>=20)gazeCache=Object.create(null);gazeCache[page]={time:Date.now(),row:row};return row;}
+
 var LumeSource={
  home:async function(){var r=await LumeSource.http.get('https://gaze.red/',{headers:{Referer:'https://gaze.red/'}}),items=gazeCards(r.body||'');if(!items.length)items=gazeCards((await gazeRender('https://gaze.red/','article')).html||'');if(!items.length)throw new Error('注视影视首页未读到作品');return [{title:'注视影视',items:items}];},
  categories:async function(){return [{id:'all',title:'全部影视'},{id:'1',title:'电影'},{id:'2',title:'剧集'},{id:'bangumi',title:'动漫'},{id:'chinese_cartoon',title:'国漫'}];},

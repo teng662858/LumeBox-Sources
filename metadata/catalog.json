@@ -745,7 +745,7 @@
     {
       "id": "gaze_video",
       "name": "注视影视",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "kind": "movie",
       "appSection": "video",
       "path": "movie/注视影视.js",
