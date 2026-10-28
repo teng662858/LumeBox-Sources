@@ -1,4 +1,4 @@
-// LumeSource: {"id":"lu320_video","name":"320lu小视频","version":"1.0.0","category":"video","mirrors":["http://yd.kmuan.com:66","http://111.62.156.183:66"],"network":"direct"}
+// LumeSource: {"id":"lu320_video","name":"320lu小视频","version":"1.0.0","category":"video","mirrors":["https://www.fabu55.cc","http://www.fawu110.com:66","http://218.11.5.233"],"network":"direct"}
 //
 // 站点：320lu 小视频（移动线 http://yd.kmuan.com:66 ，备用 http://111.62.156.183:66 ，
 // title「320lu小视频官网，记录幸福生活，记录你」；成人短视频站，全站 18+）
@@ -26,8 +26,12 @@
 //     App 的 Dart 会校验证书 → 不作为镜像，只记录）
 //   · http://www.fabu22.cc/ 只有 421B 跳转桩；rzvoj.com/?u=http://www.320.gg/&p=/ 实测 502；
 //     www.320.gg 本身是发布页，不含内容 → 这几个都不进 mirrors
-//   · 站点只服务 http（https://yd.kmuan.com:66 直接 TLS 失败），镜像别写 https
-var DEFAULT_BASE = 'http://yd.kmuan.com:66';
+// 线路（2026-10-28 实测，全部 200 且内容一致）：
+//   主站（电信）  https://www.fabu55.cc           ← HTTPS，iOS 直接可用
+//   镜像（移动）  http://www.fawu110.com:66       ← 只有明文 HTTP，靠 Info.plist 的 ATS 例外
+//   镜像（备用）  http://218.11.5.233             ← 只有明文 HTTP（IP，没法做域名例外）
+// App 里在「源设置 → 换网址」切这三条。
+var DEFAULT_BASE = 'https://www.fabu55.cc';
 var UA = 'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36';
 
 var CATEGORIES = [
@@ -116,7 +120,7 @@ var LumeSource = {
   name: '320lu小视频',
   version: '1.0.0',
   category: 'video',
-  mirrors: ['http://yd.kmuan.com:66', 'http://111.62.156.183:66'],
+  mirrors: ['https://www.fabu55.cc', 'http://www.fawu110.com:66', 'http://218.11.5.233'],
 
   async categories() {
     var list = [];

@@ -31,6 +31,8 @@ var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605
 var PAGE_SIZE = 20;
 var DEFAULT_KEY = 'Mumu2026#';
 var DOWN_HOST = 'https://down.mm7878.com';
+// smallpic 的 sq.2277ww.com 已经连不上；同路径换到配置里的图片域（实测 200 image/jpeg）
+var COVER_HOST = 'https://fengmian.gszy12348.com/data/';
 var NAV_TTL_MS = 6 * 3600 * 1000;
 
 function base() {
@@ -204,11 +206,19 @@ function playUrl(item) {
   return url.replace(/^https?:\/\/down\.baidu\.com\//i, DOWN_HOST + '/');
 }
 
+function coverUrl(item) {
+  var raw = String(item.smallpic || item.pic || '');
+  if (!raw) return '';
+  var path = raw.replace(/^https?:\/\/[^\/]+\//i, '');
+  if (/^cover\//.test(path)) return COVER_HOST + path;
+  return raw;
+}
+
 function mapItem(item) {
   return {
     id: String(item.movieid || item.id || ''),
     title: clean(item.Topic || item.title || ''),
-    cover: String(item.smallpic || item.pic || ''),
+    cover: coverUrl(item),
     subtitle: String(item.formatted_timesize || ''),
   };
 }
@@ -265,17 +275,6 @@ var LumeSource = {
       /* 分类拿不到时至少还能看全部 */
     }
     return list;
-  },
-
-  async filters() {
-    var options = [{ id: 'all', title: '全部' }];
-    try {
-      var tags = await navTags();
-      for (var i = 0; i < tags.length; i++) options.push({ id: 'tag:' + tags[i].id, title: tags[i].title });
-    } catch (error) {
-      /* 空筛选 */
-    }
-    return { groups: [{ id: 'tag', title: '分类', options: options }] };
   },
 
   async home() {
