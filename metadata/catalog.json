@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 96,
+    "video": 97,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1893,6 +1893,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "citapa_video",
+      "name": "茶杯狐",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/茶杯狐.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/茶杯狐.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
     },
     {
       "id": "asmrhoney_video",
