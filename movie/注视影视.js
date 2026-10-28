@@ -1,4 +1,4 @@
-// LumeSource: {"id": "gaze_video", "name": "注视影视", "category": "video", "version": "1.0.1", "mirrors": ["https://gaze.red/"], "mediaType": "video", "icon": "https://gaze.red/favicon.png", "contentCategory": "movie"}
+// LumeSource: {"id": "gaze_video", "name": "注视影视", "category": "video", "version": "1.0.2", "mirrors": ["https://gaze.red/"], "mediaType": "video", "icon": "https://gaze.red/favicon.png", "contentCategory": "movie"}
 // LumeRuntime: javascript
 // Bounded HTML tree + a small, portable CSS subset for generated source files.
 // Supports tag, .class, #id, attributes, descendant, child and comma selectors.
@@ -351,7 +351,7 @@ function feedItems(html,base) {
 }
 
 // 公开目录与默认线路选集。页面播放器持有 blob/临时签名；不导出 Cookie。
-var C={"url": "https://gaze.red/", "id": "gaze_video", "name": "注视影视", "category": "video", "mode": "gaze", "api": "", "list": "https://gaze.red/", "search": "", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "contentCategory": "movie", "profile": "注视影视网页播放器", "useBrowser": true, "version": "1.0.1"}, gazeCache=Object.create(null);
+var C={"url": "https://gaze.red/", "id": "gaze_video", "name": "注视影视", "category": "video", "mode": "gaze", "api": "", "list": "https://gaze.red/", "search": "", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "contentCategory": "movie", "profile": "注视影视网页播放器", "useBrowser": true, "version": "1.0.2"}, gazeCache=Object.create(null);
 function gazeText(s){return String(s||'').replace(/<[^>]*>/g,' ').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;|&#x27;/gi,"'").replace(/&nbsp;/g,' ').replace(/\s+/g,' ').trim();}
 function gazeAttr(s,k){var m=new RegExp('(?:^|\\s)'+k+'\\s*=\\s*(?:"([^"]*)"|\'([^\']*)\'|([^\\s>]+))','i').exec(s);return m?gazeText(m[1]===undefined?m[2]===undefined?m[3]:m[2]:m[1]):'';}
 function gazeWork(id){var m=/^(?:https:\/\/gaze\.red)?\/?play\/([a-f0-9]{32})\/?$/i.exec(String(id||''));if(!m)throw new Error('注视影视作品地址无效');return 'https://gaze.red/play/'+m[1].toLowerCase();}
@@ -381,5 +381,5 @@ var LumeSource={
   var r=await gazeRender(url,'#pagination2',script),html=r.html||'',items=gazeCards(html),pages=0,re=/\bdata-page=["'](\d+)["']/g,m;while((m=re.exec(html)))pages=Math.max(pages,Number(m[1]));return {items:items,hasMore:page<pages};},
  detail:async function(a){return gazeDetail(a.id);},
  chapters:async function(a){return (await gazeDetail(a.id)).chapters;},
- content:async function(a){var page=gazeWork(a.id),m=/^(https:\/\/gaze\.red\/play\/[a-f0-9]{32})#episode=(\d+)$/.exec(String(a.chapterId||''));if(!m||m[1]!==page)throw new Error('注视影视选集不属于当前作品');return {kind:'webplayer',pageUrl:page,headers:{Referer:'https://gaze.red/'},webPlayerOptions:{episodeSelector:'#play-source-panel-g1 button.playbtn[data-id="'+m[2]+'"]'}};}
+ content:async function(a){var page=gazeWork(a.id),m=/^(https:\/\/gaze\.red\/play\/[a-f0-9]{32})#episode=(\d+)$/.exec(String(a.chapterId||''));if(!m||m[1]!==page)throw new Error('注视影视选集不属于当前作品');if(!LumeSource.web||LumeSource.web.episodeSelection!==true)throw new Error('请升级 LumeBox：当前 App 不支持网页按钮选集，不能保证播放指定集数');return {kind:'webplayer',pageUrl:page,headers:{Referer:'https://gaze.red/'},webPlayerOptions:{episodeSelector:'#play-source-panel-g1 button.playbtn[data-id="'+m[2]+'"]'}};}
 };
