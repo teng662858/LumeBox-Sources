@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 98,
+    "video": 100,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -995,6 +995,18 @@
       "iconDeclared": false
     },
     {
+      "id": "asmrba_video",
+      "name": "ASMR吧",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/ASMR吧.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ASMR吧.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
+    },
+    {
       "id": "jizeyy_video",
       "name": "AV仓库",
       "version": "1.0.0",
@@ -1893,6 +1905,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "huajuan_video",
+      "name": "花卷4K",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/花卷4K.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/花卷4K.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
     },
     {
       "id": "citapa_video",
