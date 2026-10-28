@@ -86,6 +86,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/汤头�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/泥视频.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角情-2.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/热播极速.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱播爱播.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js

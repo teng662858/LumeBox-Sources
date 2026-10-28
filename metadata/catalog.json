@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 12,
-    "video": 105,
+    "video": 106,
     "audiobook": 6
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1844,6 +1844,18 @@
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角情-2.js",
       "aliases": [],
       "rating": "18+",
+      "iconDeclared": true
+    },
+    {
+      "id": "rebo_video",
+      "name": "热播·极速",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/热播极速.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/热播极速.js",
+      "aliases": [],
+      "rating": "unknown",
       "iconDeclared": true
     },
     {
