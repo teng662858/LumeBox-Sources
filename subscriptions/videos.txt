@@ -107,6 +107,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/花卷4K
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/茶杯狐.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蜜糖助眠.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/迷你猫源.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/追剧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/逆次元ACG.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/野果短剧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/闪电4K.js
