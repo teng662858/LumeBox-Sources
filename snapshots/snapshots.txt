@@ -151,3 +151,15 @@ d9y1w_play.html
 d9y1w_search_juqing.json
 d9y1w_search_shipin.json
 d9y1w_search_jingpin.json
+
+# 8x8x（www.8x8x.fun / 跳板 1azm0i.qcsw2b5yf.com；外壳 data-body-url 指向内容页前缀，
+# 分类/标签页是 SSR，推荐流 /json/recommend/rmd_N 是 AES-256-GCM 密文，详情页给 data-m3u8 + 三条 media route）
+x8x8_shell.html
+x8x8_home.html
+x8x8_category1.html
+x8x8_category1_p2.html
+x8x8_tag.html
+x8x8_detail.html
+x8x8_search.json
+x8x8_recommend.txt
+x8x8_master.m3u8
