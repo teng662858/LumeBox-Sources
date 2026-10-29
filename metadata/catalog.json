@@ -1849,7 +1849,7 @@
     {
       "id": "aiboaibo_video",
       "name": "爱播爱播",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "kind": "video",
       "appSection": "video",
       "path": "video/爱播爱播.js",
