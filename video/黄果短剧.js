@@ -1,4 +1,4 @@
-// LumeSource: {"id":"huangguo_duanju","name":"黄果 - 短剧","version":"1.0.0","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://huangguoai.com"]},"network":"proxy","contentCategory":"adult","icon":"https://huangguoai.com/static/web/images/logo-huangguo.png","mirrors":["https://huangguoai.com"]}
+// LumeSource: {"id":"huangguo_duanju","name":"黄果 - 短剧","version":"1.0.1","category":"video","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://huangguoai.com"]},"network":"proxy","icon":"https://huangguoai.com/static/web/images/logo-huangguo.png","mirrors":["https://huangguoai.com"]}
 // LumeRuntime: javascript
 //
 // 站点：黄果短剧（huangguoai.com）AI 短剧站，18+ 内容占多数。
@@ -19,6 +19,16 @@ var CATS = [
   { id: 'chigua', title: '吃瓜', path: '/chigua/' }
 ];
 var PAGE_SIZE = 30;
+// 封面在 pic.drleao.cn 上是 AES-128-CBC/NoPadding 密文（与汤头条同一套 key/iv，
+// 站点 JS 解密后再 createObjectURL）。把参数交给 App 图片管线原生解。
+var COVER_HEADERS = {
+  'x-lume-image-encoding': 'aes-cbc-nopadding',
+  'x-lume-image-key': 'f5d965df75336270',
+  'x-lume-image-iv': '97b60394abc2fbe1'
+};
+function coverHeadersOf(url) {
+  return /drleao\.cn/i.test(String(url || '')) ? COVER_HEADERS : {};
+}
 
 function base() {
   var d = LumeSource.config && LumeSource.config.domain ? String(LumeSource.config.domain) : '';
@@ -89,6 +99,7 @@ function parseCards(html) {
       id: id,
       title: clean(title) || ('作品 ' + id),
       cover: abs(cover),
+      coverHeaders: coverHeadersOf(cover),
       subtitle: [score ? score.trim() : '', eps ? ('共' + eps + '集') : ''].filter(Boolean).join(' · ')
     });
   }
@@ -102,7 +113,7 @@ function parseCards(html) {
       var ti2 = clean((/alt="([^"]*)"/.exec(blk2) || [])[1] || blk2);
       if (!ti2 || /^https?:/.test(ti2)) continue;
       seen[id2] = true;
-      items.push({ id: id2, title: ti2.slice(0, 60), cover: abs(cov2), subtitle: '' });
+      items.push({ id: id2, title: ti2.slice(0, 60), cover: abs(cov2), coverHeaders: coverHeadersOf(cov2), subtitle: '' });
     }
   }
   return items;
@@ -152,7 +163,7 @@ function catPath(catId) {
 var LumeSource = {
   id: 'huangguo_duanju',
   name: '黄果 - 短剧',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   settingsApiVersion: 2,
   requiresSettings: ['commonSettings', 'settingsActions'],
@@ -205,6 +216,7 @@ var LumeSource = {
       id: id,
       title: info.title || (row && row.title) || ('作品 ' + id),
       cover: info.cover || (row && row.cover) || '',
+      coverHeaders: coverHeadersOf(info.cover || (row && row.cover) || ''),
       subtitle: (row && row.subtitle) || '',
       description: info.desc || ''
     };

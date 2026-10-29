@@ -1,4 +1,4 @@
-// LumeSource: {"id":"niacg_video","name":"逆次元ACG","version":"1.0.0","category":"video","mirrors":["https://www.niacg.com","https://xpicvid.org","https://freeacg3.org","https://acg.al"]}
+// LumeSource: {"id":"niacg_video","name":"逆次元ACG","version":"1.0.1","category":"video","mirrors":["https://www.niacg.com","https://xpicvid.org","https://freeacg3.org","https://acg.al"]}
 //
 // 站点：逆次元ACG（发布页 https://02.uno/，内容站 www.niacg.com，里番 / 3D / 同人 / 会员视频
 // 与图集画廊，全站 18+）
@@ -47,6 +47,9 @@ var MIRRORS = [
   'https://acg.al'
 ];
 var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
+// 封面在 *.xunge.cyou / *.zhen.si 上必须带本站 Referer，否则 403（3 字节）。
+// 图片管线默认把 Referer 设成图床自己，所以逐条把站点 Referer 交过去。
+var COVER_HEADERS = { Referer: MEDIA_REFERER, 'User-Agent': UA };
 var MIRROR_TTL_MS = 6 * 3600 * 1000;
 var resolvedBase = '';
 
@@ -284,6 +287,7 @@ function parseItems(pageHtml) {
       id: absolute(href),
       title: title,
       cover: absolute(cover),
+      coverHeaders: COVER_HEADERS,
       subtitle: classMatch && CLASS_NAMES[classMatch[1]] ? CLASS_NAMES[classMatch[1]] : ''
     });
   }
@@ -422,7 +426,7 @@ function idOf(argument) {
 var LumeSource = {
   id: 'niacg_video',
   name: '逆次元ACG',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.niacg.com', 'https://xpicvid.org', 'https://freeacg3.org', 'https://acg.al'],
 
@@ -506,6 +510,7 @@ var LumeSource = {
       id: absolute(id),
       title: title,
       cover: coverOf(pageHtml),
+      coverHeaders: COVER_HEADERS,
       subtitle: parts.join(' · '),
       description: descriptionOf(pageHtml)
     };

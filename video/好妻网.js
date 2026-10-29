@@ -1,4 +1,4 @@
-// LumeSource: {"id":"haoqi7_video","name":"好妻网 18+","version":"1.0.0","category":"video","mirrors":["https://haoqi7.com","https://hao77.work","https://hao77.pro"]}
+// LumeSource: {"id":"haoqi7_video","name":"好妻网 18+","version":"1.0.1","category":"video","mirrors":["https://haoqi7.com","https://hao77.work","https://hao77.pro"]}
 //
 // 站点：https://haoqi7.com （标题「首映好片 - 高清视频频道 - 好妻网」）
 // 2026-10-25 逐页实测；**本站直连不通（curl / Node fetch 都 000），必须走本机代理**
@@ -441,7 +441,7 @@ function itemOfVideo(row) {
   return {
     id: String(row.id),
     title: clean(row.title || '') || String(row.id),
-    cover: absolute(row.coverUrl || ''),
+    cover: coverOf(absolute(row.coverUrl || '')),
     subtitle: parts.join(' · ')
   };
 }
@@ -473,7 +473,7 @@ function parseSearch(html) {
     items.push({
       id: id,
       title: clean(matched[2]) || id,
-      cover: absolute(matched[3]),
+      cover: coverOf(absolute(matched[3])),
       subtitle: bits.filter(Boolean).join(' · ')
     });
   }
@@ -586,7 +586,7 @@ async function fetchDetail(id) {
 var LumeSource = {
   id: 'haoqi7_video',
   name: '好妻网 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://haoqi7.com'],
 

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"f016_video","name":"在线影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://bb.f016video.com","https://ss.99utv.com"],"network":"direct","icon":"https://bb.f016video.com/favicon.ico"}
+// LumeSource: {"id":"f016_video","name":"在线影院","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://bb.f016video.com","https://ss.99utv.com"],"network":"direct","icon":"https://bb.f016video.com/favicon.ico"}
 // LumeRuntime: javascript
 //
 // 站点：在线影院（bb.f016video.com）与 91吃瓜（ss.99utv.com）—— 同一站群，但**是包含关系**：
@@ -289,7 +289,7 @@ async function detailData(path) {
 var LumeSource = {
   id: 'f016_video',
   name: '在线影院',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
   mirrors: MIRRORS,
@@ -328,14 +328,10 @@ var LumeSource = {
   },
 
   async filters() {
-    var options = [];
-    try {
-      var nav = await navCategories();
-      for (var i = 0; i < nav.length; i++) options.push({ id: String(nav[i].id).replace('cat:', ''), title: nav[i].title });
-    } catch (error) {
-      /* 空筛选即可 */
-    }
-    return { groups: [{ id: 'category', title: '分类', options: options }] };
+    // categories() 已经是「最新 + 站点全部导航分类」；这里再返回一份同样的
+    // 分类组，App 会渲染成第二排（截图里的「分类 / 全部 / 国产自拍…」重复行）。
+    // 站点没有独立的地区/年份/标签筛选，所以这里保持空组。
+    return { groups: [] };
   },
 
   async list(argument) {

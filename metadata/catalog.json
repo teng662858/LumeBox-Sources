@@ -1597,7 +1597,7 @@
     {
       "id": "f016_video",
       "name": "在线影院",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/在线影院.js",
@@ -1645,7 +1645,7 @@
     {
       "id": "haoqi7_video",
       "name": "好妻网 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/好妻网.js",
@@ -1717,7 +1717,7 @@
     {
       "id": "xanimu_video",
       "name": "成人动漫",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/成人动漫.js",
@@ -1897,7 +1897,7 @@
     {
       "id": "niacg_video",
       "name": "逆次元ACG",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/逆次元ACG.js",
@@ -1933,7 +1933,7 @@
     {
       "id": "huangguo_duanju",
       "name": "黄果 - 短剧",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/黄果短剧.js",

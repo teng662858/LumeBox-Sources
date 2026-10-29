@@ -1,4 +1,4 @@
-// LumeSource: {"id":"xanimu_video","name":"成人动漫","version":"1.0.1","category":"video"}
+// LumeSource: {"id":"xanimu_video","name":"成人动漫","version":"1.0.2","category":"video"}
 
 // 站点：https://xanimu.one/zh-CN/（WordPress + kolortube 主题；中文站前缀 /zh-CN/）
 //
@@ -60,6 +60,7 @@ var MAX_ITEMS = 200;       // 单次列表最多产出
 var MAX_CHAPTERS = 1;      // 站点没有分集（留个上限，防页面异常时无限解析）
 var MAX_TAGS = 12;         // 详情页标签最多收几个
 var HOME_BUDGET_MS = 6000; // 首页软截止（沙箱单次调用预算是 3–10s，见 home()）
+var lastHost = '';
 
 // 站点自己的排序开关（首页与分类页共用的 ?filter=）。
 var SORTS = [
@@ -72,7 +73,7 @@ var SORTS = [
 var LumeSource = {
   id: 'xanimu_video',
   name: '成人动漫',
-  version: '1.0.1',
+  version: '1.0.2',
   category: 'video',
 
   // ---------------------------------------------------------------- 契约方法
@@ -300,7 +301,7 @@ var LumeSource = {
       items.push({
         id: id,
         title: this.__clean(titleMatch ? titleMatch[1] : id),
-        cover: this.__absolute(coverMatch ? coverMatch[1] : ''),
+        cover: this.__cover(coverMatch ? coverMatch[1] : ''),
         subtitle: parts.join(' · ')
       });
     }
@@ -333,7 +334,7 @@ var LumeSource = {
     var tags = this.__labels(html, 'label-tag-video');
     return {
       title: title,
-      cover: this.__absolute(coverMatch ? this.__jsonText(coverMatch[1]) : ''),
+      cover: this.__cover(coverMatch ? this.__jsonText(coverMatch[1]) : ''),
       subtitle: parts.join(' · '),
       description: description,
       duration: duration,
@@ -425,6 +426,7 @@ var LumeSource = {
       var status = response ? Number(response.status) : 0;
       var body = response && response.body ? String(response.body) : '';
       if (status === 200) {
+        lastHost = hosts[i];
         await this.__rememberHost(hosts[i]);
         if (/just a moment|checking your browser|attention required|__cf_chl|cf-chl-/.test(body)) {
           throw new Error('NEED_WEBVIEW_VERIFY：站点触发了 Cloudflare 人机校验（HTTP '
@@ -489,6 +491,19 @@ var LumeSource = {
   },
 
   // ---------------------------------------------------------------- 文本
+
+  /// 站点页面里的封面仍指向旧图床 `*.7132p.net/storage/...`（实测 404）；
+  /// 同一路径在当前内容域（xanimu.art/.one/.com）是 200。只重写这一类地址，
+  /// 其它 CDN/相对地址原样保留。
+  __cover(url) {
+    var value = this.__absolute(url);
+    var match = /^https?:\/\/([^\/]+)(\/storage\/.*)$/i.exec(value);
+    if (match && /7132p\.net$/i.test(match[1])) {
+      var host = lastHost || HOSTS[0];
+      return host.replace(/\/+$/, '') + match[2];
+    }
+    return value;
+  },
 
   __absolute(url) {
     var value = this.__jsonText(String(url || '').trim());
