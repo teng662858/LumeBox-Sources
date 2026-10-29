@@ -5,7 +5,7 @@
     "comic": 47,
     "photo": 5,
     "movie": 14,
-    "video": 113,
+    "video": 116,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1415,6 +1415,18 @@
       "iconDeclared": false
     },
     {
+      "id": "rule34video_video",
+      "name": "Rule34Video",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/Rule34Video.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Rule34Video.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "sexbjcam_video",
       "name": "sexbjcam",
       "version": "1.0.0",
@@ -1533,6 +1545,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "xcamtube_video",
+      "name": "XCamTube",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/XCamTube.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/XCamTube.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "xhamster_video",
@@ -1689,6 +1713,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "oreno3d_video",
+      "name": "俺の3Dエロ動画",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/俺の3Dエロ動画.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/俺の3Dエロ動画.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "papalah_video",
