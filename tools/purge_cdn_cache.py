@@ -67,6 +67,30 @@ def changed_paths(before, after):
     return raw.decode('utf-8').strip('\0').split('\0') if raw else []
 
 
+def existing_paths(revision):
+    """该提交里仍然存在的文件路径集合（用来跳过「已删除」的路径）。"""
+    if not re.fullmatch(r'[0-9a-f]{40,64}', revision):
+        raise ValueError('Expected a full commit SHA')
+    raw = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', '-z', revision], cwd=ROOT)
+    return set(raw.decode('utf-8').strip('\0').split('\0')) if raw else set()
+
+
+def partition_paths(paths, present, aliases):
+    """拆成「要刷新的」和「已删除的」。
+
+    删掉的文件也会出现在 `git diff --name-only` 里，但它的 @main URL 已经只能 404，
+    去 purge 只会换来 jsDelivr 的限流/报错，把整条发布流水线标红（MatureTube/TwittHub
+    改名那次就是这样）。别名路由（`videos`、`all`、`videos-hd` …）不是文件，必须保留。
+    """
+    kept, removed = [], []
+    for path in paths:
+        if path in aliases or path in present:
+            kept.append(path)
+        else:
+            removed.append(path)
+    return kept, removed
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repository', required=True)
@@ -75,6 +99,9 @@ def main():
     args = parser.parse_args()
     aliases = json.loads((ROOT / 'metadata/legacy-paths.json').read_text(encoding='utf-8'))
     paths = published_paths(changed_paths(args.before, args.after), aliases)
+    paths, deleted = partition_paths(paths, existing_paths(args.after), aliases)
+    for path in deleted:
+        print(json.dumps({'path': path, 'status': 'skipped-deleted'}, ensure_ascii=True), flush=True)
     failures = []
     for path in paths:
         try:
@@ -82,7 +109,8 @@ def main():
         except Exception as error:
             failures.append(str(error))
             print(json.dumps({'path': path, 'error': str(error)}, ensure_ascii=True), flush=True)
-    print(f'Purged {len(paths) - len(failures)}/{len(paths)} published paths')
+    print(f'Purged {len(paths) - len(failures)}/{len(paths)} published paths'
+          f'{f" (skipped {len(deleted)} deleted)" if deleted else ""}')
     return 1 if failures else 0
 
 

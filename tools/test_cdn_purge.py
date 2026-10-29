@@ -3,7 +3,14 @@ import json
 import unittest
 from unittest.mock import patch
 
-from purge_cdn_cache import changed_paths, published_paths, purge_one, purge_url
+from purge_cdn_cache import (
+    changed_paths,
+    existing_paths,
+    partition_paths,
+    published_paths,
+    purge_one,
+    purge_url,
+)
 
 
 class CdnPurgeTests(unittest.TestCase):
@@ -53,6 +60,23 @@ class CdnPurgeTests(unittest.TestCase):
             self.assertEqual(run.call_args.args[0][1], 'ls-tree')
         with self.assertRaises(ValueError):
             changed_paths('--invalid', 'b' * 40)
+
+    def test_deleted_paths_are_skipped_but_alias_routes_are_kept(self):
+        aliases = {'videos': 'subscriptions/videos.txt'}
+        kept, removed = partition_paths(
+            ['video/new.js', 'video/gone.js', 'videos', 'metadata/catalog.json'],
+            {'video/new.js', 'metadata/catalog.json'},
+            aliases,
+        )
+        self.assertEqual(kept, ['video/new.js', 'videos', 'metadata/catalog.json'])
+        self.assertEqual(removed, ['video/gone.js'])
+
+    def test_existing_paths_reads_the_published_tree(self):
+        with patch('purge_cdn_cache.subprocess.check_output', return_value=b'video/a.js\0metadata/catalog.json\0') as run:
+            self.assertEqual(existing_paths('c' * 40), {'video/a.js', 'metadata/catalog.json'})
+            self.assertEqual(run.call_args.args[0][1], 'ls-tree')
+        with self.assertRaises(ValueError):
+            existing_paths('main')
 
 
 if __name__ == '__main__':
