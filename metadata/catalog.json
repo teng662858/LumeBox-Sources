@@ -1165,7 +1165,7 @@
     {
       "id": "kkav_video",
       "name": "KKAV",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/KKAV-2.js",
