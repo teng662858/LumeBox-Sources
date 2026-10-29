@@ -1228,8 +1228,8 @@
       "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
-      "path": "video/MatureTube.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/MatureTube.js",
+      "path": "video/MatureTube-2.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/MatureTube-2.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
@@ -1348,8 +1348,8 @@
       "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
-      "path": "video/TwittHub.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/TwittHub.js",
+      "path": "video/TwittHub-2.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/TwittHub-2.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": true
