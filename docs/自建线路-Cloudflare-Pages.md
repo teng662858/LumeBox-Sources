@@ -32,9 +32,13 @@ jsDelivr 12 小时缓存和 purge 节流影响。GitHub 的 raw / jsDelivr 两�
 
 ## 二、一次性准备（约 10 分钟）
 
-1. 注册/登录 Cloudflare，并把一个域名托管到 CF（`pages.dev` 子域在国内不可达，必须绑自己的域名）。
+1. 注册/登录 Cloudflare（免费计划即可，邮箱注册）。
+   **域名不是必需的**：Pages 会自动给一个 `项目名.pages.dev` 网址，先用它把链路跑通。
+   `pages.dev` 在国内各地差异较大（实测本机 `pages.dev` 301/0.8s、`cloudflare.com` 200/2.4s，
+   但真实子域要到发布后才能测），不稳定的再绑自己的域名。
 2. 本机装好 Node 18+（`node -v` 能输出即可）。
-3. 登录 wrangler：
+3. 登录 wrangler（**就是登录 Cloudflare 账号**：命令会打开浏览器，点 Allow；
+   没账号就在那个页面用邮箱注册，免费计划足够）：
    ```bash
    npx --yes wrangler login
    ```
@@ -42,10 +46,11 @@ jsDelivr 12 小时缓存和 purge 节流影响。GitHub 的 raw / jsDelivr 两�
    ```bash
    npx --yes wrangler pages project create lume-sources --production-branch main
    ```
-5. 绑域名：CF 控制台 → Workers & Pages → `lume-sources` → **Custom domains** → Set up a custom domain，
-   填 `sources.你的域名.com`，DNS 记录由 CF 自动创建。等状态变成 Active（一般 1–3 分钟）。
+5. （可选，有域名才做）绑域名：CF 控制台 → Workers & Pages → `lume-sources` → **Custom domains** →
+   Set up a custom domain，填 `sources.你的域名.com`，DNS 记录由 CF 自动创建，等状态变 Active（1–3 分钟）。
+   没有域名就跳过，用第 4 步给的 `https://lume-sources.pages.dev/`。
 
-后面所有地址都用 `https://sources.你的域名.com/`（结尾斜杠可有可无）。
+后面所有地址都用 `https://lume-sources.pages.dev/` 或 `https://sources.你的域名.com/`（结尾斜杠可有可无）。
 
 ---
 
@@ -188,8 +193,10 @@ rsync -az --delete public/ user@host:/srv/lume-sources/
 
 - **平台条款**：Cloudflare 对成人内容/滥用有裁量权，Pages 上放这类源存在被停用风险。
   接受这个风险就用 Pages，不接受就用第七节的 VPS；两条都保留 GitHub 备份即可无缝切换。
-- **域名**：`*.pages.dev` 在大陆基本不可用，必须绑自己的域名；绑了之后走 CF 的 anycast，
-  比 jsDelivr 稳定。
+- **域名**：`pages.dev` 免费用，但国内可达性不稳定（各地差异大，需发布后实测）。
+  绑自有域名的价值主要是「不和其他人共用一个被墙的域名」，并不改变 CF 的 IP 在国内的稳定性；
+  手机侧本来就要挂代理（iOS 上订阅下载走系统网络），所以先用免费域名验证，够用就不花钱。
+  真要国内直连稳，只能国内备案 + 国内服务器，而这类源不可能过备案——所以不做这个方向的承诺。
 - **`no-store` 的代价**：每次请求都回源（静态文件很小，可忽略）。想省一点可改成
   `Cache-Control: public, max-age=30`，代价是最多 30 秒延迟。
 - **更新时效对比**（改完源之后用户多久能拿到）：
