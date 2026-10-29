@@ -1,6 +1,5 @@
 # comics
 # 自动生成；修改脚本后运行 python tools/build_catalog.py
-https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/127漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/177漫畫.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/18H漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/18禁漫.js
@@ -45,7 +44,6 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/肉漫屋.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/腐宅BoyLove.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/色友漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/色漫天堂.js
-https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/色漫網.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/蚂蚁搬运.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/鸟鸟韩漫.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/龙禁漫.js
@@ -54,4 +52,3 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/Z8PT图库.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/天撸啦图集.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/小黄书套图.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/小黄书自拍.js
-https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/photo/逆ACG.js

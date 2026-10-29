@@ -2,26 +2,14 @@
   "format": "lume.source-catalog",
   "version": 1,
   "counts": {
-    "comic": 49,
-    "photo": 6,
+    "comic": 47,
+    "photo": 5,
     "movie": 14,
     "video": 101,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
   "sources": [
-    {
-      "id": "manhua127_comic",
-      "name": "127漫画",
-      "version": "1.2.1",
-      "kind": "comic",
-      "appSection": "comic",
-      "path": "comic/127漫画.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/127漫画.js",
-      "aliases": [],
-      "rating": "18+",
-      "iconDeclared": true
-    },
     {
       "id": "pica177_comic",
       "name": "177漫畫",
@@ -301,14 +289,14 @@
     {
       "id": "bakamh_comic",
       "name": "巴卡漫画",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "kind": "comic",
       "appSection": "comic",
       "path": "comic/巴卡漫画.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/巴卡漫画.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "kxmanhua1_comic",
@@ -551,18 +539,6 @@
       "iconDeclared": false
     },
     {
-      "id": "cartoon18_comic",
-      "name": "色漫網",
-      "version": "1.0.0",
-      "kind": "comic",
-      "appSection": "comic",
-      "path": "comic/色漫網.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/色漫網.js",
-      "aliases": [],
-      "rating": "18+",
-      "iconDeclared": false
-    },
-    {
       "id": "antbyw_comic",
       "name": "蚂蚁搬运",
       "version": "1.0.0",
@@ -654,18 +630,6 @@
       "appSection": "comic",
       "path": "photo/小黄书自拍.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/photo/小黄书自拍.js",
-      "aliases": [],
-      "rating": "18+",
-      "iconDeclared": true
-    },
-    {
-      "id": "niacg_photo",
-      "name": "逆ACG",
-      "version": "1.1.1",
-      "kind": "photo",
-      "appSection": "comic",
-      "path": "photo/逆ACG.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/photo/逆ACG.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": true
@@ -1165,14 +1129,14 @@
     {
       "id": "h4dh3_video",
       "name": "hxc 18+",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "kind": "video",
       "appSection": "video",
       "path": "video/hxc.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/hxc.js",
       "aliases": [],
       "rating": "18+",
-      "iconDeclared": false
+      "iconDeclared": true
     },
     {
       "id": "hanime1_video",

@@ -1,4 +1,5 @@
-// LumeSource: {"id":"bakamh_comic","name":"巴卡漫画","version":"2.1.0","category":"comic"}
+// LumeSource: {"id":"bakamh_comic","name":"巴卡漫画","version":"2.2.0","category":"comic","contentCategory":"adult","settingsApiVersion":2,"mirrors":["https://bakamh.com","https://bakamh.ru","https://baka3.cfd","https://baka1.cfd","https://baka2.cfd"],"network":"proxy","icon":"https://bakamh.app/favicon.ico","settings":[{"key":"publishPage","type":"action","action":"openWebsite","title":"打开发布页（bakamh.app）","url":"https://bakamh.app/","description":"官方发布页：实时更新 bakamh.com / bakamh.ru / baka*.cfd 等地址"},{"key":"note","type":"info","title":"站点说明","description":"巴卡漫画（Madara/WordPress）：韩漫/BL/GL/连载/完结 分类，条目 /manga/<slug>/，章节 /c-N/，正文图片在 reading-content。站点在 Cloudflare 后面，直连常是「Just a moment」→ 会抛 NEED_WEBVIEW_VERIFY，用 App 网页视图过一次校验即可；部分章节需登录/购买，可在「源设置 → 账号登入」填账号。"}]}
+// 发布页 https://bakamh.app/ ：官方地址发布页（bakamh.com 海外、bakamh.ru / baka3.cfd / baka1.cfd / baka2.cfd 四条备用）
 // Reimplemented from bakamh.com public Madara pages; mirrors match bakamh.app publisher.
 // Embedded into each source by tools/build_requested_sources.py; no remote code imports.
 var H = {
@@ -28,10 +29,10 @@ var H = {
 };
 
 H.base="https://bakamh.com";H.name="巴卡漫画";
-var LumeSource={id:"bakamh_comic",name:"巴卡漫画",version:"2.1.0",category:"comic",
+var LumeSource={id:"bakamh_comic",name:"巴卡漫画",version:"2.2.0",category:"comic",
 
 __host:'',
-async __pickHost(){var hosts=['https://bakamh.com','https://bakamh.ru','https://baka3.cfd','https://baka1.cfd','https://baka2.cfd'];for(var i=0;i<hosts.length;i++){var r=await this.http.get(hosts[i]+'/',{headers:H.headers(hosts[i]+'/')});if(r.status===200){H.response(r);this.__host=hosts[i];H.base=hosts[i];return hosts[i];}if(r.status===403||r.status===503||r.status===521)H.response(r);}throw new Error('巴卡漫画：站点暂时不可用，请稍后重试');},
+async __pickHost(){var hosts=[];var cfg=(this.config&&this.config.domain)?String(this.config.domain).replace(/\/+$/,''):'';if(cfg)hosts.push(cfg);['https://bakamh.com','https://bakamh.ru','https://baka3.cfd','https://baka1.cfd','https://baka2.cfd'].forEach(function(h){if(hosts.indexOf(h)<0)hosts.push(h);});for(var i=0;i<hosts.length;i++){var r=await this.http.get(hosts[i]+'/',{headers:H.headers(hosts[i]+'/')});if(r.status===200){H.response(r);this.__host=hosts[i];H.base=hosts[i];return hosts[i];}if(r.status===403||r.status===503||r.status===521)H.response(r);}throw new Error('巴卡漫画：站点暂时不可用，请稍后重试');},
 async __get(path){H.base=this.__host||'https://bakamh.com';var u=H.abs(String(path).replace(/^https?:\/\/[^/]+/,'')),r=await this.http.get(u,{headers:H.headers(H.base+'/')});if(r.status===502||r.status===404){this.__host=await this.__pickHost();u=H.abs(String(path).replace(/^https?:\/\/[^/]+/,''));r=await this.http.get(u,{headers:H.headers(H.base+'/')});}return H.response(r);},
 async categories(){return [{id:'',title:'全部'},{id:'manhwa',title:'韩漫'},{id:'bl',title:'BL'},{id:'gl',title:'GL'},{id:'allages',title:'全年龄'},{id:'en-manga',title:'英文'},{id:'on-going',title:'连载'},{id:'end',title:'完结'}];},
 __items(html){var t=H.tree(html);return H.unique(H.all(t,function(n){return H.cls(n,'item-thumb');}).map(function(n){var a=H.first(n,function(x){return x.tag==='a'&&/\/manga\//.test(x.attrs.href||'');});return {id:a?a.attrs.href.replace(/^https?:\/\/[^/]+/,''):'',title:a?(a.attrs.title||H.text(a)):'',cover:H.image(n),coverHeaders:H.headers(H.base+'/')};}));},

@@ -1,6 +1,5 @@
 # 漫画
 # 自动生成；修改脚本后运行 python tools/build_catalog.py
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/127漫画.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/177漫畫.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/18H漫画.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/18禁漫.js
@@ -45,7 +44,6 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/肉漫�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/腐宅BoyLove.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/色友漫画.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/色漫天堂.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/色漫網.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/蚂蚁搬运.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/鸟鸟韩漫.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/龙禁漫.js

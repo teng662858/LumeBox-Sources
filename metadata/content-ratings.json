@@ -41,9 +41,6 @@
     "boysyo_comic": {
       "rating": "18+"
     },
-    "cartoon18_comic": {
-      "rating": "18+"
-    },
     "cf2_video": {
       "rating": "18+"
     },
@@ -215,9 +212,6 @@
     "manga18_comic": {
       "rating": "18+"
     },
-    "manhua127_comic": {
-      "rating": "18+"
-    },
     "manhua90_comic": {
       "rating": "18+"
     },
@@ -255,9 +249,6 @@
       "rating": "18+"
     },
     "nhentai_comic": {
-      "rating": "18+"
-    },
-    "niacg_photo": {
       "rating": "18+"
     },
     "niacg_video": {
@@ -494,7 +485,6 @@
     "long91_comic": "龙禁漫（long91.com，禁漫类成人漫画站，全站 18+）",
     "yaojinghanman_comic": "妖精漫画（yaojinghanman.com，韩国高清成人漫画站，全站 18+）",
     "wnacg_comic": "紳士漫畫（wnacg.com，中文汉化本子站，全站 18+）",
-    "manhua127_comic": "127漫画（127manhua.com，中文漫画站，含成人向分区，按 18+ 归档）",
     "manga18_comic": "Manga18（manga18.me，英文韩漫/成人漫画站，全站 18+）",
     "hentai3_comic": "3Hentai（3hentai.club，英文同人志站，全站 18+）",
     "mkzhan_comic": "漫客栈（m.mkzhan.com，中文漫画站，含成人向作品，按 18+ 归档）",
@@ -538,7 +528,7 @@
     "fakehub_video": "FakeHub（fakehub.com，PublicAgent/FakeTaxi 等品牌合集，全站 18+；场景页官方预览 mp4 实测 206/50MB。publicagent.com 本身只是落地页无片源）",
     "txxx_video": "TXXX 网络（txxx.com / hclips.com / upornia.com / voyeurhit.com，同一套 Vue SPA+JSON API；覆盖综合排序与偷拍/隐藏摄像头分类，全站 18+；播放址解码后 302→ahcdn，Range 实测 206）",
     "xman6_comic": "2026-10-26 分级补标：已知成人站点或项目已有成人漫画/视频源；此标记同时供 APP 隐私隐藏使用，不表示已验证图标、封面或播放可用性。",
-    "bakamh_comic": "2026-10-26 分级补标：已知成人站点或项目已有成人漫画/视频源；此标记同时供 APP 隐私隐藏使用，不表示已验证图标、封面或播放可用性。",
+    "bakamh_comic": "巴卡漫画（bakamh.com；发布页 bakamh.app，备用 bakamh.ru / baka3.cfd / baka1.cfd / baka2.cfd；韩漫/BL/GL 成人漫画站，全站 18+；Cloudflare 后面）",
     "relamanhua_comic": "2026-10-26 分级补标：已知成人站点或项目已有成人漫画/视频源；此标记同时供 APP 隐私隐藏使用，不表示已验证图标、封面或播放可用性。",
     "smtt6_comic": "2026-10-26 分级补标：已知成人站点或项目已有成人漫画/视频源；此标记同时供 APP 隐私隐藏使用，不表示已验证图标、封面或播放可用性。",
     "nnhanman_comic": "2026-10-26 分级补标：已知成人站点或项目已有成人漫画/视频源；此标记同时供 APP 隐私隐藏使用，不表示已验证图标、封面或播放可用性。",
@@ -571,7 +561,6 @@
     "theavporn_video": "TheAVPorn theavporn.com（KVS 成人站，18+；CDN bytt.jb-aiwei.cc 免登录直连）",
     "s618_video": "618影院 618208.xyz 地址表 → 618<码>.xyz 站群（成人视频，文字 XOR 0x80 混淆，18+）",
     "kkav_video": "KKAV www.73tfhk.com（原 37tmrj 换域名目标，成人视频，XOR2 加密接口，18+）",
-    "niacg_photo": "逆ACG www.niacg.com（二次元 COS 图集，Cloudflare 校验，18+）",
     "twitthub_video": "TwittHub www.twitthub.com（X 公开视频聚合，Vercel 校验，18+）",
     "pornbest_video": "第一女優網 / PornBest（www.pornbest.org，镜像 www.av01.org，日本 AV 在线看；站内分 日本無碼/中文字幕/AV明星 等成人分区，全站 18+；大陆出口会 302 到封锁页）",
     "porn91plus_video": "91PornPlus（91pornplus.com 及 xchina/91zpc/porntube 等同一套站群模板，国产自拍/日本AV/SWAG 分区，全站 18+；网页国内被 RST，数据走 POST /js 加密接口，匿名给 m3u8）",

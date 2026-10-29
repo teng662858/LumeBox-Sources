@@ -1,4 +1,4 @@
-// LumeSource: {"id":"h4dh3_video","name":"hxc 18+","version":"1.0.2","category":"video","mirrors":["https://www.h4dh3.com","https://a84i.ux51l.com","https://a96u.t3nwc.com"]}
+// LumeSource: {"id":"h4dh3_video","name":"hxc 18+","version":"1.0.3","category":"video","contentCategory":"adult","settingsApiVersion":2,"mirrors":["https://www.9zx3x.com","https://9zx3x.com","https://www.h4dh3.com","https://a84i.ux51l.com","https://a96u.t3nwc.com"],"network":"proxy","icon":"https://www.9zx3x.com/favicon.ico","settings":[{"key":"note","type":"info","title":"站点说明","description":"hxc（Fi11）：2026-10-30 起旧域名 h4dh3.com 只剩「马上停用」公告，新域名 www.9zx3x.com（同一套前端）。接口主机仍是 a84i.ux51l.com / a96u.t3nwc.com 两台，前端写死。国内需代理；手机上若报 TLS_HANDSHAKE_FAILED(-1200)，多半是当前网络/代理把这两台接口主机握手拦了，换线路或换代理再试。播放地址取 /videos/getPreUrl 的签名 m3u8 并去掉 30 秒试看区间（见脚本头注释）。"}]}
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 一、站点与前端（2026-10-25 实测）
@@ -110,7 +110,7 @@ var COVER_HEADERS = {
   'x-lume-image-encoding': 'aes-ecb-base64',
   'x-lume-image-key': '46cc793c53dc451b'
 };
-var CDN_REFERER = 'https://www.h4dh3.com/';
+var CDN_REFERER = 'https://www.9zx3x.com/';
 var PAGE_SIZE = 20;
 
 // typeId → 分类名（实测 2026-10-25，见文件头第五节）
@@ -425,7 +425,7 @@ async function pickBase(force) {
       lastError = (error && error.message) || '未知错误';
     }
   }
-  throw new Error('接口线路都打不通（' + lastError + '）');
+  throw new Error('接口线路都打不通（' + lastError + '）——两台接口主机都失败时，先确认手机网络/代理没有拦截 TLS 握手（-1200），或在「源设置 → 站点网络」换一条线路再试');
 }
 
 // 业务接口：code!==0 一律抛可读错误；线路失败换一台重试一次
@@ -508,9 +508,9 @@ async function fetchSearch(keyword, page) {
 var LumeSource = {
   id: 'h4dh3_video',
   name: 'hxc 18+',
-  version: '1.0.2',
+  version: '1.0.3',
   category: 'video',
-  mirrors: ['https://www.h4dh3.com', 'https://a84i.ux51l.com', 'https://a96u.t3nwc.com'],
+  mirrors: ['https://www.9zx3x.com', 'https://9zx3x.com', 'https://www.h4dh3.com', 'https://a84i.ux51l.com', 'https://a96u.t3nwc.com'],
 
   async categories() {
     return CATEGORIES.slice();
