@@ -13,7 +13,7 @@
     {
       "id": "manhua127_comic",
       "name": "127漫画",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "kind": "comic",
       "appSection": "comic",
       "path": "comic/127漫画.js",
@@ -1129,7 +1129,7 @@
     {
       "id": "h4dh3_video",
       "name": "hxc 18+",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/hxc.js",
@@ -1453,7 +1453,7 @@
     {
       "id": "xtube_video",
       "name": "XTUBE",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/XTUBE.js",
@@ -1537,7 +1537,7 @@
     {
       "id": "yunlaopo_video",
       "name": "云老婆",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/云老婆.js",
@@ -1573,7 +1573,7 @@
     {
       "id": "hipeng_video",
       "name": "嗨碰",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/嗨碰.js",

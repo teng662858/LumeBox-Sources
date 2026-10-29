@@ -1,4 +1,4 @@
-// LumeSource: {"id":"h4dh3_video","name":"hxc 18+","version":"1.0.1","category":"video","mirrors":["https://www.h4dh3.com","https://a84i.ux51l.com","https://a96u.t3nwc.com"]}
+// LumeSource: {"id":"h4dh3_video","name":"hxc 18+","version":"1.0.2","category":"video","mirrors":["https://www.h4dh3.com","https://a84i.ux51l.com","https://a96u.t3nwc.com"]}
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 一、站点与前端（2026-10-25 实测）
@@ -104,6 +104,12 @@ var DEFAULT_BASES = ['https://a84i.ux51l.com', 'https://a96u.t3nwc.com'];
 var AES_KEY = 'B77A9FF7F323B5404902102257503C2F';
 var AES_IV = 'B77A9FF7F323B5404902102257503C2F';
 var IMAGE_HOST = 'https://i04g.nasuiyile.com';
+// 封面 .aes 是「Base64 文本 → AES-128-ECB/NoPadding → data URI」；
+// App 图片管线按这个声明先解 Base64 再原生 ECB 解，列表层不跑纯 JS AES。
+var COVER_HEADERS = {
+  'x-lume-image-encoding': 'aes-ecb-base64',
+  'x-lume-image-key': '46cc793c53dc451b'
+};
 var CDN_REFERER = 'https://www.h4dh3.com/';
 var PAGE_SIZE = 20;
 
@@ -113,7 +119,6 @@ var CATEGORIES = [
   { id: '15', title: '网红女神' },
   { id: '17', title: '高清无码' },
   { id: '16', title: '潮吹喷水' },
-  { id: '11', title: '潮吹喷水(父)' },
   { id: '19', title: '精品素人' },
   { id: '20', title: '中文字幕' },
   { id: '21', title: '熟女OL' },
@@ -460,6 +465,8 @@ function itemOf(row) {
   return {
     id: String(row.id),
     title: String(row.name || row.id),
+    cover: String(row.coverImgUrl || row.cover || ''),
+    coverHeaders: COVER_HEADERS,
     subtitle: parts.join(' · ')
   };
 }
@@ -501,7 +508,7 @@ async function fetchSearch(keyword, page) {
 var LumeSource = {
   id: 'h4dh3_video',
   name: 'hxc 18+',
-  version: '1.0.0',
+  version: '1.0.2',
   category: 'video',
   mirrors: ['https://www.h4dh3.com', 'https://a84i.ux51l.com', 'https://a96u.t3nwc.com'],
 
@@ -510,15 +517,9 @@ var LumeSource = {
   },
 
   async filters() {
-    return {
-      groups: [
-        {
-          id: 'type',
-          title: '分类',
-          options: CATEGORIES.filter(function (row) { return row.id !== '0'; })
-        }
-      ]
-    };
+    // categories() 已经包含全部 27 个分类；再返回一份 type 组只会和分类行重复。
+    // 站点没有地区/年份/语言筛选，这里保持空组。
+    return { groups: [] };
   },
 
   async home() {
@@ -578,11 +579,12 @@ var LumeSource = {
     if (info.addTime) lines.push('发布：' + String(info.addTime).slice(0, 19));
     if (tags.length) lines.push('标签：' + tags.join(' / '));
     if (String(info.description || '').trim()) lines.push('简介：' + String(info.description).slice(0, 300));
-    lines.push('封面：站点用 AES 加密图片（.aes），App 侧无法解密，故不显示封面');
 
     return {
       id: String(info.id),
       title: String(info.name || id),
+      cover: String(info.coverImgUrl || info.cover || ''),
+      coverHeaders: COVER_HEADERS,
       subtitle: [info.typeName, info.length ? Math.round(Number(info.length) / 60) + ' 分钟' : '', Number(info.point || 0) > 0 ? info.point + ' 金币' : '免费']
         .filter(Boolean)
         .join(' · '),

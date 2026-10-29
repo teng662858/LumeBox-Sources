@@ -1,4 +1,4 @@
-// LumeSource: {"id":"yunlaopo_video","name":"云老婆","version":"1.0.0","category":"video","mirrors":["https://yunlaopo.com"]}
+// LumeSource: {"id":"yunlaopo_video","name":"云老婆","version":"1.0.1","category":"video","mirrors":["https://yunlaopo.com"]}
 //
 // 站点：云老婆（https://yunlaopo.com，"全球华人成人短视频平台"，成人短视频站，全站 18+）
 // 来历：`https://xinhuanews.dyhs.us/` 是**地址发布页**（列一堆随机跳板域）：
@@ -60,12 +60,64 @@ function headers(extra) {
   return result;
 }
 
+// 云老婆偶尔对 Dart HTTP 的 TLS 指纹回 403（浏览器/curl 正常）。遇到 403/503 时
+// 改用宿主受限 WebKit 渲染，并把「本源走渲染」记 1 小时，后面的详情/播放页省掉 403 往返。
+var RENDER_TTL_MS = 3600 * 1000;
+
+async function renderMode() {
+  try {
+    var raw = await LumeSource.fs.readText('mode.json');
+    if (!raw) return false;
+    var saved = JSON.parse(raw);
+    return !!(saved && saved.render && saved.at && Date.now() - saved.at < RENDER_TTL_MS);
+  } catch (error) {
+    return false;
+  }
+}
+
+async function markRenderMode() {
+  try {
+    await LumeSource.fs.writeText('mode.json', JSON.stringify({ render: true, at: Date.now() }));
+  } catch (error) {
+    /* 缓存写不进去不影响本次 */
+  }
+}
+
+async function renderPage(url) {
+  var result = await LumeSource.web.render({
+    url: url,
+    headers: {
+      'User-Agent': UA,
+      Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
+      'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+      Referer: base() + '/'
+    },
+    timeoutMs: 6000
+  });
+  var body = result && result.html ? String(result.html) : '';
+  if (!body || /just a moment|checking your browser|attention required|__cf_chl|cf-chl-/i.test(body)) {
+    throw new Error('NEED_WEBVIEW_VERIFY：云老婆需要网页视图过 Cloudflare 校验，请在源设置里点「网页视图」打开本站并完成验证后重试');
+  }
+  return body;
+}
+
 async function getText(target) {
   var url = /^https?:\/\//i.test(target) ? target : base() + (String(target).charAt(0) === '/' ? target : '/' + target);
+  if (await renderMode()) return renderPage(url);
   var response = await LumeSource.http.get(url, { headers: headers() });
   var status = response ? response.status : 0;
+  var body = String((response && response.body) || '');
+  if (status === 403 || status === 503 || /just a moment|__cf_chl|challenge-platform/i.test(body)) {
+    try {
+      var rendered = await renderPage(url);
+      await markRenderMode();
+      return rendered;
+    } catch (error) {
+      throw new Error('NEED_WEBVIEW_VERIFY：云老婆被 Cloudflare 拦住（HTTP ' + status + '），请在源设置里走网页视图完成校验后重试');
+    }
+  }
   if (status !== 200) throw new Error('云老婆：请求失败 HTTP ' + status + ' ' + url);
-  return String((response && response.body) || '');
+  return body;
 }
 
 // 卡片：<div class="item"><a href="…/video/{id}/{hash}/" title="标题"> … data-original="封面"
@@ -127,7 +179,7 @@ function qualitiesOf(html) {
 var LumeSource = {
   id: 'yunlaopo_video',
   name: '云老婆',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://yunlaopo.com'],
 

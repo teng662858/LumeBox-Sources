@@ -1,4 +1,4 @@
-// LumeSource: {"id":"manhua127_comic","name":"127漫画","version":"1.2.0","category":"comic","mirrors":["https://www.127manhua.com"],"icon":"https://www.127manhua.com/template/wap/default/img/favicon.ico"}
+// LumeSource: {"id":"manhua127_comic","name":"127漫画","version":"1.2.1","category":"comic","mirrors":["https://www.127manhua.com"],"icon":"https://www.127manhua.com/template/wap/default/img/favicon.ico"}
 
 // v1.2.0（2026-10-29）修：封面被 http/裸 IP 拖死、VIP 分类空、章节图 http 混用
 //
@@ -89,7 +89,7 @@ var SKIP_IMAGE = /logo|avatar|banner|advert|placeholder|blank|loading|icon|sprit
 var LumeSource = {
   id: 'manhua127_comic',
   name: '127漫画',
-  version: '1.1.0',
+  version: '1.2.1',
   icon: 'https://www.127manhua.com/template/wap/default/img/favicon.ico',
   category: 'comic',
 
@@ -147,6 +147,9 @@ var LumeSource = {
     }
 
     if (boards.length) {
+      var homeItems = [];
+      for (var b = 0; b < boards.length; b++) homeItems = homeItems.concat(boards[b].items || []);
+      await this.__fillCovers(homeItems);
       console.warn('[127] 首页板块 ' + boards.length + ' 块');
       return boards;
     }
@@ -173,6 +176,7 @@ var LumeSource = {
         throw new Error('接口回了 code=' + (payload ? payload.code : '?') + ' msg=' + (payload ? payload.msg : ''));
       }
       var items = this.__apiItems(payload);
+      await this.__fillCovers(items);
       console.warn('[127] 列表 ' + (keyword ? '搜索「' + keyword + '」' : (category || '全部')) +
         ' 第 ' + page + ' 页：' + items.length + ' 条');
       return { items: items, hasMore: items.length >= API_PAGE_SIZE };
@@ -547,8 +551,8 @@ var LumeSource = {
     var imgTag = imgAt >= 0 ? block.slice(imgAt, block.indexOf('>', imgAt) + 1) : '';
     var cover = '';
     if (imgTag) {
-      cover = this.__absolute(this.__attr(imgTag, 'data-src') || this.__attr(imgTag, 'data-original') ||
-        this.__attr(imgTag, 'src'));
+      cover = this.__httpsUrl(this.__absolute(this.__attr(imgTag, 'data-src') || this.__attr(imgTag, 'data-original') ||
+        this.__attr(imgTag, 'src')));
     }
 
     var title = this.__textOfClass(block, 'comic-name') || this.__plain(this.__attr(imgTag, 'alt'));
@@ -571,7 +575,7 @@ var LumeSource = {
     if (!title) title = this.__plain(this.__meta(area, 'og:novel:book_name'));
     if (!title) title = this.__plain(this.__titleTag(area)).split('_')[0];
 
-    var cover = this.__absolute(this.__meta(area, 'og:image'));
+    var cover = this.__httpsUrl(this.__absolute(this.__meta(area, 'og:image')));
     if (!cover) {
       var back = area.indexOf('class="box-back"');
       if (back >= 0) {

@@ -1,4 +1,4 @@
-﻿// LumeSource: {"id":"hipeng_video","name":"嗨碰","version":"1.0.0","category":"video","mirrors":["https://60lkly.scenicembrace.com"]}
+﻿// LumeSource: {"id":"hipeng_video","name":"嗨碰","version":"1.0.1","category":"video","mirrors":["https://60lkly.scenicembrace.com"]}
 //
 // 站点：嗨碰（"向在炮火连天第一线战斗的原创者致敬!"，成人短视频站，全站 18+）
 // 来历：`https://xinhuanews.dyhs.us/` 发布页里的跳板域 `60lkly.scenicembrace.com` **本身就是内容站**
@@ -20,11 +20,13 @@
 //   · 搜索        站点搜索是前端交互（`/search?q=` 只回空壳），本源不做假搜索：
 //                 `list({keyword})` 会在「推荐」页里本地过滤标题。
 var BASE_URL = 'https://60lkly.scenicembrace.com';
+var RELEASE_URL = 'https://xinhuanews.dyhs.us/';
+var resolvedBase = '';
 var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
 
 function base() {
   var domain = LumeSource.config && LumeSource.config.domain ? LumeSource.config.domain : '';
-  return (domain || BASE_URL).replace(/\/+$/, '');
+  return (domain || resolvedBase || BASE_URL).replace(/\/+$/, '');
 }
 
 function absolute(url) {
@@ -60,12 +62,123 @@ function headers(extra) {
   return result;
 }
 
+function dedupe(list) {
+  var out = [], seen = {};
+  for (var i = 0; i < list.length; i++) {
+    var value = String(list[i] || '').replace(/\/+$/, '');
+    if (!value || seen[value]) continue;
+    seen[value] = true;
+    out.push(value);
+  }
+  return out;
+}
+
+// 跳板域会轮换：发布页里 `*.scenicembrace.com` 才是当前可用的嗨碰入口。
+async function candidateBases() {
+  var list = [base()];
+  try {
+    var cached = await LumeSource.fs.readText('base.txt');
+    if (cached && cached.indexOf('http') === 0) list.push(String(cached).trim());
+  } catch (error) { /* 没缓存 */ }
+  try {
+    var response = await LumeSource.http.get(RELEASE_URL, { headers: headers() });
+    var html = String((response && response.body) || '');
+    var pattern = /https:\/\/([a-z0-9]{4,12})\.scenicembrace\.com/gi;
+    var matched;
+    while ((matched = pattern.exec(html)) !== null) list.push('https://' + matched[1] + '.scenicembrace.com');
+  } catch (error) { /* 发布页打不开就用内置域 */ }
+  list.push(BASE_URL);
+  return dedupe(list);
+}
+
+// App 单次调用预算 3–10 秒；单个域最多等 4 秒，避免一个挂掉的线路把整页拖成「执行超时」。
+function raceTimeout(promise, ms, message) {
+  if (typeof setTimeout !== 'function') return promise;
+  var timer = null;
+  var guard = new Promise(function (resolve, reject) {
+    timer = setTimeout(function () { reject(new Error(message)); }, ms);
+  });
+  return Promise.race([promise, guard]).then(function (value) {
+    if (timer) clearTimeout(timer);
+    return value;
+  }, function (error) {
+    if (timer) clearTimeout(timer);
+    throw error;
+  });
+}
+
 async function getText(target) {
-  var url = /^https?:\/\//i.test(target) ? target : base() + (String(target).charAt(0) === '/' ? target : '/' + target);
-  var response = await LumeSource.http.get(url, { headers: headers() });
-  var status = response ? response.status : 0;
-  if (status !== 200) throw new Error('嗨碰：请求失败 HTTP ' + status + ' ' + url);
-  return String((response && response.body) || '');
+  var absoluteTarget = /^https?:\/\//i.test(target);
+  var bases = absoluteTarget ? [String(target).replace(/\/+$/, '')] : await candidateBases();
+  var last = '';
+  for (var i = 0; i < bases.length; i++) {
+    var url = absoluteTarget ? bases[i] : bases[i] + (String(target).charAt(0) === '/' ? target : '/' + target);
+    try {
+      var response = await raceTimeout(
+        LumeSource.http.get(url, { headers: headers() }),
+        4000,
+        '请求 4 秒没有响应（' + url + '）'
+      );
+      var status = response ? response.status : 0;
+      var body = String((response && response.body) || '');
+      if (status === 200 && body) {
+        resolvedBase = bases[i];
+        try { await LumeSource.fs.writeText('base.txt', resolvedBase); } catch (error) { /* 缓存不影响 */ }
+        return body;
+      }
+      last = 'HTTP ' + status + ' ' + url;
+    } catch (error) {
+      last = (error && error.message) || String(error);
+    }
+  }
+  throw new Error('嗨碰：所有跳板域都打不开（' + last + '）。站点后端可能正在维护，请稍后重试');
+}
+
+// 页面 500 时（2026-10 实测全站模板报错）仍可用的 JSON 首页接口。
+async function apiHome() {
+  var bases = await candidateBases();
+  var last = '';
+  for (var i = 0; i < bases.length; i++) {
+    try {
+      var response = await raceTimeout(
+        LumeSource.http.get(bases[i] + '/api/video', { headers: headers() }),
+        4000,
+        'API 4 秒没有响应'
+      );
+      var status = response ? response.status : 0;
+      var body = String((response && response.body) || '');
+      if (status !== 200) { last = 'HTTP ' + status; continue; }
+      var json = JSON.parse(body);
+      var data = json && json.data ? json.data : null;
+      if (!data) continue;
+      resolvedBase = bases[i];
+      return data;
+    } catch (error) {
+      last = (error && error.message) || String(error);
+    }
+  }
+  throw new Error('嗨碰：首页接口也打不开（' + last + '）');
+}
+
+function apiItems(rows) {
+  var out = [], seen = {};
+  for (var i = 0; i < (rows || []).length; i++) {
+    var row = rows[i] || {};
+    var id = String(row.id == null ? '' : row.id);
+    if (!id || seen[id]) continue;
+    seen[id] = true;
+    var duration = row.duration && row.duration.text ? String(row.duration.text) : '';
+    var bits = [];
+    if (row.categoryname) bits.push(String(row.categoryname));
+    if (duration) bits.push(duration);
+    out.push({
+      id: base() + '/video/' + id,
+      title: decode(row.title) || ('视频 ' + id),
+      cover: absolute(row.vimage),
+      subtitle: bits.join(' · ')
+    });
+  }
+  return out;
 }
 
 // 卡片：<a href="/video/{id}-{slug}" class="hiporn-video-card …"> … data-original="封面" … <h3 class="…-title">标题</h3></a>
@@ -113,7 +226,7 @@ function pageUrl(category, pageNo) {
 var LumeSource = {
   id: 'hipeng_video',
   name: '嗨碰',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://60lkly.scenicembrace.com'],
 
@@ -124,6 +237,17 @@ var LumeSource = {
   },
 
   async home() {
+    try {
+      var data = await apiHome();
+      var featured = apiItems(data.featured);
+      var latest = apiItems(data.lastupdate);
+      var boards = [];
+      if (featured.length) boards.push({ title: '为您推荐', moreUrl: 'recommend', items: featured.slice(0, 24) });
+      if (latest.length) boards.push({ title: '最新更新', moreUrl: 'home', items: latest.slice(0, 24) });
+      if (boards.length) return boards;
+    } catch (error) {
+      /* API 也挂了才回退 HTML */
+    }
     var html = await getText('/recommend');
     var items = parseItems(html);
     if (!items.length) throw new Error('嗨碰：首页没认出卡片（站点可能改版或换了跳板域）');
@@ -136,14 +260,32 @@ var LumeSource = {
     if (!pageNo || pageNo < 1) pageNo = 1;
     var category = settings.categoryId ? String(settings.categoryId).trim() : 'recommend';
     var keyword = settings.keyword ? String(settings.keyword).trim().toLowerCase() : '';
+    try {
+      var data = await apiHome();
+      var merged = apiItems(data.lastupdate).concat(apiItems(data.featured));
+      var seen = {};
+      var items = merged.filter(function (item) {
+        if (seen[item.id]) return false;
+        seen[item.id] = true;
+        return true;
+      });
+      if (keyword) {
+        items = items.filter(function (item) {
+          return String(item.title).toLowerCase().indexOf(keyword) >= 0;
+        });
+      }
+      if (items.length) return { items: items, hasMore: false };
+    } catch (error) {
+      /* API 挂了才走 HTML */
+    }
     var html = await getText(pageUrl(category, pageNo));
-    var items = parseItems(html);
+    var fallback = parseItems(html);
     if (keyword) {
-      items = items.filter(function (item) {
+      fallback = fallback.filter(function (item) {
         return String(item.title).toLowerCase().indexOf(keyword) >= 0;
       });
     }
-    return { items: items, hasMore: items.length >= 20 };
+    return { items: fallback, hasMore: fallback.length >= 20 };
   },
 
   async detail(argument) {
