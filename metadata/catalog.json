@@ -4,9 +4,9 @@
   "counts": {
     "comic": 49,
     "photo": 6,
-    "movie": 12,
-    "video": 96,
-    "audiobook": 6
+    "movie": 14,
+    "video": 93,
+    "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
   "sources": [
@@ -755,6 +755,18 @@
       "iconDeclared": true
     },
     {
+      "id": "duboku_video",
+      "name": "独播库",
+      "version": "1.0.1",
+      "kind": "movie",
+      "appSection": "video",
+      "path": "video/独播库.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/独播库.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
+    },
+    {
       "id": "gztv5_video",
       "name": "瓜子影视",
       "version": "3.1.1",
@@ -774,6 +786,18 @@
       "appSection": "video",
       "path": "movie/短剧网.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/短剧网.js",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": true
+    },
+    {
+      "id": "ptt_drama",
+      "name": "蝴蝶影院",
+      "version": "1.0.2",
+      "kind": "movie",
+      "appSection": "video",
+      "path": "video/蝴蝶影院.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蝴蝶影院.js",
       "aliases": [],
       "rating": "unknown",
       "iconDeclared": true
@@ -997,13 +1021,13 @@
     {
       "id": "asmrba_video",
       "name": "ASMR吧",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/ASMR吧.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ASMR吧.js",
       "aliases": [],
-      "rating": "unknown",
+      "rating": "18+",
       "iconDeclared": true
     },
     {
@@ -1691,18 +1715,6 @@
       "iconDeclared": false
     },
     {
-      "id": "yueting_video",
-      "name": "悦听",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/悦听.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/悦听.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
-    },
-    {
       "id": "xanimu_video",
       "name": "成人动漫",
       "version": "1.0.1",
@@ -1847,18 +1859,6 @@
       "iconDeclared": false
     },
     {
-      "id": "duboku_video",
-      "name": "独播库",
-      "version": "1.0.0",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/独播库.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/独播库.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
-    },
-    {
       "id": "yuxiu_video",
       "name": "玉羞园",
       "version": "1.0.0",
@@ -1885,26 +1885,14 @@
     {
       "id": "asmrhoney_video",
       "name": "蜜糖助眠",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/蜜糖助眠.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蜜糖助眠.js",
       "aliases": [],
-      "rating": "unknown",
+      "rating": "18+",
       "iconDeclared": false
-    },
-    {
-      "id": "ptt_drama",
-      "name": "蝴蝶影院",
-      "version": "1.0.1",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/蝴蝶影院.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蝴蝶影院.js",
-      "aliases": [],
-      "rating": "unknown",
-      "iconDeclared": true
     },
     {
       "id": "niacg_video",
@@ -2012,6 +2000,18 @@
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/小黄书听书.js",
       "aliases": [],
       "rating": "18+",
+      "iconDeclared": true
+    },
+    {
+      "id": "yueting_video",
+      "name": "悦听",
+      "version": "1.0.0",
+      "kind": "audiobook",
+      "appSection": "video",
+      "path": "video/悦听.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/悦听.js",
+      "aliases": [],
+      "rating": "unknown",
       "iconDeclared": true
     },
     {

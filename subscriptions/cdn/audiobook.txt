@@ -4,5 +4,6 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/13听书�
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/听书吧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/夜读小说听书.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/小黄书听书.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/悦听.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/悦听吧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/audiobook/麒麟听书.js

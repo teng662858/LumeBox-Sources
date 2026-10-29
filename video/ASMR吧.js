@@ -1,4 +1,4 @@
-// LumeSource: {"id":"asmrba_video","name":"ASMR吧","version":"1.0.0","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://www.asmrba.com"]},"network":"proxy","icon":"https://www.asmrba.com/favicon.ico"}
+// LumeSource: {"id":"asmrba_video","name":"ASMR吧","version":"1.0.1","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://www.asmrba.com"]},"network":"proxy","icon":"https://www.asmrba.com/favicon.ico","contentCategory":"adult"}
 // LumeRuntime: javascript
 //
 // 站点：ASMR 吧（https://www.asmrba.com）—— WordPress，助眠音频/视频。
@@ -39,7 +39,7 @@ function parseCards(html) {
 }
 
 var LumeSource = {
-  id: 'asmrba_video', name: 'ASMR吧', version: '1.0.0', category: 'video',
+  id: 'asmrba_video', name: 'ASMR吧', version: '1.0.1', category: 'video',
   settingsApiVersion: 2, requiresSettings: ['commonSettings', 'settingsActions'],
   endpoints: { site: ['https://www.asmrba.com'] },
   commonSettings: [{ key: 'pageSize', default: 20, min: 1, max: 50 }, { key: 'playbackMode', default: 'auto' }],

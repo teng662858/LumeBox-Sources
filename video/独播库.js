@@ -1,4 +1,4 @@
-// LumeSource: {"id":"duboku_video","name":"独播库","version":"1.0.0","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://www.dbku.tv","https://www.duboku.tv"]},"network":"proxy","icon":"https://www.dbku.tv/favicon.ico"}
+// LumeSource: {"id":"duboku_video","name":"独播库","version":"1.0.1","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://www.dbku.tv","https://www.duboku.tv"]},"network":"proxy","icon":"https://www.dbku.tv/favicon.ico","contentCategory":"movie"}
 // LumeRuntime: javascript
 //
 // 站点：独播库（https://www.dbku.tv）—— 苹果CMS v10（maccms）HTML 模板站。
@@ -186,7 +186,7 @@ function remember(items) {
 var LumeSource = {
   id: "duboku_video",
   name: "独播库",
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   settingsApiVersion: 2,
   requiresSettings: ['commonSettings', 'settingsActions'],

@@ -20,7 +20,10 @@ jobs:
         with:
           fetch-depth: 0
       - name: Verify CDN publishing logic
-        run: python3 -m unittest discover -s tools -p test_cdn_purge.py -v
+        run: |
+          python3 -m unittest discover -s tools -p test_cdn_purge.py -v
+          python3 -m unittest discover -s tools -p test_source_classifications.py -v
+          python3 tools/build_catalog.py --check
       - name: Refresh every changed script and manifest
         env:
           SOURCE_REPOSITORY: ${{ github.repository }}

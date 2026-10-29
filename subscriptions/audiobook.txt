@@ -4,5 +4,6 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/13�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/听书吧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/夜读小说听书.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/小黄书听书.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/悦听.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/悦听吧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/麒麟听书.js

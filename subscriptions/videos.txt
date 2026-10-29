@@ -7,8 +7,10 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/华视�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/播剧网.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/欧乐影院.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/注视影视.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/独播库.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/瓜子影视.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/短剧网.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蝴蝶影院.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/金牌影院.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/飞流视频.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/饭搭子影视.js
@@ -85,7 +87,6 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/好色TV
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Fcw.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/快猫.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/快猫镜像站.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/悦听.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/成人动漫.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/探花视频.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/月色视频.js
@@ -98,11 +99,9 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱情岛.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱播爱播.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/独播库.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/玉羞园.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/绅游巴士.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蜜糖助眠.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蝴蝶影院.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/逆次元ACG.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/野果短剧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/麻豆社.js
@@ -112,5 +111,6 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/13�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/听书吧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/夜读小说听书.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/小黄书听书.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/悦听.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/悦听吧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/audiobook/麒麟听书.js

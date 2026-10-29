@@ -1,4 +1,4 @@
-// LumeSource: {"id":"asmrhoney_video","name":"蜜糖助眠","version":"1.0.1","category":"video"}
+// LumeSource: {"id":"asmrhoney_video","name":"蜜糖助眠","version":"1.0.2","category":"video","contentCategory":"adult"}
 // Site-specific adapter. Live requests checked 2026-10-14; membership restrictions remain enforced.
 
 // Embedded into each source by tools/build_requested_sources.py; no remote code imports.
@@ -29,7 +29,7 @@ var H = {
 };
 
 H.base="https://asmrhoney.com";H.name="蜜糖助眠";
-var LumeSource={id:"asmrhoney_video",name:"蜜糖助眠",version:"1.0.1",category:"video",
+var LumeSource={id:"asmrhoney_video",name:"蜜糖助眠",version:"1.0.2",category:"video",
 async home(){var r=await this.list({page:1});return [{title:'最新',items:r.items.slice(0,12)}];},
 
 async categories(){return [{id:'video',title:'视频'},{id:'audio',title:'音频'}];},

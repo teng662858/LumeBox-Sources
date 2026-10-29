@@ -56,12 +56,14 @@ def read_sources():
         path, meta = canonical
         if sid in MOVIES or meta.get('contentCategory') == 'movie':
             kind = 'movie'
-        elif meta.get('mediaType') == 'audio' or sid.endswith('_audiobook'):
+        elif meta.get('mediaType') == 'audio' or meta.get('category') == 'audiobook' or sid.endswith('_audiobook'):
             kind = 'audiobook'
         elif path.startswith('photo/'):
             kind = 'photo'
         else:
             kind = 'comic' if meta.get('category') == 'comic' else 'video'
+        if kind == 'video' and meta.get('contentCategory') not in ('movie', 'adult') and ratings.get(sid, {}).get('rating') != '18+':
+            raise ValueError(f'视频源缺少内容分类 contentCategory（movie/adult）: {sid} ({path})')
         rows.append({
             'id': sid, 'name': meta['name'], 'version': meta['version'],
             'kind': kind, 'appSection': 'comic' if kind in ('comic', 'photo') else 'video',

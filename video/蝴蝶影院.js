@@ -1,4 +1,4 @@
-// LumeSource: {"id":"ptt_drama","name":"蝴蝶影院","version":"1.0.1","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://ptt01.com","https://ptt02.cc","https://ptt03.com","https://ptt02.nl","https://ptt2.my"]},"network":"direct","icon":"https://ptt01.com/logo.png","mirrors":["https://ptt01.com","https://ptt02.cc","https://ptt03.com","https://ptt02.nl","https://ptt2.my"]}
+// LumeSource: {"id":"ptt_drama","name":"蝴蝶影院","version":"1.0.2","category":"video","settingsApiVersion":2,"requiresSettings":["commonSettings","settingsActions"],"endpoints":{"site":["https://ptt01.com","https://ptt02.cc","https://ptt03.com","https://ptt02.nl","https://ptt2.my"]},"network":"direct","icon":"https://ptt01.com/logo.png","mirrors":["https://ptt01.com","https://ptt02.cc","https://ptt03.com","https://ptt02.nl","https://ptt2.my"],"contentCategory":"movie"}
 // LumeRuntime: javascript
 //
 // 站点：蝴蝶影院（ptt01.com / ptt02.cc / ptt03.com / ptt02.nl / ptt2.my）
@@ -150,7 +150,7 @@ function pageQuery(path, page) {
 var LumeSource = {
   id: 'ptt_drama',
   name: '蝴蝶影院',
-  version: '1.0.1',
+  version: '1.0.2',
   category: 'video',
   settingsApiVersion: 2,
   requiresSettings: ['commonSettings', 'settingsActions'],
