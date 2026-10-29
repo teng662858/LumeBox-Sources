@@ -1,11 +1,16 @@
-// LumeSource: {"id":"x8x8_video","name":"8x8x","version":"3.0.0","category":"video","contentCategory":"adult","mirrors":["https://1azm0i.qcsw2b5yf.com","https://qnzu16v.u85772.com"],"network":"proxy"}
+// LumeSource: {"id":"x8x8_video","name":"8x8x","version":"3.0.1","category":"video","contentCategory":"adult","mirrors":["https://8x.vip","https://1azm0i.qcsw2b5yf.com","https://8x8x.com"],"network":"proxy"}
 // LumeRuntime: javascript
 //
 // 站点：8x8x（成人综合站，全站 18+）—— 2026-10-29 复测（改版后：跳板域 + SPA 外壳 + 服务端渲染内容页）
 //
 // 一、域名与页面结构
-//   跳板域 1azm0i.qcsw2b5yf.com 302 到当前真实域（本次 113452.85hcp2.com）；本源每次跟随重定向取
+//   站点自己公布的两个「海外永久域名」是 8x.vip 与 8x8x.com：
+//     · 8x.vip 2026-10-29 实测直连 200，页面与跳板域同内容（同 bodyRoot、同 id）→ **主站**；
+//     · 8x8x.com 在本机 DNS 被污染（解析到境外无关 IP），未能复核，只放 mirrors 供用户手选；
+//   跳板域 1azm0i.qcsw2b5yf.com 302 到当前真实域（本次 113452.85hcp2.com），本源每次跟随重定向取
 //   **当前 origin**（缓存 30 分钟），域名再换也能自己跟过去。
+//   旧的第二个跳板 qnzu16v.u85772.com 已 NXDOMAIN（2026-10-29 复核），已换掉。
+//   自动解析只走上面两个已验证地址（SEEDS）；`8x8x.com` 只在「源设置 → 换网址」里可选。
 //   真实域根路径只有 347 字节外壳：`<script src=/assets/app.xxx.js data-body-url=/4rov3/>`
 //   真正的内容页都在 `/<bodyRoot>/...`（bodyRoot 每次改版会变，动态取），路径：
 //     首页     /<bodyRoot>/
@@ -41,7 +46,7 @@
 //   content() 按线路探活，失败换下一条，全挂再退回 webplayer。
 // 18+
 
-var SEEDS = ['https://1azm0i.qcsw2b5yf.com', 'https://qnzu16v.u85772.com'];
+var SEEDS = ['https://8x.vip', 'https://1azm0i.qcsw2b5yf.com'];
 var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 var BASE_TTL_MS = 30 * 60 * 1000;
 var PIC_TTL_MS = 6 * 3600 * 1000;
@@ -613,10 +618,10 @@ function remember(items) {
 var LumeSource = {
   id: 'x8x8_video',
   name: '8x8x',
-  version: '3.0.0',
+  version: '3.0.1',
   category: 'video',
   contentCategory: 'adult',
-  mirrors: ['https://1azm0i.qcsw2b5yf.com', 'https://qnzu16v.u85772.com'],
+  mirrors: ['https://8x.vip', 'https://1azm0i.qcsw2b5yf.com', 'https://8x8x.com'],
 
   async categories() {
     var base = await resolveBase();
