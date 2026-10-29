@@ -209,3 +209,30 @@ rsync -az --delete public/ user@host:/srv/lume-sources/
 
 - **回滚**：Pages 控制台每次部署都有独立 URL 与记录，可一键回滚到上一版；
   源仓库本身仍是 git，`git revert` 后重跑一次部署即可。
+
+---
+
+## 九、排障
+
+**发布后 `nslookup` 报 NXDOMAIN、`curl` 直接失败**
+多半是本地/路由器 DNS 的**负缓存**：项目刚建好时查过一次（那时记录还不存在），
+路由器把这个"不存在"缓存住了。判断方法——查同站点从没访问过的地址（如
+`<部署ID>.lume-sources.pages.dev`）：如果它能解析，就说明不是被封，是缓存。
+处理：换 DNS（223.5.5.5 / 1.1.1.1）或等缓存过期；不要改配置。
+想在不动 DNS 的前提下立刻自查内容，用：
+
+```bash
+curl -sI --resolve lume-sources.pages.dev:443:172.66.46.235 \
+  https://lume-sources.pages.dev/subscriptions/all.json | grep -i cache-control
+```
+
+**200 但内容是旧的**
+看部署日志里有没有单独的 `Uploading _headers` 一行；没有就是 `_headers` 没上传，
+`no-store` 没生效。确认 `public/_headers` 存在后重新部署。
+
+**`wrangler` 提示未登录 / 权限不足**
+`npx wrangler login` 重新授权；CI 用 `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`。
+
+**本地 `--clean` 报 WinError 32**
+输出目录被本地静态服务或杀软占用。脚本已改成"写入 + 清理过期文件"，
+不会因此漏发或残留，忽略即可。
