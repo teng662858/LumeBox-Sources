@@ -503,7 +503,7 @@
     "uncams_video": "UN Cams（uncams.com，成人直播站，全站 18+；房间列表走 /api/ts/roomlist/room-list/，播放给 webplayer）",
     "mfc_video": "MyFreeCams（myfreecams.com，成人直播站，全站 18+；在线列表由 WebSocket 填充，源内用网页渲染取列表、播放走 webplayer）",
     "lu320_video": "320lu 小视频（yd.kmuan.com:66 / 111.62.156.183:66，成人短视频站，全站 18+；播放走 kan.php 现取一次性签名 mp4）",
-    "x8x8_video": "8x8x（随机跳板域，成人综合站：视频+小说+图库，全站 18+；列表由 AES-GCM 加密接口填充，源内用网页渲染，条目按形态返回 video/text/images）",
+    "x8x8_video": "8x8x（随机跳板域，成人综合站：视频+小说+图库，全站 18+；频道/标签页是 SSR，推荐流为 AES-256-GCM 加密 JSON，详情页给三条媒体线路的 HLS）",
     "yunlaopo_video": "云老婆（yunlaopo.com，华人成人短视频平台，全站 18+；KVS 内核，播放串 …xxx.mp4/ 形式，Range 实测 206）",
     "hipeng_video": "嗨碰（scenicembrace 跳板域，成人短视频站，全站 18+；SSR 列表 + hlsdelivery 签名 m3u8）",
     "artofzoo_video": "ArtOfZoo（artofzoo.com，zoo 题材成人影视品牌站/商店，全站 18+；商品+官方预告片 mp4，Range 实测 206）",
