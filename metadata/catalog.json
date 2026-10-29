@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 14,
-    "video": 95,
+    "video": 96,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -945,6 +945,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "porn91plus_video",
+      "name": "91PornPlus",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/91PornPlus.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/91PornPlus.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "cg1_video",
