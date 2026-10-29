@@ -5,7 +5,7 @@
     "comic": 47,
     "photo": 5,
     "movie": 14,
-    "video": 100,
+    "video": 113,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -911,6 +911,18 @@
       "iconDeclared": true
     },
     {
+      "id": "p91pinse_video",
+      "name": "91PinSe",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/91PinSe.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/91PinSe.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "porn91_video",
       "name": "91Porn",
       "version": "1.0.0",
@@ -1019,6 +1031,18 @@
       "iconDeclared": true
     },
     {
+      "id": "avbebe_video",
+      "name": "Avbebe",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/Avbebe.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Avbebe.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "jizeyy_video",
       "name": "AV仓库",
       "version": "1.0.0",
@@ -1053,6 +1077,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "cartoonporn_video",
+      "name": "CartoonPorn",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/CartoonPorn.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/CartoonPorn.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "chaturbetter_video",
@@ -1091,6 +1127,30 @@
       "iconDeclared": false
     },
     {
+      "id": "forcedcinema_video",
+      "name": "ForcedCinema",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/ForcedCinema.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ForcedCinema.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
+      "id": "gifscroll_video",
+      "name": "GifScroll",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/GifScroll.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/GifScroll.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "hentai2w",
       "name": "Hentai2W",
       "version": "1.0.0",
@@ -1110,6 +1170,18 @@
       "appSection": "video",
       "path": "video/HeroEro.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/HeroEro.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
+      "id": "hstream_video",
+      "name": "hstream",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/hstream.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/hstream.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": true
@@ -1235,6 +1307,30 @@
       "iconDeclared": false
     },
     {
+      "id": "ogfap_video",
+      "name": "OGFAP",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/OGFAP.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/OGFAP.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
+      "id": "pmvtube_video",
+      "name": "PMVtube",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/PMVtube.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/PMVtube.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "pornhub_video",
       "name": "Pornhub",
       "version": "1.0.0",
@@ -1317,6 +1413,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "sexbjcam_video",
+      "name": "sexbjcam",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/sexbjcam.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/sexbjcam.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "spankbang_video",
@@ -1485,6 +1593,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "xxxfollow_video",
+      "name": "XXXfollow",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/XXXfollow.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/XXXfollow.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "youjizz_video",
@@ -1698,6 +1818,18 @@
       "appSection": "video",
       "path": "video/好色TVhsex.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/好色TVhsex.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
+      "id": "xiaohuangniao_video",
+      "name": "小黄鸟",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/小黄鸟.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/小黄鸟.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": true
@@ -1919,6 +2051,18 @@
       "iconDeclared": false
     },
     {
+      "id": "laosiji_video",
+      "name": "老司机在线",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/老司机在线.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/老司机在线.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "mtav_video",
       "name": "蜜桃视频",
       "version": "1.0.1",
@@ -1965,6 +2109,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "fplayer_video",
+      "name": "飞播",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/飞播.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/飞播.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "madou_club_video",
