@@ -59,8 +59,13 @@
 // ════════════════════════════════════════════════════════════════════════════
 // 四、分类与内容过滤
 // ════════════════════════════════════════════════════════════════════════════
-//   分类 = /tag/conf/list 的标签；本源对 tag=<id> 过滤参数未验证成功，故分类仅作浏览入口
-//   （切分类退回热门流），搜索走本地过滤。
+//   分类 = `/modules/list` 的 homePage 栏目（新片/18岁/热播🔥/制服/国产/伦理/厂牌/AV/海外/…），
+//   每个栏目用 `GET /vid/module/<栏目id>?pageNumber&pageSize` 取内容 → 实测不同栏目首条不同。
+//   `/tag/conf/list` 的 325 个标签**不是分类**：`/search/hotVid/list?tag=<id>`（以及 tagId/tagIds/
+//   labelId/realm/tags/tagName 六种写法）返回的首条 id 与不带参数时完全一致 —— 服务端把标签参数
+//   丢了，所以拿它当分类等于「切了不换内容」。1.0.1 起分类换成栏目，标签不再进分类/筛选表。
+//   搜索：`/search/list` 只收 POST 且本部署回 parameters error，`/search/vid/list` 404，
+//   故退化为「热门流第一页本地过滤」，不把报错甩给用户。
 //   ⚠ 不做涉未成年内容：标签与标题命中 萝莉/幼齿/学生/loli/未成年 的一律剔除。
 //
 var DEFAULT_BASES = [
@@ -69,6 +74,12 @@ var DEFAULT_BASES = [
   'https://d32wxxub5gb7wa.cloudfront.net',
   'https://d1x0nwh6cfbmjp.cloudfront.net',
   'https://32sdhsudan.com'
+];
+// 页面域（CloudFront 静态托管）：**不是接口主机** —— 往它 POST /api/app/* 一律 405。
+// 用户「换网址」/ 镜像下标 0 可能把它写进 config.customDomain，那样连登录都发不出去，
+// 所以候选表里要把这类主机剔掉（曾经的报错：`接口打不开：HTTP 405 /mine/login/h5`）。
+var PAGE_HOSTS = [
+  'https://d17rhkrwip15vt.cloudfront.net'
 ];
 var INTERFACE_KEY = 'vEukA&w15z4VAD3kAY#fkL#rBnU!WDhN';
 var PARAM_KEY = 'BxJand%xf5h3sycH';
@@ -554,18 +565,30 @@ async function pingOne(base) {
   return reply.code === 200 && !!reply.data && String(reply.data.response || '') === 'pong';
 }
 
+function isPageHost(value) {
+  var text = String(value || '').replace(/\/+$/, '').toLowerCase();
+  if (!text) return false;
+  for (var index = 0; index < PAGE_HOSTS.length; index++) {
+    if (text === PAGE_HOSTS[index].toLowerCase()) return true;
+  }
+  return false;
+}
+
 async function pickBase(force, avoid) {
   var custom = customBase();
   var candidates = custom ? [custom].concat(DEFAULT_BASES.filter(function (item) { return item !== custom; })) : DEFAULT_BASES.slice();
-  // 刚失败过的那台挪到最后，换一台再试（这台部署偶发 fetch failed，但 ping 还通）
+  // 页面域进候选表只会换来 405：直接剔掉（用户真的只能选它时，下面 ping 也会跳过）
+  candidates = candidates.filter(function (item) { return !isPageHost(item); });
   if (avoid) candidates = candidates.filter(function (item) { return item !== avoid; }).concat([avoid]);
+  if (!candidates.length) candidates = DEFAULT_BASES.slice();
   if (!force) {
     if (baseCache) return baseCache;
     // 省一次往返：上次选中的主机直接信，没缓存就赌主站；真失败由 api() 走 force 分支逐台 ping
     try {
       var cached = await LumeSource.fs.readText('base.txt');
-      if (cached && String(cached).indexOf('http') === 0) {
-        candidates = [String(cached).trim()].concat(candidates.filter(function (item) { return item !== cached; }));
+      var saved = cached ? String(cached).trim() : '';
+      if (saved && saved.indexOf('http') === 0 && !isPageHost(saved)) {
+        candidates = [saved].concat(candidates.filter(function (item) { return item !== saved; }));
       }
     } catch (error) {
       /* 没缓存 */
@@ -631,25 +654,46 @@ async function ensureToken(base, force) {
   }
 }
 
-async function api(path, options) {
+/// 这台主机是否「根本不能当接口用」：405（页面域）、404、连不上 —— 值得换台重试。
+/// 业务报错（code 4001 / 内容不存在）不算，别为它多跑一轮。
+function baseFailure(error) {
+  var text = String((error && error.message) || '');
+  return /接口打不开：HTTP (403|404|405|5\d\d)|连不上接口|ping/.test(text);
+}
+
+/// 在「一台可用接口主机」上跑 task：挂了就换台再来一次。
+/// 登录（/mine/login/h5）也走这里 —— 以前它绕过了换台逻辑，一台页面域就能把首页打成
+/// `接口打不开：HTTP 405 /mine/login/h5`。
+async function withBase(task) {
   var base = await pickBase(false);
-  await ensureToken(base, false);
-  var reply;
   try {
-    reply = await call(base, path, options);
+    return await task(base);
   } catch (error) {
-    var next = await pickBase(true, base);
-    if (next !== base) reply = await call(next, path, options);
-    else throw error;
+    if (!baseFailure(error)) throw error;
+    var next;
+    try {
+      next = await pickBase(true, base);
+    } catch (switchError) {
+      throw error;
+    }
+    if (!next || next === base) throw error;
+    return await task(next);
   }
-  if (reply.code === 5009) {
-    await ensureToken(base, true);
-    reply = await call(base, path, options);
-  }
-  if (reply.code !== 200) {
-    throw new Error('接口报错：' + (reply.msg || 'code ' + reply.code) + '（' + path + '）');
-  }
-  return reply.data;
+}
+
+async function api(path, options) {
+  return await withBase(async function (base) {
+    await ensureToken(base, false);
+    var reply = await call(base, path, options);
+    if (reply.code === 5009) {
+      await ensureToken(base, true);
+      reply = await call(base, path, options);
+    }
+    if (reply.code !== 200) {
+      throw new Error('接口报错：' + (reply.msg || 'code ' + reply.code) + '（' + path + '）');
+    }
+    return reply.data;
+  });
 }
 
 /* ══════════════════════════ 数据整形 ══════════════════════════ */
@@ -710,16 +754,30 @@ async function fetchList(page, tagId) {
   return { rows: rows, hasMore: !!(data && data.hasNext) };
 }
 
-async function fetchTags() {
-  var data = await api('/tag/conf/list');
-  var rows = (data && data.tags) || [];
+/// 站点的真分类：首页标签页（`/modules/list` 的 homePage）。
+/// 返回值是**模块 id → 标题**，`list()` 用 `/vid/module/<模块id>` 取这一栏的内容。
+async function fetchModules() {
+  var data = await api('/modules/list');
+  var rows = (data && data.homePage) || [];
   var out = [];
   for (var index = 0; index < rows.length; index++) {
-    var name = String((rows[index] && rows[index].tagName) || '').trim();
-    if (!name || BLOCKED_TAGS.test(name) || BLOCKED_WORDS.test(name)) continue;
-    out.push({ id: String(rows[index].id), title: name });
+    var row = rows[index] || {};
+    var name = String(row.moduleName || '').trim();
+    var id = String(row.id || '').trim();
+    // type 1 = 视频栏目；acg 那几栏是漫画/小说/有声，视频板块不要
+    if (!id || !name || Number(row.type) !== 1) continue;
+    if (BLOCKED_TAGS.test(name) || BLOCKED_WORDS.test(name)) continue;
+    out.push({ id: id, title: name });
   }
   return out;
+}
+
+/// 模块内容：`/vid/module/<id>?pageNumber&pageSize` → allVideoInfo[] + hasNext
+async function fetchModule(page, moduleId) {
+  var query = '?pageNumber=' + Math.max(1, Number(page) || 1) + '&pageSize=' + PAGE_SIZE;
+  var data = await api('/vid/module/' + encodeURIComponent(String(moduleId)) + query);
+  var rows = (data && data.allVideoInfo) || [];
+  return { rows: rows, hasMore: !!(data && data.hasNext) };
 }
 
 /* ══════════════════════════ 图源契约 ══════════════════════════ */
@@ -727,74 +785,57 @@ async function fetchTags() {
 var LumeSource = {
   id: 'cf3_video',
   name: 'Butterfly 2 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://d17rhkrwip15vt.cloudfront.net', 'https://32sdhsudan.com', 'https://d32wxxub5gb7wa.cloudfront.net'],
 
   async categories() {
-    var tags = [];
+    // 分类 = 站点首页那排真栏目（`/modules/list` 的 homePage：新片/热播/制服/国产/伦理…）。
+    // 以前给的是 `/tag/conf/list` 的 325 个标签，**切了不换内容**（`&tag=` 被服务端忽略，
+    // 实测首条 id 一模一样）——按源约定第 3 条，这种伪分类不能留。
+    var cached = null;
     try {
-      tags = await LumeSource.fs.readText('tags.json');
+      var raw = await LumeSource.fs.readText('modules.json');
+      if (raw) cached = JSON.parse(raw);
     } catch (error) {
-      tags = null;
+      cached = null;
     }
-    if (tags) {
+    if (cached && cached.list && cached.list.length) {
+      return [{ id: '', title: '最新' }].concat(cached.list);
+    }
+    var live = await fetchModules();
+    if (live.length) {
       try {
-        var cached = JSON.parse(tags);
-        if (cached && cached.length) return cached;
+        await LumeSource.fs.writeText('modules.json', JSON.stringify({ at: Date.now(), list: live }));
       } catch (error) {
-        /* 缓存坏了就重抓 */
+        /* 缓存写不进不影响本次 */
       }
-    }
-    var live = await fetchTags();
-    try {
-      await LumeSource.fs.writeText('tags.json', JSON.stringify(live));
-      if (live.length) {
-        await LumeSource.fs.writeText('homeTag.txt', live[0].id);
-        await LumeSource.fs.writeText('homeTagTitle.txt', live[0].title);
-      }
-    } catch (error) {
-      /* 无所谓 */
     }
     return [{ id: '', title: '最新' }].concat(live);
   },
 
-  async filters() {
-    var tags = await fetchTags();
-    return {
-      groups: [
-        {
-          id: 'tag',
-          title: '标签',
-          options: tags
-        }
-      ]
-    };
-  },
-
   async home() {
-    // 首屏预算 3–5 秒：这里只用 Promise.all 并发两个请求，标签表缓存过才多挂一个板块
-    // （标签 id 存在 fs 里，由 categories()/filters() 首次调用时写入）
-    var tag = '';
+    // 首屏预算 3–5 秒：三个请求并发（最新 + 前两个栏目），栏目表走 categories() 的同一份缓存
+    var modules = [];
     try {
-      tag = (await LumeSource.fs.readText('homeTag.txt')) || '';
+      var list = await this.categories();
+      modules = list.filter(function (item) { return !!item.id; });
     } catch (error) {
-      tag = '';
+      modules = [];
     }
-    var tasks = tag ? [fetchList(1), fetchList(1, tag)] : [fetchList(1)];
+    var picks = modules.slice(0, 2);
+    var tasks = [fetchList(1)].concat(picks.map(function (item) {
+      return fetchModule(1, item.id).catch(function () { return { rows: [], hasMore: false }; });
+    }));
     var results = await Promise.all(tasks);
     var boards = [];
     var freshItems = itemsOf(results[0].rows);
     if (freshItems.length) boards.push({ title: '最新', moreUrl: '', items: freshItems.slice(0, 12) });
-    if (results[1]) {
-      var boardItems = itemsOf(results[1].rows);
-      var title = '热门标签';
-      try {
-        title = (await LumeSource.fs.readText('homeTagTitle.txt')) || title;
-      } catch (error) {
-        /* 用默认标题 */
+    for (var index = 0; index < picks.length; index++) {
+      var boardItems = itemsOf((results[index + 1] && results[index + 1].rows) || []);
+      if (boardItems.length) {
+        boards.push({ title: picks[index].title, moreUrl: picks[index].id, items: boardItems.slice(0, 12) });
       }
-      if (boardItems.length) boards.push({ title: title, moreUrl: tag, items: boardItems.slice(0, 12) });
     }
     if (!boards.length) throw new Error('首页：列表取不到条目（站点可能改版）');
     return boards;
@@ -806,25 +847,37 @@ var LumeSource = {
     if (!page || page < 1) page = 1;
     var keyword = settings.keyword ? String(settings.keyword).trim() : '';
     if (keyword) {
-      // 站点搜索接口在本部署上回 4008 network bad，退化为「热门流前 3 页本地过滤」
+      // 站点搜索接口在本部署上回 4008 / parameters error，退化为「热门流第一页本地过滤」
       var needle = keyword.toLowerCase();
       var hits = [];
-      var hasMore = false;
-      for (var round = 1; round <= 1; round++) {
-        var feedRows = await fetchList(round);
-        hasMore = feedRows.hasMore;
-        for (var index = 0; index < feedRows.rows.length; index++) {
-          var row = feedRows.rows[index];
-          if (String(row.title || '').toLowerCase().indexOf(needle) >= 0) hits.push(row);
-        }
-        if (hits.length >= 6) break;
+      var feedRows = await fetchList(1);
+      for (var index = 0; index < feedRows.rows.length; index++) {
+        var row = feedRows.rows[index];
+        if (String(row.title || '').toLowerCase().indexOf(needle) >= 0) hits.push(row);
       }
-      return { items: itemsOf(hits), hasMore: hasMore };
+      return { items: itemsOf(hits), hasMore: false };
     }
-    var filters = settings.filters || {};
-    var tagId = filters.tag || settings.categoryId || '';
-    if (String(tagId).indexOf(',') >= 0) tagId = String(tagId).split(',')[0];
-    var feed = await fetchList(page, tagId);
+    // 栏目 id 走 `/vid/module/<id>`；其余（含老版本缓存下来的标签 id）退回热门流
+    var want = String(settings.categoryId == null ? '' : settings.categoryId).trim();
+    if (want.indexOf(',') >= 0) want = want.split(',')[0].trim();
+    if (want && /^[a-f0-9]{24}$/i.test(want)) {
+      var modules = [];
+      try {
+        var cached = await LumeSource.fs.readText('modules.json');
+        modules = cached ? (JSON.parse(cached).list || []) : [];
+      } catch (error) {
+        modules = [];
+      }
+      var known = false;
+      for (var cursor = 0; cursor < modules.length; cursor++) {
+        if (modules[cursor].id === want) { known = true; break; }
+      }
+      if (known) {
+        var module = await fetchModule(page, want);
+        return { items: itemsOf(module.rows), hasMore: module.hasMore };
+      }
+    }
+    var feed = await fetchList(page);
     return { items: itemsOf(feed.rows), hasMore: feed.hasMore };
   },
 

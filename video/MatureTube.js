@@ -1,5 +1,4 @@
-// LumeSource: {"id":"maturetube_video","name":"MatureTube","version":"1.0.0","category":"video","mirrors":["https://www.maturetube.com","https://maturetube.com"]}
-// 镜像：裸域 302 到 www
+// LumeSource: {"id":"maturetube_video","name":"MatureTube","version":"1.0.0","category":"video","mirrors":["https://www.maturetube.com"]}
 
 // 站点：https://www.maturetube.com （2026-10-25 逐页实测；本机直连被封，走本机代理出口）
 //
@@ -64,6 +63,28 @@ var DEFAULT_BASE = 'https://www.maturetube.com';
 var RENDER_TTL_MS = 3600 * 1000;
 var CACHE = {};
 var MODE_KEY = 'maturetube-mode.json';
+// 来源站点（`/source/<slug>`）：slug 是 2026-10-29 从 /category/japanese 的卡片 item-source 里取的
+// 18 个，逐个实测 `/source/<slug>` 都是 200 + 120 张卡。
+var SOURCE_SITES = [
+  { id: 'eporner', title: 'Eporner' },
+  { id: 'faphouse', title: 'FapHouse' },
+  { id: 'xhamster', title: 'xHamster' },
+  { id: '2jav', title: '2Jav' },
+  { id: 'mature-nl', title: 'Mature.nl' },
+  { id: 'w4nkr', title: 'W4nkr' },
+  { id: 'xfeed', title: 'XFeed' },
+  { id: 'vikiporn', title: 'VikiPorn' },
+  { id: 'drtuber', title: 'DrTuber' },
+  { id: 'pornoxo', title: 'PornoXO' },
+  { id: 'momvids', title: 'MomVids' },
+  { id: 'maturekinkys', title: 'MatureKinkys' },
+  { id: 'pumpjap', title: 'PumpJap' },
+  { id: 'thrupnies', title: 'Thrupnies' },
+  { id: 'zbporn', title: 'ZBPorn' },
+  { id: 'hard3r', title: 'Hard3r' },
+  { id: 'analdin', title: 'Analdin' },
+  { id: 'deviants', title: 'Deviants' }
+];
 
 function base() {
   var c = typeof LumeSource !== 'undefined' && LumeSource.config ? LumeSource.config : null;
@@ -112,7 +133,6 @@ function headers(referer) {
     'Referer': referer || base() + '/'
   };
 }
-
 function looksBlocked(status, body) {
   if (status !== 403 && status !== 503) return false;
   var s = String(body || '');
@@ -195,7 +215,79 @@ async function html(target, referer) {
   return body;
 }
 
+/// 列表页：拿到 HTML 解析 → 0 条就**换另一条抓取路径**再来一次（渲染 ↔ 代理互为备份），
+/// 两次都没有条目才失败，并且把「拿到多少字节 / 页面像不像年龄门」写进报错。
+/// 旧版只看第一次的结果，于是在真机上（直连 403 → 网页渲染回了一张没卡片的空壳）
+/// 直接报「列表没解析出条目（模板可能改版）」，既看不出原因也没换路。
+async function listPage(path) {
+  var url = abs(path);
+  var first = null;
+  var firstError = '';
+  try {
+    first = await html(path);
+  } catch (error) {
+    firstError = String((error && error.message) || error);
+  }
+  if (first) {
+    var items = parseCards(first);
+    if (items.length) return { items: items, pageHtml: first };
+  }
+  var second = null;
+  try {
+    second = await proxyPage(url);
+  } catch (error) {
+    second = null;
+  }
+  if (!second) {
+    try {
+      second = await renderPage(url);
+    } catch (error) {
+      second = null;
+    }
+  }
+  if (second) {
+    var retry = parseCards(second);
+    if (retry.length) return { items: retry, pageHtml: second };
+  }
+  if (!first && !second) {
+    throw new Error('MatureTube：' + path + ' 打不开（' + (firstError || '两条抓取路径都失败') + '）');
+  }
+  var sample = String(first || second || '');
+  var gate = /just a moment|cf-browser|challenge-platform|verify you are|age verification|are you 18/i.test(sample);
+  throw new Error(
+    'MatureTube：' + path + ' 没解析出条目（拿到 ' + sample.length + ' 字节，' +
+      (gate ? '页面是年龄门/Cloudflare 校验页' : '模板可能改版') + '）'
+  );
+}
+
 // ------------------------------------------------------------ 条目
+/// 纯 JS base64 → 二进制字符串（latin1）。
+/// **不能只靠 atob/Buffer**：App 的 QuickJS 沙箱里两者都不保证存在，缺了就会让 `targetOf()`
+/// 返回空串 → 每张卡都被 isAdTarget 当成广告丢掉 → 整页「列表没解析出条目」（真机就是这个症状）。
+var B64_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+function b64ToBinary(text) {
+  var clean = String(text == null ? '' : text)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/')
+    .replace(/[^A-Za-z0-9+/=]/g, '');
+  var out = '';
+  var buffer = 0;
+  var bits = 0;
+  for (var i = 0; i < clean.length; i++) {
+    var ch = clean.charAt(i);
+    if (ch === '=') break;
+    var value = B64_CHARS.indexOf(ch);
+    if (value < 0) continue;
+    buffer = (buffer << 6) | value;
+    bits += 6;
+    if (bits >= 8) {
+      bits -= 8;
+      out += String.fromCharCode((buffer >> bits) & 0xff);
+    }
+  }
+  return out;
+}
+
 /// `/out/?l=<base64(msgpack)>&c=…&v=3` → 广告主地址
 function targetOf(outUrl) {
   var m = /[?&]l=([^&]+)/.exec(String(outUrl || ''));
@@ -213,13 +305,7 @@ function targetOf(outUrl) {
   } catch (error) {
     bin = '';
   }
-  if (!bin) {
-    try {
-      if (typeof Buffer !== 'undefined') bin = Buffer.from(raw, 'base64').toString('binary');
-    } catch (error) {
-      bin = '';
-    }
-  }
+  if (!bin) bin = b64ToBinary(raw);
   var hit = /https?:\/\/[\x21-\x7e]+/.exec(bin);
   return hit ? hit[0] : '';
 }
@@ -234,9 +320,11 @@ function hostOf(url) {
 
 /// 付费站注册跳转（join.*、/track/）不是片子，过滤掉
 function isAdTarget(url) {
-  if (!url) return true;
+  // 解不出目标地址 ≠ 广告：卡片本身（标题/封面）仍然可用，content() 再按不可播处理。
+  // 旧版 `if (!url) return true` 就是「解码器一缺失，整页全丢」的根源。
+  if (!url) return false;
   var host = hostOf(url);
-  if (!host) return true;
+  if (!host) return false;
   if (/^join\./.test(host)) return true;
   if (/\/track\//.test(url)) return true;
   return false;
@@ -244,14 +332,22 @@ function isAdTarget(url) {
 
 function parseCards(pageHtml) {
   var out = [], seen = {};
-  var chunks = String(pageHtml).split('data-public-id="');
+  var source = String(pageHtml);
+  // App 的网页渲染会把属性序列化成单引号、或把 `/` 转义成 `\/`（内联 JSON 那种），
+  // 所以先把这些写法归一成「双引号 + 正斜杠」再按原来的结构切块。
+  source = source.replace(/\\\//g, '/').replace(/\u002F/g, '/');
+  if (source.indexOf('data-public-id="') < 0 && source.indexOf("data-public-id='") >= 0) {
+    source = source.replace(/'/g, '"');
+  }
+  var chunks = source.split(/data-public-id=\s*"/);
   for (var i = 1; i < chunks.length; i++) {
     var block = chunks[i].slice(0, 9000);
     var pid = (/^([^"]+)"/.exec(block) || [])[1] || '';
     if (!pid || seen[pid]) continue;
-    var outMatch = /href="(\/out\/\?[^"]+)"|href="(https?:\/\/[^"]*\/out\/\?[^"]+)"/.exec(block);
+    var outMatch = /href="(\/out\/\?[^"]+)"|href="(https?:\/\/[^"]*\/out\/\?[^"]+)"/.exec(block) ||
+      /href='([^']*\/out\/\?[^']+)'/.exec(block);
     if (!outMatch) continue;
-    var outHref = String(outMatch[1] || outMatch[2] || '').replace(/&amp;/g, '&');
+    var outHref = String(outMatch[1] || outMatch[2] || outMatch[3] || '').replace(/&amp;/g, '&');
     if (!outHref) continue;
     var target = targetOf(outHref);
     if (isAdTarget(target)) continue; // 广告卡：没有片源
@@ -332,13 +428,12 @@ function findMedia(pageHtml, pageUrl) {
 var LumeSource = {
   id: 'maturetube_video',
   name: 'MatureTube',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.maturetube.com'],
 
   async home() {
     var page = await this.list({ categoryId: 'japanese', page: 1 });
-    if (!page.items.length) throw new Error('MatureTube：列表没解析出条目（模板可能改版）');
     return [
       { title: 'Japanese（Mature Tube）', moreUrl: base() + '/category/japanese', items: page.items.slice(0, 24) }
     ];
@@ -379,19 +474,35 @@ var LumeSource = {
     var page = Math.max(1, Number(args.page) || 1);
     var keyword = text(args.keyword || '').trim();
     var category = String(args.categoryId == null ? '' : args.categoryId).trim();
+    var filters = args.filters || {};
+    var sourceSlug = String(filters.source || '').trim();
     var path;
     if (keyword) {
       path = '/search/' + encodeURIComponent(keyword) + (page > 1 ? '?page=' + page : '');
+    } else if (sourceSlug) {
+      path = '/source/' + encodeURIComponent(sourceSlug) + (page > 1 ? '?page=' + page : '');
     } else if (/^https?:\/\//i.test(category)) {
       path = category + (category.indexOf('?') >= 0 ? '&' : '?') + 'page=' + page;
     } else {
       var slug = (category || 'japanese').replace(/^\/+/, '').replace(/^category\//, '').replace(/\/+$/, '');
       path = '/category/' + slug + (page > 1 ? '?page=' + page : '');
     }
-    var pageHtml = await html(path);
-    var items = parseCards(pageHtml);
-    if (!items.length) console.warn('[maturetube] 列表没解析出条目：' + path);
-    return { items: items, hasMore: new RegExp('page=' + (page + 1) + '(?![0-9])').test(pageHtml) };
+    var fetched = await listPage(path);
+    return { items: fetched.items, hasMore: new RegExp('page=' + (page + 1) + '(?![0-9])').test(fetched.pageHtml) };
+  },
+
+  /// 筛选：来源站点（站点的 `/source/<slug>` 栏目，实测一页都是 120 张卡）。
+  /// 分类那 60 个栏目已经是一级入口，这里不再重复放分类，避免两条一样的行。
+  async filters() {
+    return {
+      groups: [
+        {
+          id: 'source',
+          title: '来源站点',
+          options: SOURCE_SITES.slice()
+        }
+      ]
+    };
   },
 
   async detail(argument) {

@@ -1,25 +1,28 @@
-// LumeSource: {"id":"mfc_video","name":"MyFreeCams","version":"1.0.0","category":"video","mirrors":["https://www.myfreecams.com","https://myfreecams.com"]}
-// 镜像：裸域 302 到 www；主播主页在 profiles.myfreecams.com（源内已固定）
+// LumeSource: {"id":"mfc_video","name":"MyFreeCams","version":"1.0.1","category":"video","mirrors":["https://www.myfreecams.com"]}
 //
 // 站点：MyFreeCams（https://www.myfreecams.com，成人直播站，全站 18+）
 //
-// 这个站的模型列表**不是 HTTP 接口给的**：首页 HTML 只有 31 个 `mfcTmpl-*` 模板（`%username_div%` 占位符），
-// 真正的在线列表由登录后（甚至未登录也有）的 WebSocket 帧填进 DOM。所以：
-//   · 列表 = 用宿主的 LumeSource.web.render 渲染首页，等 WS 把 `[data-model_container]` 填出来再解析；
-//     实测渲染后 128 个格子，每格 `id="model_box_{uid}"`，标题在
-//     `<img title="Enter Chat Room of {用户名}">`，封面 `img.mfcimg.com/photos2/…/avatar.300x300.jpg`，
-//     直播快照 `snap.mfcimg.com/…`（data-src），在线人数 `span.room_count`。
+// 在线目录（1.0.1 换源，**不再需要网页渲染**）：
+//   · 列表 = `GET https://profiles.myfreecams.com/online` —— 服务端渲染的 200 个
+//     `<div class="model_container">`：用户名 `<div class="name"><a href="/{用户名}">`、
+//     封面 `img.mfcimg.com/photos2/<组>/<uid>/avatar.90x90.jpg`、
+//     大图 `profile_preview.256x192.jpg`（在 `data-mfc-profile-preview` 里，取它当封面）。
+//     实测 200 / 140KB，无分页（`?page=2`、`/new`、`/popular` 都是同一批 200 个）。
 //   · 详情 = 服务端渲染的 `https://profiles.myfreecams.com/{用户名}`（curl 可直取，200，32KB）。
 //   · 播放 = **webplayer**。直播流地址要 WebSocket 会话里的 respkey 去换（/php/FcwExtResp.php 那条链），
 //     脚本侧没有 WS，所以交给 App 的网页播放器打开主播页；在 App 的网页视图里登录过一次之后，播放器里是能直接看的。
-//   · 分类 = 未登录可取的公开标签接口 `https://api-edge.myfreecams.com/tags/models`
-//     （返回 499 个标签 + 每个标签的在播人数，无需 cookie）。
+//   · 分类 = 「在线主播」+ 热门标签。标签走 `api-edge.myfreecams.com/tags/models`
+//     （499 个标签 + 每个标签的主播数），单个标签的**主播 id 列表**在 `tags/models/<标签>`
+//     （`result.users`，含离线主播），所以标签分类 = 标签 id 集合 ∩ 在线目录，交集为空如实返回空。
 //
-// 实测记录（2026-10-25，本机代理出口）：
-//   · `api-edge.myfreecams.com/tags/models` → 200 / 40KB JSON，`result.tags[]` 有 tag / tag_count / total_cam_score；
-//     加 `&limit=60` 只是把标签表截断，**不是模型列表**；`/models`、`/models/online`、`/online` 全 404。
-//   · 登录（`POST /php/login.php`，字段 username/password）在真浏览器里是成功的（落到 `#Homepage`），
-//     登录后仍没有「模型列表」的 HTTP 接口，确认列表只走 WS。
+// 旧版为什么废掉：首页 HTML 只有 31 个 `mfcTmpl-*` 模板（`%username_div%` 占位符），真正的在线格子
+// 由 WebSocket 帧填进 DOM，所以旧版用 `LumeSource.web.render` 等渲染后再解析 `id="model_box_*"`。
+// 真机上渲染回来的是**没被 WS 填过的空壳**，于是首页报「渲染后的首页没认出在线主播卡片」。
+//
+// 实测记录（2026-10-29，本机代理出口）：
+//   · `profiles.myfreecams.com/online` → 200，200 个 model_container，`data-mfc-profile-preview` 200 image/jpeg。
+//   · `api-edge.myfreecams.com/tags/models/asian` → `{"result":{"users":[8172564,…]}}`（21 个，其中 2 个在播）。
+//   · `api-edge.myfreecams.com/models`、`/models/online`、`/online` 全 404（没有「按标签列主播」的 HTTP 接口）。
 //   · `https://www.myfreecams.com/{用户名}` 是 404，主播主页在 **profiles.** 子域。
 var BASE_URL = 'https://www.myfreecams.com';
 var PROFILE_HOST = 'https://profiles.myfreecams.com';
@@ -64,71 +67,109 @@ function headers(extra) {
   return result;
 }
 
-async function getText(url) {
-  var response = await LumeSource.http.get(url, { headers: headers() });
+async function getText(url, accept) {
+  var response = await LumeSource.http.get(url, {
+    headers: headers(accept ? { Accept: accept } : null)
+  });
   var status = response ? response.status : 0;
   if (status !== 200) throw new Error('MyFreeCams 请求失败：HTTP ' + status + ' ' + url);
   return String((response && response.body) || '');
 }
 
-// 首页必须靠渲染：WS 填充后才有 `[data-model_container]`
-async function renderHome() {
-  var result = await LumeSource.web.render({
-    url: base() + '/',
-    headers: { 'User-Agent': UA, Accept: 'text/html,*/*;q=0.8' },
-    timeoutMs: 9000
-  });
-  var html = result && result.html ? String(result.html) : '';
-  if (!html) throw new Error('NEED_WEBVIEW_VERIFY：MyFreeCams 的在线列表要跑 WebSocket 才有，请在源设置里给本源开启网页渲染/网页视图');
-  return html;
+// 在线目录：**纯 HTTP 就有一份服务端渲染的**，不必渲染首页。
+//   GET https://profiles.myfreecams.com/online → 200 / 140KB，200 个
+//   `<div class="model_container">`：用户名在 `<div class="name"><a href="/{用户名}">`，
+//   封面分别是 `img.mfcimg.com/photos2/<组>/<uid>/avatar.90x90.jpg` 与
+//   更大的 `profile_preview.256x192.jpg`（data-mfc-profile-preview 属性里，免 Referer）。
+//   旧版用 LumeSource.web.render 等 WebSocket 把首页格子填出来，真机上渲染回来的是**空壳**
+//   → 报「渲染后的首页没认出在线主播卡片」。这条路彻底去掉了。
+async function fetchOnline() {
+  var html = await getText(PROFILE_HOST + '/online');
+  var items = parseModels(html);
+  if (!items.length) throw new Error('MyFreeCams：在线目录里没认出主播卡片（站点可能改版）');
+  return items;
 }
 
 function parseModels(html) {
   var items = [];
   var seen = {};
-  var blocks = html.split('id="model_box_');
+  var blocks = String(html || '').split('class="model_container"');
   for (var i = 1; i < blocks.length; i++) {
     var block = blocks[i].slice(0, 2600);
-    var uid = /^(\d+)/.exec(block);
-    if (!uid) continue;
-    var nameMatch = /title="Enter Chat Room of ([^"]+)"/.exec(block) || /profiles\.myfreecams\.com\/([A-Za-z0-9_\-]+)/.exec(block);
-    var username = nameMatch ? decode(nameMatch[1]) : '';
-    if (!username || seen[username]) continue;
-    var coverMatch = /src="(https:\/\/img\.mfcimg\.com\/[^"]+)"/.exec(block) ||
-      /data-src="(https:\/\/snap\.mfcimg\.com\/[^"]+)"/.exec(block);
-    var countMatch = /class="room_count[^"]*">(\d+)</.exec(block);
-    seen[username] = true;
+    var nameMatch = /class="name"><a[^>]*href="\/([^"\/]+)"/.exec(block) ||
+      /href="\/([A-Za-z0-9_\-]+)"[^>]*data-mfc-profile-preview/.exec(block);
+    if (!nameMatch) continue;
+    var username = decode(nameMatch[1]);
+    if (!username || seen[username.toLowerCase()]) continue;
+    var preview = /data-mfc-profile-preview="(https:\/\/[^"]+)"/.exec(block);
+    var avatar = /class="avatar[^"]*"[^>]*src="(https:\/\/[^"]+)"/.exec(block) ||
+      /src="(https:\/\/img\.mfcimg\.com\/[^"]+)"/.exec(block);
+    // uid 只在头像路径里（/photos2/393/39327422/…），标签过滤要靠它对上号
+    var uidMatch = /photos2\/\d+\/(\d+)\//.exec(avatar ? avatar[1] : block);
+    seen[username.toLowerCase()] = true;
     items.push({
       id: username,
       title: username,
-      cover: coverMatch ? absolute(coverMatch[1]) : '',
-      subtitle: countMatch ? Number(countMatch[1]) + ' 人在看' : ''
+      cover: preview ? absolute(preview[1]) : (avatar ? absolute(avatar[1]) : ''),
+      subtitle: '',
+      uid: uidMatch ? String(uidMatch[1]) : ''
     });
   }
   return items;
 }
 
+/// 标签 → 在播主播 id 列表（`api-edge.myfreecams.com/tags/models/<tag>` → result.users）。
+/// 这个接口给的是**全站**带标签的主播（含离线），所以要和在线目录取交集。
+async function fetchTagUids(tag) {
+  var raw = await getText(API_HOST + '/tags/models/' + encodeURIComponent(tag), 'application/json');
+  var data = JSON.parse(raw);
+  var users = (data && data.result && data.result.users) || [];
+  var out = {};
+  for (var i = 0; i < users.length; i++) out[String(users[i])] = true;
+  return out;
+}
+
 var LumeSource = {
   id: 'mfc_video',
   name: 'MyFreeCams',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.myfreecams.com'],
 
   async categories() {
     var list = [{ id: 'online', title: '在线主播' }];
+    // 标签表 40KB：缓存 12 小时，首屏不为它单跑一趟
+    var cached = null;
     try {
-      var raw = await getText(API_HOST + '/tags/models');
-      var data = JSON.parse(raw);
+      var raw = await LumeSource.fs.readText('tags.json');
+      cached = raw ? JSON.parse(raw) : null;
+    } catch (error) {
+      cached = null;
+    }
+    if (cached && cached.list && cached.list.length && Date.now() - Number(cached.at || 0) < 12 * 3600 * 1000) {
+      return list.concat(cached.list);
+    }
+    try {
+      var body = await getText(API_HOST + '/tags/models', 'application/json');
+      var data = JSON.parse(body);
       var tags = (data && data.result && data.result.tags) || [];
       tags.sort(function (a, b) {
         return Number(b.tag_count || 0) - Number(a.tag_count || 0);
       });
-      for (var i = 0; i < tags.length && list.length < 13; i++) {
+      var picked = [];
+      for (var i = 0; i < tags.length && picked.length < 12; i++) {
         var tag = tags[i] && tags[i].tag ? String(tags[i].tag) : '';
         if (!tag) continue;
-        list.push({ id: 'tag:' + tag, title: '标签 · ' + tag });
+        picked.push({ id: 'tag:' + tag, title: '标签 · ' + tag });
       }
+      if (picked.length) {
+        try {
+          await LumeSource.fs.writeText('tags.json', JSON.stringify({ at: Date.now(), list: picked }));
+        } catch (error) {
+          /* 缓存写不进不影响本次 */
+        }
+      }
+      list = list.concat(picked);
     } catch (error) {
       // 标签接口挂了就只留「在线主播」，不影响浏览
     }
@@ -136,30 +177,28 @@ var LumeSource = {
   },
 
   async home() {
-    var html = await renderHome();
-    var items = parseModels(html);
-    if (!items.length) throw new Error('MyFreeCams：渲染后的首页没认出在线主播卡片（站点可能改版）');
+    var items = await fetchOnline();
     return [{ title: '在线主播', moreUrl: 'online', items: items.slice(0, 24) }];
   },
 
   async list(argument) {
     var settings = argument || {};
-    var keyword = settings.keyword ? String(settings.keyword).trim() : '';
+    var keyword = settings.keyword ? String(settings.keyword).trim().toLowerCase() : '';
     var category = settings.categoryId ? String(settings.categoryId).trim() : '';
-    var html = await renderHome();
-    var items = parseModels(html);
+    var items = await fetchOnline();
     if (keyword) {
-      var lower = keyword.toLowerCase();
       items = items.filter(function (item) {
-        return String(item.title).toLowerCase().indexOf(lower) >= 0;
+        return String(item.title).toLowerCase().indexOf(keyword) >= 0;
       });
     } else if (category.indexOf('tag:') === 0) {
-      var tag = category.slice(4).toLowerCase();
-      var tagged = items.filter(function (item) {
-        return String(item.subtitle).toLowerCase().indexOf(tag) >= 0;
+      // 标签 → 全站带该标签的主播 id → 与本机这份「在播目录」取交集。
+      // 交集为空是真实情况（标签库是离线主播也算的），不拿别的分类顶替。
+      var uids = await fetchTagUids(category.slice(4));
+      items = items.filter(function (item) {
+        return !!item.uid && uids[item.uid] === true;
       });
-      if (tagged.length) items = tagged;
     }
+    for (var index = 0; index < items.length; index++) delete items[index].uid;
     return { items: items, hasMore: false };
   },
 
@@ -171,7 +210,10 @@ var LumeSource = {
     var title = decode(titleMatch ? titleMatch[1] : '').replace(/'s Homepage on MyFreeCams\.com.*$/i, '').trim();
     if (!title) title = username;
     var coverMatch = /<meta[^>]+property="og:image"[^>]+content="([^"]+)"/i.exec(html) ||
-      /<img[^>]+class="[^"]*avatar[^"]*"[^>]+src="([^"]+)"/i.exec(html);
+      /<img[^>]+class="[^"]*avatar[^"]*"[^>]+src="([^"]+)"/i.exec(html) ||
+      // 主播页没有 og:image / avatar 标签，但主题把主页大图写在 CSS 里：
+      // background-image:url('https://img.mfcimg.com/photos2/393/39327422/875-240-….jpg?mfca=…')
+      /background-image:url\('(https:\/\/img\.mfcimg\.com\/photos2\/[^')]+)'\)/i.exec(html);
     var descMatch = /<meta[^>]+(?:property="og:description"|name="description")[^>]+content="([^"]*)"/i.exec(html);
     return {
       id: username,

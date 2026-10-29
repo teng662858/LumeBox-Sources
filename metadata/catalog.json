@@ -1105,7 +1105,7 @@
     {
       "id": "familyporn_video",
       "name": "Familyporn",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/Familyporn.js",
@@ -1165,7 +1165,7 @@
     {
       "id": "iwara_video",
       "name": "Iwara",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/Iwara视频.js",
@@ -1237,7 +1237,7 @@
     {
       "id": "mfc_video",
       "name": "MyFreeCams",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/MyFreeCams.js",

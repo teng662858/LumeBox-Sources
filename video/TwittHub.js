@@ -48,22 +48,51 @@ function clean(text) {
     .trim();
 }
 
+/// Vercel 的校验页有时不立刻回 429，而是把连接吊着 —— App 侧只会看到「执行超时」，
+/// 用户拿不到任何可操作的信息。这里给单次请求加 6 秒上限，到点就按校验页报错。
+/// 沙箱没有 setTimeout 时（部分宿主/离线检查器）自动跳过这层，退回原样等待。
+function raceTimeout(promise, ms, message) {
+  if (typeof setTimeout !== 'function') return promise;
+  var timer = null;
+  var guard = new Promise(function (resolve, reject) {
+    timer = setTimeout(function () {
+      reject(new Error(message));
+    }, ms);
+  });
+  return Promise.race([promise, guard]).then(
+    function (value) {
+      if (timer) clearTimeout(timer);
+      return value;
+    },
+    function (error) {
+      if (timer) clearTimeout(timer);
+      throw error;
+    }
+  );
+}
+
+function checkpointError(path) {
+  return new Error(
+    '站点要过 Vercel 安全校验：先在源里点一次「网页视图」完成校验，再回来重试（' + path + '）'
+  );
+}
+
 function get(path) {
-  return LumeSource.http.get(base() + path, {
+  var request = LumeSource.http.get(base() + path, {
     headers: {
       'User-Agent': UA,
       Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
       'Accept-Language': 'zh-CN,zh;q=0.9',
       Referer: base() + '/',
     },
-  }).then(function (reply) {
-    var status = reply ? reply.status : 0;
-    if (status === 429 || status === 403) {
-      throw new Error('站点要过 Vercel 安全校验：先在源里点一次「网页视图」，再回来重试');
-    }
-    if (status !== 200) throw new Error('页面打不开：HTTP ' + status + '（' + path + '）');
-    return reply.body ? String(reply.body) : '';
   });
+  return raceTimeout(request, 6000, '站点要过 Vercel 安全校验：请求 6 秒没有响应，先在源里点一次「网页视图」再回来重试（' + path + '）')
+    .then(function (reply) {
+      var status = reply ? reply.status : 0;
+      if (status === 429 || status === 403) throw checkpointError(path);
+      if (status !== 200) throw new Error('页面打不开：HTTP ' + status + '（' + path + '）');
+      return reply.body ? String(reply.body) : '';
+    });
 }
 
 function parseCards(html) {
@@ -106,7 +135,7 @@ function remember(items) {
 var LumeSource = {
   id: 'twitthub_video',
   name: 'TwittHub',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
   mirrors: ['https://www.twitthub.com'],

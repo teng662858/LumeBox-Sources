@@ -1,5 +1,4 @@
-// LumeSource: {"id":"uncams_video","name":"UN Cams","version":"1.0.0","category":"video","mirrors":["https://uncams.com","https://www.uncams.com"]}
-// 镜像：www 是 JSON 接口所在线（裸域 HTML 对 Node/Ap 的 TLS 指纹常 403）
+// LumeSource: {"id":"uncams_video","name":"UN Cams","version":"1.0.0","category":"video","mirrors":["https://uncams.com"]}
 //
 // 站点：UN Cams（uncams.com，Chaturbate / highwebmedia 白标直播站，18+）
 // 快照：.tmp_probe/cf/uncams.html（90KB，apex 首页 SSR）
@@ -100,9 +99,11 @@ function sleep(ms) {
 
 async function getText(url, accept) {
   var lastStatus = 0;
-  // 房间目录接口有频率限制，实测连打十来次会 429；429 时退避重试一次再放弃。
-  for (var attempt = 0; attempt < 2; attempt++) {
-    if (attempt) await sleep(1200);
+  // 房间目录接口按 IP 有分钟级配额，实测密集调用会 429（等一会儿又恢复）。
+  // 429/503 时退避重试两轮（2s、5s）再放弃，总耗时仍远小于 App 的单次预算。
+  var delays = [0, 2000, 5000];
+  for (var attempt = 0; attempt < delays.length; attempt++) {
+    if (delays[attempt]) await sleep(delays[attempt]);
     var response = await LumeSource.http.get(url, {
       headers: headers({ Accept: accept || 'text/html,application/xhtml+xml,*/*;q=0.8' })
     });
@@ -111,7 +112,8 @@ async function getText(url, accept) {
     if (lastStatus === 200) return body;
     if (lastStatus !== 429 && lastStatus !== 503) break;
   }
-  throw new Error('UN Cams 打不开：HTTP ' + lastStatus + ' ' + url);
+  throw new Error('UN Cams 打不开：HTTP ' + lastStatus + ' ' + url +
+    (lastStatus === 429 ? '（接口限流，稍等几十秒再试）' : ''));
 }
 
 async function getRooms(gender, limit, offset, keyword) {
@@ -123,7 +125,27 @@ async function getRooms(gender, limit, offset, keyword) {
     throw new Error('UN Cams 返回的不是 JSON：' + body.slice(0, 120));
   }
   var data = JSON.parse(body);
-  return { rooms: Array.isArray(data.rooms) ? data.rooms : [], total: Number(data.total_count || 0) };
+  var rooms = Array.isArray(data.rooms) ? data.rooms : [];
+  // 按性别分的那一页空了，就退回「不分性别」再自己筛一遍：
+  // 站点偶尔会对某个 genders 值回空数组（不是报错），真机上的表现是整页「直播间接口没返回数据」。
+  if (!rooms.length && gender) {
+    var plain = await getText(
+      WWW_BASE + '/api/ts/roomlist/room-list/?enable_recommendations=false&limit=' + limit +
+        '&offset=' + offset,
+      'application/json, text/plain, */*'
+    );
+    if (plain.charAt(0) === '{') {
+      var all = JSON.parse(plain);
+      var pool = Array.isArray(all.rooms) ? all.rooms : [];
+      rooms = pool.filter(function (room) {
+        var g = String((room && room.gender) || (room && room.genders) || '').toLowerCase();
+        if (!g) return true;
+        return g.charAt(0) === String(gender).charAt(0);
+      });
+      if (rooms.length) return { rooms: rooms, total: Number(all.total_count || 0) };
+    }
+  }
+  return { rooms: rooms, total: Number(data.total_count || 0) };
 }
 
 function coverOf(room) {
@@ -185,7 +207,7 @@ function nameOf(value) {
 var LumeSource = {
   id: 'uncams_video',
   name: 'UN Cams',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://uncams.com'],
 
@@ -199,20 +221,38 @@ var LumeSource = {
       { gender: 'c', title: '情侣直播' },
       { gender: 'm', title: '男主播' }
     ];
-    var boards = await Promise.all(
-      plans.map(async function (plan) {
-        try {
-          var data = await getRooms(plan.gender, 24, 0);
-          return { title: plan.title, moreUrl: plan.gender, items: itemsOf(data.rooms).slice(0, 24) };
-        } catch (error) {
-          return { title: plan.title, moreUrl: plan.gender, items: [] };
-        }
-      })
-    );
+    // 三类**串行**取：目录接口按 IP 有分钟级配额，三个并发一起打最容易一起 429/回空，
+    // 真机上的表现就是首页直接「直播间接口没返回数据」。串行多花 1–2 秒但稳得多。
+    var boards = [];
+    var errors = [];
+    for (var index = 0; index < plans.length; index++) {
+      var plan = plans[index];
+      try {
+        var data = await getRooms(plan.gender, 24, 0);
+        boards.push({ title: plan.title, moreUrl: plan.gender, items: itemsOf(data.rooms).slice(0, 24) });
+      } catch (error) {
+        errors.push(plan.title + '：' + ((error && error.message) || error));
+        boards.push({ title: plan.title, moreUrl: plan.gender, items: [] });
+      }
+    }
     var kept = boards.filter(function (board) {
       return board.items.length > 0;
     });
-    if (!kept.length) throw new Error('UN Cams：直播间接口没返回数据');
+    if (!kept.length) {
+      // 三类都空：先把「是不是全网真的没人」问一遍（不带 genders 的目录），再决定报什么
+      var fallback = null;
+      try {
+        fallback = await getRooms('', 24, 0);
+      } catch (error) {
+        fallback = null;
+      }
+      var filled = fallback ? itemsOf(fallback.rooms).slice(0, 24) : [];
+      if (filled.length) return [{ title: '在线直播', moreUrl: 'f', items: filled }];
+      throw new Error(
+        'UN Cams：直播间接口没返回数据' +
+          (errors.length ? '（' + errors.join('；') + '）' : '（三大类在播数都是 0，可能是当前出口 IP 被站点限流）')
+      );
+    }
     return kept;
   },
 

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"iwara_video","name":"Iwara","version":"1.0.1","category":"video","mirrors":["https://www.iwara.tv"]}
+// LumeSource: {"id":"iwara_video","name":"Iwara","version":"1.0.2","category":"video","mirrors":["https://www.iwara.tv"]}
 // 站点：https://www.iwara.tv（Iwara；前端 React SPA，**数据全在公开 JSON API 上**）
 //
 // ## 为什么这个源几乎不解析 HTML
@@ -21,8 +21,8 @@
 //          即「清晰度变体列表」。取其中最高的一档（跳过 preview 预览片），
 //          `src.view` 是协议相对地址，补 `https:` 就能播。
 //          匿名只给 360p（带浏览器头也一样，实测）——更高清要登录/会员，本源如实按最高档取。
-//   缩略图 不需要接口给：`https://i.iwara.tv/image/thumbnail/<file.id>/thumbnail-<thumbnail>.jpg`
-//          （`thumbnail` 字段是版本号；这个地址实测 200 image/jpeg）。
+//   缩略图 不需要接口给：`https://i.iwara.tv/image/thumbnail/<file.id>/thumbnail-<帧号>.jpg`
+//          （这个地址实测 200 image/jpeg）。**帧号要夹到「已生成的最后 6 帧」**，见 __cover。
 //
 // ## 已验证 / 已知边界
 //
@@ -231,6 +231,13 @@ var LumeSource = {
     };
   },
 
+  /// 封面：`/image/thumbnail/<file.id>/thumbnail-<帧号>.jpg`。
+  ///
+  /// ⚠ 帧号不能直接用接口的 `thumbnail` 字段：Iwara 只生成**最后 6 帧**（实测
+  /// numThumbnails=16 的视频，只有 10..15 是真实画面，0..9 一律回一张 4.8KB 的
+  /// 站点占位图 —— 黑底 + 白色船形 logo，和 iwara 自己的 favicon 一个样）。
+  /// 而接口给的 `thumbnail` 是 0..15 随机，于是大量条目在 App 里显示成那张占位图。
+  /// 规则：落在已生成区间就用它，否则退回最后一帧（`numThumbnails-1`，一定存在）。
   __cover(raw) {
     if (raw.customThumbnail) {
       var custom = raw.customThumbnail;
@@ -240,8 +247,13 @@ var LumeSource = {
     }
     var file = raw.file || {};
     if (!file.id) return '';
+    var total = Number(file.numThumbnails) || 0;
+    var last = total > 0 ? total - 1 : 15;
+    var lowest = Math.max(0, last - 5);
+    var frame = Number(raw.thumbnail);
+    if (!isFinite(frame) || frame < lowest || frame > last) frame = last;
     return IMG_URL + '/image/thumbnail/' + encodeURIComponent(file.id)
-      + '/thumbnail-' + (raw.thumbnail || 0) + '.jpg';
+      + '/thumbnail-' + frame + '.jpg';
   },
 
   __subtitle(raw) {

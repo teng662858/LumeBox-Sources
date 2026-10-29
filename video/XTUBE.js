@@ -33,17 +33,21 @@
 //              所以本源用「列表缓存 + 回退按 4 个 primaryTag 扫一遍」拿 streamName，实测一次命中。
 //   搜索      没有搜索接口（/api/front/v2/models/search、/v3/models/search、/v2/search 全 404，
 //              ?search= 参数被忽略）。keyword 只能在已取回的块里本地匹配 username，注释里写明。
-//   封面      previewUrlThumbSmall 是相对路径（/previews/a/2/4/…-thumb-small），
-//              拼模板 https://img.doppiocdn.org/{type}/{timestamp}/{modelId}；
-//              **本机实测所有 doppiocdn 图床（.org/.com/.media/.live、avatars/previews、
-//              带不带 .jpg）一律 404**，估计要站点会话签名。App 里有会话时多半能出图，
-//              出不来就是空封面，不影响播放。不要拿它当被拦信号。
+//   封面      `previewUrlThumbSmall` 在接口里是相对路径（`/previews/a/2/4/…-thumb-small`），
+//              但**图床不是 img.doppiocdn.org**：主播页内联 JSON 里同一个字段已经是绝对值
+//              `https://static-proxy.strpst.com/previews/…`（1.0.1 实测 200 image/webp 3.6KB）。
+//              旧版拼成 `https://img.doppiocdn.org{path}/{snapshotTimestamp}/{modelId}`，
+//              实测三站图片域全是 404 → 封面整片空白。
+//              现在的规则：接口给了绝对地址就直接用；只给相对路径就补 `static-proxy.strpst.com`；
+//              连 preview 都没有才退回 avatarUrl（同样是 static-proxy）。
+//              不要拿 404 当被拦信号（缺直播快照的主播本来就没有 preview）。
 //
 // 头：zh.xtube.com 对 iPhone UA 直接 **406**（实测 Version/17.0 Mobile 拿到 406、
 // 桌面 Chrome 140 + Accept-Language 才 200），所以 UA 固定桌面 Chrome 140，
 // 且必须带 Accept / Accept-Language，否则 406。
 var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
 var DEFAULT_BASE = 'https://zh.xtube.com';
+var IMAGE_HOST = 'https://static-proxy.strpst.com';
 var TAGS = ['men', 'girls', 'couples', 'trans'];
 var TAG_TITLES = { men: '男主播', girls: '女主播', couples: '情侣', trans: '跨性别' };
 var BLOCK_TITLES = {
@@ -117,14 +121,19 @@ async function getPage(path) {
   return status(r);
 }
 
-/// 封面：站点模板 https://img.doppiocdn.org/{type}/{timestamp}/{modelId}
+/// 封面：接口里的 previewUrlThumbSmall（绝对值直接用，相对路径补 static-proxy 图床），
+/// 没有预览快照才退回头像。两者都缺 → null（交给 App 的占位图）。
 function coverOf(model) {
-  var path = String(model && model.previewUrlThumbSmall ? model.previewUrlThumbSmall : '');
-  if (!path) return null;
-  var ts = String(model.snapshotTimestamp || model.popularSnapshotTimestamp || '');
-  var id = String(model.id || model.streamName || '');
-  if (!ts || !id) return null;
-  return 'https://img.doppiocdn.org' + (path.charAt(0) === '/' ? path : '/' + path) + '/' + ts + '/' + id;
+  var row = model || {};
+  var candidates = [row.previewUrlThumbSmall, row.previewUrlThumbBig, row.previewUrl, row.avatarUrlThumb, row.avatarUrl];
+  for (var index = 0; index < candidates.length; index++) {
+    var path = String(candidates[index] || '').trim();
+    if (!path) continue;
+    if (/^https?:\/\//i.test(path)) return path;
+    if (path.indexOf('//') === 0) return 'https:' + path;
+    return IMAGE_HOST + (path.charAt(0) === '/' ? path : '/' + path);
+  }
+  return null;
 }
 
 function remember(model) {
@@ -176,7 +185,7 @@ function toItem(model) {
 var LumeSource = {
   id: 'xtube_video',
   name: 'XTUBE',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://zh.xtube.com'],
 

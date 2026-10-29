@@ -1,6 +1,8 @@
-﻿// LumeSource: {"id":"familyporn_video","name":"Familyporn","version":"1.0.0","category":"video","mirrors":["https://familyporn.tv"]}
+﻿// LumeSource: {"id":"familyporn_video","name":"Familyporn","version":"1.0.1","category":"video","network":"proxy","mirrors":["https://familyporn.tv"]}
 //
 // 站点：Familyporn.tv（https://familyporn.tv，英文 taboo/step- 题材免费 tube，全站 18+）
+// 网络：本机实测 **直连超时、走代理 200**，所以标了 `network: proxy`（源设置里会提示要代理）。
+//       封面也在同一台机器上（familyporn.tv/contents/videos_screenshots/…），代理是必须的。
 //   KVS 内核，同族站点入口：18-virgin-sex / puremature / pervmom / milfaf …
 //
 // 结构（2026-10-25 实测，KVS）：
@@ -78,13 +80,19 @@ function parseItems(html) {
     var titleMatch = /title="([^"]{2,200})"/.exec(block);
     var title = decode(titleMatch ? titleMatch[1] : '');
     if (!title) continue;
-    var coverMatch = /class="img"[^>]+src="([^"]+)"/.exec(block) || /<img[^>]+src="([^"]+)"/.exec(block);
+    var coverMatch = /class="img"[^>]+src="([^"]+)"/.exec(block) ||
+      /<img[^>]+class="[^"]*img[^"]*"[^>]+data-webp="([^"]+)"/.exec(block) ||
+      /<img[^>]+data-src="([^"]+)"/.exec(block) ||
+      /<img[^>]+src="([^"]+)"/.exec(block);
+    var cover = coverMatch ? absolute(String(coverMatch[1]).replace(/&amp;/g, '&')) : '';
+    // 懒加载占位（data:/1x1 gif/空路径）不算封面，宁可留空让 App 画占位图
+    if (!/^https?:\/\//i.test(cover) || /\/static\/images\//i.test(cover)) cover = '';
     var durMatch = /class="duration"[^>]*>([\s\S]{0,20}?)</.exec(block);
     seen[href] = true;
     items.push({
       id: absolute(href),
       title: title,
-      cover: coverMatch ? absolute(coverMatch[1]) : '',
+      cover: cover,
       subtitle: durMatch ? decode(durMatch[1]) : ''
     });
   }
@@ -179,15 +187,40 @@ var LumeSource = {
     return [{ title: '最新更新', moreUrl: 'latest', items: items.slice(0, 24) }];
   },
 
+  /// 筛选：排序。站点的三个真实列表页——`/latest-updates/`、`/most-popular/`、`/top-rated/`
+  /// （2026-10-29 实测都是 200 + 24 张封面；`/most-viewed/` 是 404，没有它）。
+  /// 站点分类已经是 13 个一级入口，这里不再重复分类，避免两条一样的行。
+  async filters() {
+    return {
+      groups: [
+        {
+          id: 'sort',
+          title: '排序',
+          options: [
+            { id: 'latest', title: '最新更新' },
+            { id: 'popular', title: '最受欢迎' },
+            { id: 'rated', title: '最高评分' }
+          ]
+        }
+      ]
+    };
+  },
+
   async list(argument) {
     var settings = argument || {};
     var pageNo = Number(settings.page || 1);
     if (!pageNo || pageNo < 1) pageNo = 1;
     var category = settings.categoryId ? String(settings.categoryId).trim() : 'latest';
     var keyword = settings.keyword ? String(settings.keyword).trim().toLowerCase() : '';
+    var filters = settings.filters || {};
+    var sort = String(filters.sort || '').trim();
     var path;
     if (category.indexOf('site:') === 0) {
       path = '/sites/' + category.slice(5) + '/' + (pageNo > 1 ? pageNo + '/' : '');
+    } else if (sort === 'popular') {
+      path = '/most-popular/' + (pageNo > 1 ? pageNo + '/' : '');
+    } else if (sort === 'rated') {
+      path = '/top-rated/' + (pageNo > 1 ? pageNo + '/' : '');
     } else {
       path = '/latest-updates/' + (pageNo > 1 ? pageNo + '/' : '');
     }
