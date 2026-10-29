@@ -57,7 +57,7 @@ function base() {
 var LumeSource = {
   id: 'iwara_video',
   name: 'Iwara',
-  version: '1.0.1',
+  version: '1.0.2',
   category: 'video',
   mirrors: ['https://www.iwara.tv'],
 

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"twitthub_video","name":"TwittHub","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.twitthub.com"],"network":"proxy","icon":"https://www.twitthub.com/icon.png"}
+// LumeSource: {"id":"twitthub_video","name":"TwittHub","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://www.twitthub.com"],"network":"proxy","icon":"https://www.twitthub.com/icon.png"}
 // LumeRuntime: javascript
 //
 // 站点：TwittHub（https://www.twitthub.com）—— X（Twitter）公开视频聚合，5052 条、211 页。

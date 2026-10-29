@@ -1,4 +1,4 @@
-// LumeSource: {"id":"xtube_video","name":"XTUBE","version":"1.0.0","category":"video","mirrors":["https://zh.xtube.com"]}
+// LumeSource: {"id":"xtube_video","name":"XTUBE","version":"1.0.1","category":"video","mirrors":["https://zh.xtube.com"]}
 
 // 站点：https://zh.xtube.com （2026-10-25 逐页实测；本机直连被封，全部走本机代理出口）
 //

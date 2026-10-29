@@ -1,4 +1,4 @@
-// LumeSource: {"id":"cf3_video","name":"Butterfly 2 18+","version":"1.0.0","category":"video","mirrors":["https://d17rhkrwip15vt.cloudfront.net","https://32sdhsudan.com","https://d32wxxub5gb7wa.cloudfront.net"]}
+// LumeSource: {"id":"cf3_video","name":"Butterfly 2 18+","version":"1.0.1","category":"video","mirrors":["https://d17rhkrwip15vt.cloudfront.net","https://32sdhsudan.com","https://d32wxxub5gb7wa.cloudfront.net"]}
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 一、d17rhkrwip15vt / d1q6v0m0fmxvl0 / d1nu1x3tadacmt —— 同一个 SDK，三个运营方

@@ -1069,7 +1069,7 @@
     {
       "id": "cf3_video",
       "name": "Butterfly 2 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/Butterfly2.js",
@@ -1225,7 +1225,7 @@
     {
       "id": "maturetube_video",
       "name": "MatureTube",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/MatureTube.js",
@@ -1345,7 +1345,7 @@
     {
       "id": "twitthub_video",
       "name": "TwittHub",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/TwittHub.js",
@@ -1381,7 +1381,7 @@
     {
       "id": "uncams_video",
       "name": "UN Cams",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/UNCams.js",
@@ -1453,7 +1453,7 @@
     {
       "id": "xtube_video",
       "name": "XTUBE",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/XTUBE.js",

@@ -151,7 +151,7 @@ async function probeMedia(url, referer) {
 var LumeSource = {
   id: 'familyporn_video',
   name: 'Familyporn',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://familyporn.tv'],
 

@@ -1,4 +1,4 @@
-// LumeSource: {"id":"maturetube_video","name":"MatureTube","version":"1.0.0","category":"video","mirrors":["https://www.maturetube.com"]}
+// LumeSource: {"id":"maturetube_video","name":"MatureTube","version":"1.0.1","category":"video","mirrors":["https://www.maturetube.com"]}
 
 // 站点：https://www.maturetube.com （2026-10-25 逐页实测；本机直连被封，走本机代理出口）
 //
