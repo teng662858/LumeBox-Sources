@@ -1,4 +1,4 @@
-// LumeSource: {"id":"pornbest_video","name":"第一女優網","version":"1.0.1","category":"video","contentCategory":"adult","settingsApiVersion":2,"mirrors":["https://www.pornbest.org","https://www.av01.org"],"network":"proxy","icon":"https://www.pornbest.org/favicon.ico","settings":[{"key":"note","type":"info","title":"站点说明","description":"第一女優網（PornBest）日本 AV 在线看：主站 www.pornbest.org，镜像 www.av01.org（实测同一套视频/同一播放地址）。站点对中国大陆 IP 会 302 到封锁页，必须在「源设置 → 站点网络」里配代理才能打开；封面和 HLS 播放地址在 CDN 上，不需要 Referer。分类 /c/<id> 每页约 40 条，搜索走 /q/<关键词>，分页都真实生效。"}]}
+// LumeSource: {"id":"pornbest_video","name":"第一女優網","version":"1.0.2","category":"video","contentCategory":"adult","settingsApiVersion":2,"mirrors":["https://www.pornbest.org","https://www.av01.org"],"network":"proxy","icon":"https://www.pornbest.org/favicon.ico","settings":[{"key":"note","type":"info","title":"站点说明","description":"第一女優網（PornBest）日本 AV 在线看：主站 www.pornbest.org，镜像 www.av01.org（实测同一套视频/同一播放地址）。站点对中国大陆 IP 会 302 到封锁页，必须在「源设置 → 站点网络」里配代理才能打开；封面和 HLS 播放地址在 CDN 上，不需要 Referer。分类 /c/<id> 每页约 40 条，搜索走 /q/<关键词>，分页都真实生效。"}]}
 // LumeRuntime: javascript
 //
 // 站点：第一女優網（PornBest，https://www.pornbest.org；镜像 https://www.av01.org）
@@ -109,12 +109,143 @@ function headers(referer) {
   };
 }
 
+// ------------------------------------------------------------ 纯 JS SHA-256（CDNLah WAF 的 PoW 用）
+var SHA_K = [
+  0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+  0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+  0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+  0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+  0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+  0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+  0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+  0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
+];
+
+function asciiBytes(text) {
+  var out = [];
+  for (var i = 0; i < text.length; i++) out.push(text.charCodeAt(i) & 0xff);
+  return out;
+}
+
+function sha256(bytes) {
+  var H = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+  var msg = bytes.slice();
+  var bitLen = bytes.length * 8;
+  msg.push(0x80);
+  while (msg.length % 64 !== 56) msg.push(0);
+  for (var b = 7; b >= 0; b--) msg.push(Math.floor(bitLen / Math.pow(2, b * 8)) & 255);
+  var w = new Array(64);
+  for (var off = 0; off < msg.length; off += 64) {
+    var i;
+    for (i = 0; i < 16; i++) {
+      w[i] = ((msg[off + i * 4] << 24) | (msg[off + i * 4 + 1] << 16) | (msg[off + i * 4 + 2] << 8) | msg[off + i * 4 + 3]) | 0;
+    }
+    for (i = 16; i < 64; i++) {
+      var s0 = ((w[i - 15] >>> 7) | (w[i - 15] << 25)) ^ ((w[i - 15] >>> 18) | (w[i - 15] << 14)) ^ (w[i - 15] >>> 3);
+      var s1 = ((w[i - 2] >>> 17) | (w[i - 2] << 15)) ^ ((w[i - 2] >>> 19) | (w[i - 2] << 13)) ^ (w[i - 2] >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0;
+    }
+    var a = H[0], bb = H[1], c = H[2], d = H[3], e = H[4], f = H[5], g = H[6], h = H[7];
+    for (i = 0; i < 64; i++) {
+      var S1 = ((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7));
+      var ch = (e & f) ^ (~e & g);
+      var t1 = (h + S1 + ch + SHA_K[i] + w[i]) | 0;
+      var S0 = ((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10));
+      var maj = (a & bb) ^ (a & c) ^ (bb & c);
+      var t2 = (S0 + maj) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = bb; bb = a; a = (t1 + t2) | 0;
+    }
+    H[0] = (H[0] + a) | 0; H[1] = (H[1] + bb) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0;
+    H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+  }
+  var out = [];
+  for (var k = 0; k < 8; k++) out.push((H[k] >>> 24) & 255, (H[k] >>> 16) & 255, (H[k] >>> 8) & 255, H[k] & 255);
+  return out;
+}
+
+/// difficulty 是「十六进制 0 的个数」：4 = 前两个字节为 0。
+function hasDifficulty(digest, difficulty) {
+  var full = difficulty >> 1;
+  for (var i = 0; i < full; i++) if (digest[i] !== 0) return false;
+  if (difficulty & 1) return (digest[full] >> 4) === 0;
+  return true;
+}
+
+function solveNonce(seed, difficulty) {
+  if (!seed || !difficulty) throw new Error('PoW 参数缺失');
+  var seedBytes = asciiBytes(seed);
+  for (var n = 0; n < 20000000; n++) {
+    var hex = n.toString(16);
+    while (hex.length < 16) hex = '0' + hex;
+    if (hasDifficulty(sha256(seedBytes.concat(asciiBytes(hex))), difficulty)) return hex;
+  }
+  throw new Error('PoW 找不到 nonce（difficulty=' + difficulty + '）');
+}
+
+// CDNLah 的「安全防御 - 工作量验证」页（pornbest / pornlulu 同一套 WAF）
+var POW_CONFIG_RE = /<script id="__cdnlah_pow_config" type="application\/json">([\s\S]*?)<\/script>/;
+
+function formEncode(value) {
+  return encodeURIComponent(String(value == null ? '' : value));
+}
+
+async function solveAndFetch(path, challengeHtml) {
+  var url = base() + path;
+  var html = String(challengeHtml || '');
+  if (!POW_CONFIG_RE.test(html)) {
+    var probe = await LumeSource.http.get(url, { headers: headers() });
+    html = String((probe && probe.body) || '');
+  }
+  var matched = POW_CONFIG_RE.exec(html);
+  if (!matched) throw new Error('第一女優網：拿到了校验页但没找到 PoW 配置');
+  var cfg = null;
+  try {
+    cfg = JSON.parse(matched[1]);
+  } catch (error) {
+    throw new Error('第一女優網：PoW 配置不是合法 JSON');
+  }
+  var nonce = solveNonce(String(cfg.seed || ''), Number(cfg.difficulty) || 0);
+  var field = String(cfg.metadata_field || 'challenge_metadata');
+  var form = [
+    'seed=' + formEncode(cfg.seed),
+    'nonce=' + formEncode(nonce),
+    'redirect=' + formEncode(cfg.redirect || path),
+    'challenge_cookie=' + formEncode(cfg.challenge_cookie || ''),
+    formEncode(field) + '=' + formEncode(cfg.metadata_token || '')
+  ].join('&');
+  var reply = await LumeSource.http.post(base() + String(cfg.verify_path), form, {
+    headers: {
+      'User-Agent': UA,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Accept: 'text/html,application/xhtml+xml,*/*;q=0.8',
+      Referer: url
+    }
+  });
+  var status = Number((reply && reply.status) || 0);
+  var body = String((reply && reply.body) || '');
+  if (status === 200 && !POW_CONFIG_RE.test(body)) return { status: 200, body: body, url: url };
+  // 跟随那一步可能又踩到校验，用刚写进站点会话的 WAF Cookie 再取一次
+  var retry = await LumeSource.http.get(url, { headers: headers() });
+  var retryStatus = Number((retry && retry.status) || 0);
+  var retryBody = String((retry && retry.body) || '');
+  if (retryStatus === 200 && !POW_CONFIG_RE.test(retryBody)) {
+    return { status: 200, body: retryBody, url: url };
+  }
+  throw new Error('第一女優網：人机校验没通过（validate=' + status + '，retry=' + retryStatus + '）'
+    + '——稍后重试，或在源设置里换镜像');
+}
+
 async function request(path) {
   var url = /^https?:\/\//i.test(path) ? path : base() + path;
   var reply = await LumeSource.http.get(url, { headers: headers() });
   var status = Number((reply && reply.status) || 0);
   if (!status) throw new Error('第一女優網：连不上（' + url + '）');
-  return { status: status, body: String((reply && reply.body) || ''), url: url };
+  var body = String((reply && reply.body) || '');
+  if (status === 492 || POW_CONFIG_RE.test(body)) {
+    console.warn('[pornbest] 触发人机校验，解 PoW 后重取：' + path);
+    return solveAndFetch(path, body);
+  }
+  return { status: status, body: body, url: url };
 }
 
 /// 站点对受限制的出口会把整站跳到 goto2.cc 的「换域」封锁页（包里是一段 packed JS，
@@ -146,6 +277,9 @@ function verify(reply) {
   }
   if (status === 403 || status === 503 || status === 521 || status === 1020) {
     throw new Error('NEED_WEBVIEW_VERIFY：第一女優網 要求网页验证（HTTP ' + status + '）');
+  }
+  if (status === 492) {
+    throw new Error('第一女優網：站点弹了人机校验（HTTP 492）且本次没解开——稍后重试，或在源设置里换镜像');
   }
   throw new Error('第一女優網：请求失败（HTTP ' + status + ' ' + reply.url + '）');
 }
@@ -272,7 +406,7 @@ function pagePath(categoryId, page, sort) {
 var LumeSource = {
   id: 'pornbest_video',
   name: '第一女優網',
-  version: '1.0.1',
+  version: '1.0.2',
   category: 'video',
   contentCategory: 'adult',
   settingsApiVersion: 2,

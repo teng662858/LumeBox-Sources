@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 14,
-    "video": 96,
+    "video": 97,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1271,6 +1271,18 @@
       "iconDeclared": false
     },
     {
+      "id": "pornlulu_video",
+      "name": "Pornlulu",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/Pornlulu.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Pornlulu.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "porntrex_video",
       "name": "PornTrex",
       "version": "1.0.0",
@@ -1897,7 +1909,7 @@
     {
       "id": "pornbest_video",
       "name": "第一女優網",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/第一女優網.js",

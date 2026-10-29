@@ -284,6 +284,9 @@
     "pornhub_video": {
       "rating": "18+"
     },
+    "pornlulu_video": {
+      "rating": "18+"
+    },
     "porntrex_video": {
       "rating": "18+"
     },
@@ -559,6 +562,7 @@
     "niacg_photo": "逆ACG www.niacg.com（二次元 COS 图集，Cloudflare 校验，18+）",
     "twitthub_video": "TwittHub www.twitthub.com（X 公开视频聚合，Vercel 校验，18+）",
     "pornbest_video": "第一女優網 / PornBest（www.pornbest.org，镜像 www.av01.org，日本 AV 在线看；站内分 日本無碼/中文字幕/AV明星 等成人分区，全站 18+；大陆出口会 302 到封锁页）",
-    "porn91plus_video": "91PornPlus（91pornplus.com 及 xchina/91zpc/porntube 等同一套站群模板，国产自拍/日本AV/SWAG 分区，全站 18+；网页国内被 RST，数据走 POST /js 加密接口，匿名给 m3u8）"
+    "porn91plus_video": "91PornPlus（91pornplus.com 及 xchina/91zpc/porntube 等同一套站群模板，国产自拍/日本AV/SWAG 分区，全站 18+；网页国内被 RST，数据走 POST /js 加密接口，匿名给 m3u8）",
+    "pornlulu_video": "Pornlulu / 撸撸（www.pornlulu.net，主域 .com 是正體同库），国产自拍/日本AV/人妻等成人分区，全站 18+；站点在 CDNLah WAF 后（PoW 校验），国内直连 302 到封锁页"
   }
 }
