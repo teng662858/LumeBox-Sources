@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 14,
-    "video": 97,
+    "video": 101,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -935,6 +935,18 @@
       "iconDeclared": false
     },
     {
+      "id": "porn9188_video",
+      "name": "9188色情网",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/9188色情网.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/9188色情网.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "porn91_video",
       "name": "91Porn",
       "version": "1.0.0",
@@ -1139,6 +1151,18 @@
       "iconDeclared": false
     },
     {
+      "id": "heroero_video",
+      "name": "HeroEro",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/HeroEro.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/HeroEro.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
+    },
+    {
       "id": "h4dh3_video",
       "name": "hxc 18+",
       "version": "1.0.2",
@@ -1305,6 +1329,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "qinav_video",
+      "name": "Qinav",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/Qinav.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Qinav.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "reddxxx_video",
@@ -1929,6 +1965,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "mtav_video",
+      "name": "蜜桃视频",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/蜜桃视频.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/蜜桃视频.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "asmrhoney_video",
