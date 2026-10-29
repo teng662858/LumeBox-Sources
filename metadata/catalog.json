@@ -1969,7 +1969,7 @@
     {
       "id": "mtav_video",
       "name": "蜜桃视频",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/蜜桃视频.js",

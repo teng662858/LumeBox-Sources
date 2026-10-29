@@ -1,7 +1,8 @@
-// LumeSource: {"id":"mtav_video","name":"蜜桃视频","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://mtav.art","https://tmav.art"],"network":"proxy","icon":"https://mtav.art/template/pc/images/logo.png","settings":[{"key":"note","type":"info","title":"站点说明","description":"蜜桃视频 / 麻豆视频在线（mtav.art，TKTube 模板，macCMS 内核）：只开放「视频一区/二区/三区」三个列表（/vod/show/id/<N>/），每页 48 条，分页 /page/<P>/；搜索 /vod/search.html?wd=。详情 /vod/detail/id/<id>/，播放页 /vod/play/id/<id>/sid/1/nid/1/ 里 `var uul` 直给 HLS（2609.v155p.com 等）。国内直连超时，需要代理；播放 CDN 直连可播。"}]}
+// LumeSource: {"id":"mtav_video","name":"蜜桃视频","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://mtav.art"],"network":"proxy","icon":"https://mtav.art/template/pc/images/logo.png","settings":[{"key":"note","type":"info","title":"站点说明","description":"蜜桃视频 / 麻豆视频在线（mtav.art，TKTube 模板，macCMS 内核）：只开放「视频一区/二区/三区」三个列表（/vod/show/id/<N>/），每页 48 条，分页 /page/<P>/；搜索 /vod/search.html?wd=。详情 /vod/detail/id/<id>/，播放页 /vod/play/id/<id>/sid/1/nid/1/ 里 `var uul` 直给 HLS（2609.v155p.com 等）。国内直连超时，需要代理；播放 CDN 直连可播。"}]}
 // LumeRuntime: javascript
 //
 // 站点：蜜桃视频（https://mtav.art）—— macCMS "TKTube/myui" 模板。
+// 注：导航里的 tmav.art 是「天美AV」，标题和列表都不是本站（实测 24 条不同片），故不作镜像。
 //
 // 结构（2026-10-30 实测，走本机代理）：
 //   列表   /vod/show/id/<1|2|3>/         → 视频一区/二区/三区，分页 /vod/show/id/<N>/page/<P>/
@@ -146,10 +147,10 @@ function showPath(categoryId, page) {
 var LumeSource = {
   id: 'mtav_video',
   name: '蜜桃视频',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
-  mirrors: ['https://mtav.art', 'https://tmav.art'],
+  mirrors: ['https://mtav.art'],
 
   async home() {
     var items = parseCards(await get('/vod/show/id/1/'));
