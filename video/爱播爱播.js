@@ -1,4 +1,4 @@
-// LumeSource: {"id":"aiboaibo_video","name":"爱播爱播","version":"2.0.0","category":"video","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["settingsActions"],"mirrors":["https://www.994555.xyz","https://www.455333.xyz","https://www.466333.xyz","https://www.477333.xyz","https://www.488333.xyz","https://www.4545.eu.org","https://4599.pages.dev","https://55511.pages.dev"],"network":"direct","icon":"https://www.994555.xyz/favicon.svg","settings":[{"key":"publishPage","type":"action","action":"openWebsite","title":"打开发布页","url":"https://didizhi.pages.dev/","description":"官方发布页（永不失联）：列出 pages.dev 镜像与 455333/466333/477333/488333 等主域，换域名时先看这里"},{"key":"note","type":"info","title":"站点说明","description":"爱播爱播（SvelteKit SSR + /category/__data.json）。首页与搜索页的 SSR 数据里每条自带 m3u8；分类页走 __data.json（devalue 扁平格式），分类 = 来源 11/12 的栏目。分类里每页 20–50 条，分页真实生效；播放为 HLS 直链，不需要 Referer。"}]}
+// LumeSource: {"id":"aiboaibo_video","name":"爱播爱播","version":"2.0.1","category":"video","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["settingsActions"],"mirrors":["https://www.994555.xyz","https://www.455333.xyz","https://www.466333.xyz","https://www.477333.xyz","https://www.488333.xyz","https://www.4545.eu.org","https://4599.pages.dev","https://55511.pages.dev"],"network":"direct","icon":"https://www.994555.xyz/favicon.svg","settings":[{"key":"publishPage","type":"action","action":"openWebsite","title":"打开发布页（didizhi.pages.dev）","url":"https://didizhi.pages.dev/","description":"官方发布页（永不失联）：列出 pages.dev 镜像与 455333/466333/477333/488333 等主域，换域名时先看这里"},{"key":"note","type":"info","title":"站点说明","description":"发布页：https://didizhi.pages.dev/（换域名时先看这里） 爱播爱播（SvelteKit SSR + /category/__data.json）。首页与搜索页的 SSR 数据里每条自带 m3u8；分类页走 __data.json（devalue 扁平格式），分类 = 来源 11/12 的栏目。分类里每页 20–50 条，分页真实生效；播放为 HLS 直链，不需要 Referer。"}]}
 // LumeRuntime: javascript
 //
 // 站点：爱播爱播（https://www.994555.xyz）—— SvelteKit SSR 的成人视频搜索/播放站。
@@ -273,7 +273,7 @@ function parseItemId(text) {
 var LumeSource = {
   id: 'aiboaibo_video',
   name: '爱播爱播',
-  version: '2.0.0',
+  version: '2.0.1',
   category: 'video',
   contentCategory: 'adult',
   settingsApiVersion: 2,
@@ -293,7 +293,7 @@ var LumeSource = {
       key: 'publishPage',
       type: 'action',
       action: 'openWebsite',
-      title: '打开发布页',
+      title: '打开发布页（didizhi.pages.dev）',
       url: 'https://didizhi.pages.dev/',
       description: '官方发布页（永不失联）：列出 pages.dev 镜像与 455333/466333/477333/488333 等主域',
     },
@@ -301,7 +301,7 @@ var LumeSource = {
       key: 'note',
       type: 'info',
       title: '站点说明',
-      description: '爱播爱播（SvelteKit SSR + /category/__data.json）。分类 = 来源 11/12 的栏目，分页真实生效；播放为 HLS 直链，不需要 Referer。',
+      description: '发布页：https://didizhi.pages.dev/（换域名时先看这里） 爱播爱播（SvelteKit SSR + /category/__data.json）。分类 = 来源 11/12 的栏目，分页真实生效；播放为 HLS 直链，不需要 Referer。',
     },
   ],
 

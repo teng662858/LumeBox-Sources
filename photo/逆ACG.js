@@ -1,4 +1,4 @@
-// LumeSource: {"id":"niacg_photo","name":"逆ACG","version":"1.1.0","category":"photo","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["settingsActions"],"mirrors":["https://www.acgbay.com","https://www.acg.al","https://www.acg.bz","https://www.xpicvid.net"],"network":"direct","icon":"https://www.acgbay.com/skin/img/logo_a7.png","settings":[{"key":"publishPage","type":"action","action":"openWebsite","title":"打开发布页","url":"https://02.uno/","description":"站点换域名时先看这里：02.uno 是官方发布页，列出当前可用地址"},{"key":"note","type":"info","title":"站点说明","description":"逆ACG / Xpicvid 二次元图集站。acg.al、acgbay.com 直连 200；acg.bz、xpicvid.net 有 Cloudflare 人机校验，必要时在源设置里点「打开当前站点」过一次校验。图集详情由页面 JS 渲染，因此在 App 内嵌浏览器里看整组图。"}]}
+// LumeSource: {"id":"niacg_photo","name":"逆ACG","version":"1.1.1","category":"photo","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["settingsActions"],"mirrors":["https://www.acgbay.com","https://www.acg.al","https://www.acg.bz","https://www.xpicvid.net"],"network":"direct","icon":"https://www.acgbay.com/skin/img/logo_a7.png","settings":[{"key":"publishPage","type":"action","action":"openWebsite","title":"打开发布页（02.uno）","url":"https://02.uno/","description":"站点换域名时先看这里：02.uno 是官方发布页，列出当前可用地址"},{"key":"note","type":"info","title":"站点说明","description":"发布页：https://02.uno/（换域名时先看这里） 逆ACG / Xpicvid 二次元图集站。acg.al、acgbay.com 直连 200；acg.bz、xpicvid.net 有 Cloudflare 人机校验，必要时在源设置里点「打开当前站点」过一次校验。图集详情由页面 JS 渲染，因此在 App 内嵌浏览器里看整组图。"}]}
 // LumeRuntime: javascript
 //
 // 站点：逆ACG（标题「Xpicvid图片视频在线资源平台」）—— 二次元 COS / 图集站。
@@ -153,7 +153,7 @@ function remember(items) {
 var LumeSource = {
   id: 'niacg_photo',
   name: '逆ACG',
-  version: '1.1.0',
+  version: '1.1.1',
   category: 'photo',
   contentCategory: 'adult',
   settingsApiVersion: 2,
@@ -165,7 +165,7 @@ var LumeSource = {
       key: 'publishPage',
       type: 'action',
       action: 'openWebsite',
-      title: '打开发布页',
+      title: '打开发布页（02.uno）',
       url: 'https://02.uno/',
       description: '站点换域名时先看这里：02.uno 是官方发布页，列出当前可用地址',
     },
@@ -173,7 +173,7 @@ var LumeSource = {
       key: 'note',
       type: 'info',
       title: '站点说明',
-      description: '逆ACG / Xpicvid 二次元图集站。acg.al、acgbay.com 直连 200；acg.bz、xpicvid.net 有 Cloudflare 人机校验，必要时在源设置里点「打开当前站点」过一次校验。图集详情由页面 JS 渲染，因此在 App 内嵌浏览器里看整组图。',
+      description: '发布页：https://02.uno/（换域名时先看这里） 逆ACG / Xpicvid 二次元图集站。acg.al、acgbay.com 直连 200；acg.bz、xpicvid.net 有 Cloudflare 人机校验，必要时在源设置里点「打开当前站点」过一次校验。图集详情由页面 JS 渲染，因此在 App 内嵌浏览器里看整组图。',
     },
   ],
 

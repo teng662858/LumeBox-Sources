@@ -661,7 +661,7 @@
     {
       "id": "niacg_photo",
       "name": "逆ACG",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "kind": "photo",
       "appSection": "comic",
       "path": "photo/逆ACG.js",
@@ -925,7 +925,7 @@
     {
       "id": "x8x8_video",
       "name": "8x8x",
-      "version": "3.0.2",
+      "version": "3.0.3",
       "kind": "video",
       "appSection": "video",
       "path": "video/8x8x.js",
@@ -1849,7 +1849,7 @@
     {
       "id": "aiboaibo_video",
       "name": "爱播爱播",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/爱播爱播.js",

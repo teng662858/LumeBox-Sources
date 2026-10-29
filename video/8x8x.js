@@ -1,4 +1,4 @@
-// LumeSource: {"id":"x8x8_video","name":"8x8x","version":"3.0.2","category":"video","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["settingsActions"],"mirrors":["https://8x.vip","https://1azm0i.qcsw2b5yf.com","https://8x8x.com"],"network":"proxy"}
+// LumeSource: {"id":"x8x8_video","name":"8x8x","version":"3.0.3","category":"video","contentCategory":"adult","settingsApiVersion":2,"requiresSettings":["settingsActions"],"mirrors":["https://8x.vip","https://1azm0i.qcsw2b5yf.com","https://8x8x.com"],"network":"proxy","settings":[{"key":"publishPage","type":"action","action":"openWebsite","title":"打开发布页（csms.k385f9akf.com）","url":"https://csms.k385f9akf.com","description":"站点自己公布的「最新地址发布页」"},{"key":"note","type":"info","title":"站点说明","description":"发布页：https://csms.k385f9akf.com（换域名时先看这里） 8x8x 成人综合站；主站 8x.vip 直连可用，跳板域自动 302 到真实域；分类/标签是 SSR，推荐流加密，播放为三条媒体线路 HLS。"}]}
 // LumeRuntime: javascript
 //
 // 站点：8x8x（成人综合站，全站 18+）—— 2026-10-29 复测（改版后：跳板域 + SPA 外壳 + 服务端渲染内容页）
@@ -618,7 +618,7 @@ function remember(items) {
 var LumeSource = {
   id: 'x8x8_video',
   name: '8x8x',
-  version: '3.0.2',
+  version: '3.0.3',
   category: 'video',
   contentCategory: 'adult',
   mirrors: ['https://8x.vip', 'https://1azm0i.qcsw2b5yf.com', 'https://8x8x.com'],
@@ -629,7 +629,7 @@ var LumeSource = {
       key: 'publishPage',
       type: 'action',
       action: 'openWebsite',
-      title: '打开发布页',
+      title: '打开发布页（csms.k385f9akf.com）',
       url: 'https://csms.k385f9akf.com',
       description: '站点自己公布的「最新地址发布页」（需要登录客服系统后获取最新地址）',
     },
@@ -637,7 +637,7 @@ var LumeSource = {
       key: 'note',
       type: 'info',
       title: '站点说明',
-      description: '8x8x 成人综合站。主站 8x.vip 直连可用；跳板域会自动 302 到当前真实域。分类/标签是站点服务端页面，推荐流是加密接口；播放为三条媒体线路的 HLS，线路不通会自动换下一条。',
+      description: '发布页：https://csms.k385f9akf.com（换域名时先看这里） 8x8x 成人综合站。主站 8x.vip 直连可用；跳板域会自动 302 到当前真实域。分类/标签是站点服务端页面，推荐流是加密接口；播放为三条媒体线路的 HLS，线路不通会自动换下一条。',
     },
   ],
 
