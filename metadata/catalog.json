@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 14,
-    "video": 94,
+    "video": 95,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1881,6 +1881,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "pornbest_video",
+      "name": "第一女優網",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/第一女優網.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/第一女優網.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "gamebus_video",

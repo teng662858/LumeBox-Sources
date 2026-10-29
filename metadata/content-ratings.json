@@ -275,6 +275,9 @@
     "porn91_video": {
       "rating": "18+"
     },
+    "pornbest_video": {
+      "rating": "18+"
+    },
     "pornhub_video": {
       "rating": "18+"
     },
@@ -551,6 +554,7 @@
     "s618_video": "618影院 618208.xyz 地址表 → 618<码>.xyz 站群（成人视频，文字 XOR 0x80 混淆，18+）",
     "kkav_video": "KKAV www.73tfhk.com（原 37tmrj 换域名目标，成人视频，XOR2 加密接口，18+）",
     "niacg_photo": "逆ACG www.niacg.com（二次元 COS 图集，Cloudflare 校验，18+）",
-    "twitthub_video": "TwittHub www.twitthub.com（X 公开视频聚合，Vercel 校验，18+）"
+    "twitthub_video": "TwittHub www.twitthub.com（X 公开视频聚合，Vercel 校验，18+）",
+    "pornbest_video": "第一女優網 / PornBest（www.pornbest.org，镜像 www.av01.org，日本 AV 在线看；站内分 日本無碼/中文字幕/AV明星 等成人分区，全站 18+；大陆出口会 302 到封锁页）"
   }
 }
