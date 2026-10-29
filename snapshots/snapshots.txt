@@ -142,3 +142,12 @@ iwara_list.json
 iwara_tags.json
 iwara_detail.json
 iwara_files.json
+
+# 四色视频（www.d9y1w.top；maomi 模板站。标题/分类/菜单链接是 AES-256-CBC（key/iv 在 encrypt.js），
+# 卡片 href 是 /cYc+base64(明文路径)；列表为 SSR HTML，搜索是 /search/<频道>-<词>-<页>.html 的 JSON）
+d9y1w_home.html
+d9y1w_list.html
+d9y1w_play.html
+d9y1w_search_juqing.json
+d9y1w_search_shipin.json
+d9y1w_search_jingpin.json

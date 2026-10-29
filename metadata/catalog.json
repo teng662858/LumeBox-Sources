@@ -5,7 +5,7 @@
     "comic": 49,
     "photo": 6,
     "movie": 14,
-    "video": 93,
+    "video": 94,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1581,6 +1581,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "d9y1w_video",
+      "name": "四色视频 18+",
+      "version": "1.0.0",
+      "kind": "video",
+      "appSection": "video",
+      "path": "video/四色视频.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/四色视频.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "hu4_video",
