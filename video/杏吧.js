@@ -1,4 +1,4 @@
-﻿// LumeSource: {"id":"sex8_video","name":"杏吧","version":"1.0.0","category":"video","mirrors":["https://www.sex8.cc"]}
+﻿// LumeSource: {"id":"sex8_video","name":"杏吧","version":"1.0.1","category":"video","mirrors":["https://www.sex8.cc"]}
 //
 // 站点：杏吧 / 性吧（https://www.sex8.cc，华语成人社区 Discuz 论坛，全站 18+）
 //   自述「杏吧性吧论坛-视频点播·图片分享·原创内容社区」，板块以**创作者专版**为主：
@@ -17,6 +17,8 @@
 //                 **不影响 m3u8 在 HTML 里明文可读**（实测游客直接能取）。
 var BASE_URL = 'https://www.sex8.cc';
 var UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36';
+// 杏吧图床在 WebP/JPEG 前塞 16 字节随机头；App 图片管线按这个声明跳过。
+var COVER_HEADERS = { 'x-lume-image-encoding': 'strip-prefix-16' };
 
 function base() {
   var domain = LumeSource.config && LumeSource.config.domain ? LumeSource.config.domain : '';
@@ -106,7 +108,7 @@ function parseThreads(html) {
     var title = decode(matched[2] || matched[4] || '');
     if (!href || !title || seen[href]) continue;
     seen[href] = true;
-    items.push({ id: absolute(href), title: title, cover: '', subtitle: '' });
+    items.push({ id: absolute(href), title: title, cover: '', coverHeaders: COVER_HEADERS, subtitle: '' });
   }
   if (!items.length) {
     // 兜底：任何 thread-…-1-1.html 链接 + 其后的文本
@@ -117,7 +119,7 @@ function parseThreads(html) {
       var t2 = decode(m2[2]);
       if (!t2 || t2.length < 4 || seen[h2]) continue;
       seen[h2] = true;
-      items.push({ id: absolute(h2), title: t2, cover: '', subtitle: '' });
+      items.push({ id: absolute(h2), title: t2, cover: '', coverHeaders: COVER_HEADERS, subtitle: '' });
     }
   }
   return items;
@@ -138,10 +140,111 @@ function mediaOf(html) {
   return found;
 }
 
+/* ───────────────────────── 封面（列表层带图） ─────────────────────────
+ * Discuz 的版块帖表没有缩略图，只有帖子页正文里才有第一张内容图。
+ * 帖子页的 `zoomfile` 常带 `?w=200&h=200`（小图），正好当封面。
+ * 这里按帖子页取一次并缓存到 fs：同一帖不重复抓，列表分页/回退都复用。
+ * 单次 list 最多补 12 张，避免一页 46 帖把 App 的 3–5 秒预算打穿。
+ */
+var COVER_CACHE = null;
+var COVER_LIMIT = 12;
+
+function threadIdOf(url) {
+  var matched = /thread-(\d+)-/.exec(String(url || ''));
+  return matched ? matched[1] : '';
+}
+
+function junkImage(url) {
+  return /smiley|static\/image|ad_|advert|\/adv\/|logo|avatar|noavatar|icon|hrline|digest_|hot_|filetype|reply-|space\/share|imageloading|-\d{2,3}-\d{2,3}\.(?:jpe?g|png|webp)/i.test(String(url || ''));
+}
+
+// `zoomfile` 常带 `?w=200&h=200`，但图床对带尺寸参数的请求回 406；原图本身可用。
+function stripSizing(url) {
+  return String(url || '').replace(/\?(?:w=\d+&h=\d+|h=\d+&w=\d+)$/i, '');
+}
+
+function coverFromThread(html) {
+  var text = String(html || '');
+  // 只认帖内附件的 `zoomfile` / `data-imgurl` / `data-oldfile`：
+  // 版头广告和头像都是普通 <img src>，不认附件属性就能避开。
+  var candidates = [];
+  var re = /(?:zoomfile|data-imgurl|data-oldfile)="\s*(https?:\/\/[^"\s]+)\s*"/gi;
+  var matched;
+  while ((matched = re.exec(text)) !== null) candidates.push(matched[1].replace(/&amp;/g, '&'));
+  for (var i = 0; i < candidates.length; i++) {
+    var url = stripSizing(absolute(candidates[i]));
+    if (!/^https?:\/\//i.test(url) || junkImage(url)) continue;
+    return url;
+  }
+  return '';
+}
+
+async function loadCoverCache() {
+  if (COVER_CACHE) return COVER_CACHE;
+  COVER_CACHE = {};
+  try {
+    var raw = await LumeSource.fs.readText('covers.json');
+    var parsed = raw ? JSON.parse(raw) : null;
+    if (parsed && typeof parsed === 'object') COVER_CACHE = parsed;
+  } catch (error) {
+    /* 没缓存 */
+  }
+  return COVER_CACHE;
+}
+
+async function saveCoverCache() {
+  try {
+    await LumeSource.fs.writeText('covers.json', JSON.stringify(COVER_CACHE || {}));
+  } catch (error) {
+    /* 缓存写不进不影响本次 */
+  }
+}
+
+/// 给列表条目补封面：只抓「缓存里没有」的前 limit 条，4 并发。
+async function enrichCovers(items, limit) {
+  var max = Number(limit == null ? COVER_LIMIT : limit);
+  if (!items || !items.length || !(max > 0)) return;
+  var cache = await loadCoverCache();
+  var pending = [];
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    var tid = threadIdOf(item.id);
+    if (!tid) continue;
+    if (cache[tid]) {
+      if (!item.cover) item.cover = cache[tid];
+      continue;
+    }
+    if (!item.cover) pending.push(item);
+    if (pending.length >= max) break;
+  }
+  if (!pending.length) return;
+  var next = 0;
+  var changed = false;
+  async function worker() {
+    while (next < pending.length) {
+      var row = pending[next++];
+      var tid = threadIdOf(row.id);
+      try {
+        var html = await getText(row.id);
+        var cover = coverFromThread(html);
+        if (cover) {
+          row.cover = cover;
+          cache[tid] = cover;
+          changed = true;
+        }
+      } catch (error) {
+        /* 单帖失败不影响列表 */
+      }
+    }
+  }
+  await Promise.all([worker(), worker(), worker(), worker(), worker(), worker()]);
+  if (changed) await saveCoverCache();
+}
+
 var LumeSource = {
   id: 'sex8_video',
   name: '杏吧',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://www.sex8.cc'],
 
@@ -180,7 +283,10 @@ var LumeSource = {
       try {
         var page = await getText('/forum-' + boards[i].id + '-1.html');
         var items = parseThreads(page);
-        if (items.length) boardsOut.push({ title: boards[i].title, moreUrl: boards[i].id, items: items.slice(0, 12) });
+        if (items.length) {
+          await enrichCovers(items, 3);
+          boardsOut.push({ title: boards[i].title, moreUrl: boards[i].id, items: items.slice(0, 12) });
+        }
       } catch (error) {
         /* 单个板块失败不影响其它 */
       }
@@ -216,6 +322,7 @@ var LumeSource = {
         return String(item.title).toLowerCase().indexOf(keyword) >= 0;
       });
     }
+    await enrichCovers(items, COVER_LIMIT);
     return { items: items, hasMore: items.length >= 15 };
   },
 
@@ -227,20 +334,21 @@ var LumeSource = {
       /<h1[^>]*>([\s\S]{0,200}?)<\/h1>/.exec(html);
     var title = decode(titleMatch ? titleMatch[1] : '').split('-杏吧')[0].trim();
     if (!title) return null;
-    var cover = '';
-    var imgPattern = /<img[^>]+(?:file|src)="(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp))[^"]*"/gi;
-    var imgMatched;
-    while ((imgMatched = imgPattern.exec(html)) !== null) {
-      var candidate = imgMatched[1];
-      if (/smiley|hrline|static\/image|ad_|adv|logo|avatar|icon/i.test(candidate)) continue;
-      cover = candidate;
-      break;
+    var cover = coverFromThread(html);
+    if (cover) {
+      var tid = threadIdOf(id);
+      if (tid) {
+        var cache = await loadCoverCache();
+        cache[tid] = cover;
+        saveCoverCache();
+      }
     }
     var media = mediaOf(html);
     return {
       id: absolute(id),
       title: title,
       cover: cover ? absolute(cover) : '',
+      coverHeaders: COVER_HEADERS,
       subtitle: media.length ? '可直接播放' : '需进入帖子',
       description: ''
     };

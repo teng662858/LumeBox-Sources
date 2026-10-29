@@ -1,4 +1,4 @@
-// LumeSource: {"id":"s618_video","name":"618影院","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://618208.xyz","https://6181029.xyz","https://618600.xyz"],"network":"direct","icon":"https://618208.xyz/favicon.ico"}
+// LumeSource: {"id":"s618_video","name":"618影院","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://618208.xyz","https://6181029.xyz","https://618600.xyz"],"network":"direct","icon":"https://618208.xyz/favicon.ico"}
 // LumeRuntime: javascript
 //
 // 站点：618 影院（`618<码>.xyz` 全域；入口 https://618208.xyz）
@@ -213,6 +213,24 @@ function subTypeIds(html) {
   return ids;
 }
 
+// 子分类名同样是 XOR 0x80（`餙藉簾呁` → `香蕉精品`）。
+// 只收 vod 分类链接；art（图集）分类在详情页 500，不进筛选。
+function parseSubTypes(html) {
+  var out = [];
+  var seen = {};
+  var re = /<a[^>]+href="\/index\.php\/vod\/type\/id\/(\d+)\.html"[^>]*>([\s\S]{1,200}?)<\/a>/g;
+  var matched;
+  while ((matched = re.exec(String(html || ''))) !== null) {
+    var id = matched[1];
+    if (seen[id]) continue;
+    var title = clean(xor80(matched[2]));
+    if (!title || /^全部/.test(title)) continue;
+    seen[id] = true;
+    out.push({ id: id, title: title });
+  }
+  return out;
+}
+
 function pagePath(zone, page, type) {
   var n = Number(page) || 1;
   var t = type || zone.type;
@@ -231,15 +249,17 @@ async function remember(items) {
 }
 
 // 取某个区的内容：先直取；空页则展开一层子分类
-async function zoneItems(zone, page) {
+// type 非空时只取该子分类（筛选里选中的类型），不再跨子分类拼凑。
+async function zoneItems(zone, page, type) {
   var base = await resolveBase();
-  var html = await httpGet(base + pagePath(zone, page), base + '/');
+  var picked = type || zone.type;
+  var html = await httpGet(base + pagePath(zone, page, picked), base + '/');
   var items = parseCards(html);
   if (items.length) {
     await remember(items);
     return items;
   }
-  if (Number(page) > 1) return [];
+  if (Number(page) > 1 || type) return [];
   var subs = subTypeIds(html).filter(function (id) { return id !== zone.type; }).slice(0, 3);
   var merged = [];
   for (var i = 0; i < subs.length; i++) {
@@ -256,7 +276,7 @@ async function zoneItems(zone, page) {
 var LumeSource = {
   id: 's618_video',
   name: '618影院',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
   mirrors: ['https://618208.xyz', 'https://6181029.xyz', 'https://618600.xyz'],
@@ -287,10 +307,23 @@ var LumeSource = {
     return boards;
   },
 
-  async filters() {
-    var options = [];
-    for (var i = 0; i < ZONES.length; i++) options.push({ id: ZONES[i].id, title: ZONES[i].title });
-    return { groups: [{ id: 'category', title: '区', options: options }] };
+  // 筛选：**不要**再把 10 个区当筛选组返回（那会和上面 categories 的第一行完全重复）。
+  // 这里按当前选中的区实时抓它的子分类（`全部视频/女同专属/素人出演…`），
+  // 选一个子分类后 list() 只取该类型；抓不到就返回空组，不影响分类行。
+  async filters(argument) {
+    var args = argument || {};
+    var zone = zoneOf(String(args.categoryId == null ? '' : args.categoryId).trim());
+    try {
+      var base = await resolveBase();
+      var html = await httpGet(base + pagePath(zone, 1), base + '/');
+      var subs = parseSubTypes(html);
+      if (!subs.length) return { groups: [] };
+      var options = [];
+      for (var i = 0; i < subs.length; i++) options.push({ id: subs[i].id, title: subs[i].title });
+      return { groups: [{ id: 'sub', title: '子分类', options: options }] };
+    } catch (error) {
+      return { groups: [] };
+    }
   },
 
   async list(argument) {
@@ -300,7 +333,10 @@ var LumeSource = {
     var filters = args.filters || {};
     if (filters.category) categoryId = 'z' + String(filters.category).trim().replace(/^z/, '');
     var zone = zoneOf(categoryId);
-    var items = await zoneItems(zone, page);
+    // 子分类 id 直接就是站点的 vod type id（纯数字）
+    var sub = String(filters.sub == null ? '' : filters.sub).trim();
+    var type = /^\d+$/.test(sub) ? sub : '';
+    var items = await zoneItems(zone, page, type);
     return {
       items: items.map(function (row) {
         return { id: row.id, title: row.title, cover: row.cover, subtitle: row.subtitle };

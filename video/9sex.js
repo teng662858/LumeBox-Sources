@@ -1,4 +1,4 @@
-// LumeSource: {"id":"jiuxse_video","name":"9sex 18+","version":"1.0.0","category":"video","mirrors":["https://9sex.com"]}
+// LumeSource: {"id":"jiuxse_video","name":"9sex 18+","version":"1.0.1","category":"video","mirrors":["https://9sex.com"]}
 //
 // 站点：9sex（https://9sex.com，ThinkPHP 站，2026-10-25 逐页实测）
 //
@@ -27,14 +27,14 @@
 //   <a class="item pointer" [target] href="/index/movie/play/id/{id}.html" title="{标题}">
 //     <img data-src="{封面}"> <div class="icon-free">VIP</div>   ← 付费片才有这个角标
 //
-// ── 封面为什么是空的（重要，不是偷懒）
+// ── 封面（重要，不是偷懒）
 //   站点的封面地址形如 https://img.jqotrwkiebik.com/aes/movies/…/<hash>.webp.txt，
 //   实测那个 .txt 是 **AES-128-CBC 密文**（key=625222f9149e961d，iv=5efdtf6060e2o330，
 //   见站点 /static/index/js/header.js 的 SEXCRYPTO.decrypt），解出来是一个
-//   `data:png;base64,…` 的内联图片。去掉 .txt、换 jpg、换域名都还是密文（实测全 200 但仍是密文）。
-//   App 的图片管线只吃一个直链，脚本没法把解密后的字节塞给它（每张 30–70KB，
-//   一张就要一次请求 + 一次 AES，列表 20 条直接撞穿沙箱预算），所以本源 **cover 一律留空**，
-//   标题/时长/是否 VIP 照常给。这一条已在源码里如实说明，不做伪装修饰。
+//   非标准的 `data:png;base64,…`（少了 `image/` 前缀）内联图片。
+//   本源把加密地址写成 `lume-enc://aes-cbc/<key>/<iv>/<原地址>`，由 App 图片管线
+//   用原生 AES 解；App 的 data URI 解码同时兼容 `data:png;base64` 这种短写法。
+//   列表层不跑纯 JS 解密，不会撞沙箱预算。
 //
 // ── VIP / 登录：服务端硬门禁（实测）
 //   · 播放页里 `var is_vip = '1';` 的片子，info 接口匿名访问返回
@@ -231,7 +231,7 @@ function pageUrl(kind, page, categoryId, keyword) {
 var LumeSource = {
   id: 'jiuxse_video',
   name: '9sex 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://9sex.com'],
 

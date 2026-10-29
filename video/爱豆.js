@@ -1,4 +1,4 @@
-// LumeSource: {"id":"aido8_video","name":"爱豆 18+","version":"1.0.0","category":"video","mirrors":["https://ww15.aido8.icu","https://ww1.aido8.icu","https://ww5.aido8.icu"]}
+// LumeSource: {"id":"aido8_video","name":"爱豆 18+","version":"1.0.1","category":"video","mirrors":["https://ww15.aido8.icu","https://ww1.aido8.icu","https://ww5.aido8.icu"]}
 //
 // 站点：爱豆（页面 <title> 就是「爱豆」）——苹果CMS 风格模板 + jQuery + Element，2026-10-25 实测。
 //
@@ -92,6 +92,10 @@ var UA =
 
 // 条目级黑名单：命中标签或标题就整条丢弃（不接涉未成年内容）
 var BANNED_WORDS = ['萝莉', '幼齿', '幼女', '未成年', '小学生', '中学生', '高中生', '学生', '校服', '童颜', '女童'];
+
+// 封面：站点把 JPEG 逐字节反转后当 `.ttf` 发（前 4 字节是 JPEG 尾）。
+// App 图片管线支持 `reverse` 解码，这里把编码方式随封面一起交给它。
+var COVER_HEADERS = { 'x-lume-image-encoding': 'reverse' };
 
 /* ========================= 纯 JS AES-128-CBC（加/解密 + base64） ========================= */
 // 站点前端用 CryptoJS；本沙箱不保证有 tools.aes / atob，所以这里自带一份最小实现。
@@ -543,8 +547,9 @@ function itemOf(row) {
   return {
     id: String(row.vodId),
     title: clean(row.vodName) || String(row.vodId),
-    // 站点的封面是字节反转的 JPEG（见文件头第 7 节），这里如实返回原地址
+    // 站点的封面是字节反转的 JPEG（见文件头第 7 节），交给图片管线解码
     cover: absolute(row.vodPic),
+    coverHeaders: COVER_HEADERS,
     subtitle: bits.join(' · ')
   };
 }
@@ -644,7 +649,7 @@ var CATEGORY_CACHE = null;
 var LumeSource = {
   id: 'aido8_video',
   name: '爱豆 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://ww15.aido8.icu', 'https://ww1.aido8.icu', 'https://ww5.aido8.icu'],
 
@@ -744,6 +749,7 @@ var LumeSource = {
       id: String(info.vodId),
       title: clean(info.vodName) || String(info.vodId),
       cover: absolute(info.vodPic),
+      coverHeaders: COVER_HEADERS,
       subtitle: bits.join(' · '),
       description: description.join('\n')
     };

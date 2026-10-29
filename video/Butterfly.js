@@ -1,4 +1,4 @@
-// LumeSource: {"id":"cf2_video","name":"Butterfly 18+","version":"1.0.0","category":"video","mirrors":["https://d1q6v0m0fmxvl0.cloudfront.net","https://d2m0k739byzwun.cloudfront.net","https://d1w3p997s8acw6.cloudfront.net"]}
+// LumeSource: {"id":"cf2_video","name":"Butterfly 18+","version":"1.0.1","category":"video","mirrors":["https://d1q6v0m0fmxvl0.cloudfront.net","https://d2m0k739byzwun.cloudfront.net","https://d1w3p997s8acw6.cloudfront.net"]}
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 一、先回答「d1q6v0m0fmxvl0.cloudfront.net 是不是就是 hstv.js 那套」
@@ -84,6 +84,10 @@ var DEFAULT_BASES = [
   'https://d2m0k739byzwun.cloudfront.net',
   'https://d1w3p997s8acw6.cloudfront.net'
 ];
+// 页面域（CloudFront 静态托管）：**不是接口主机** —— 往它 POST /api/app/* 一律 405。
+// 用户「换网址」/ 镜像下标 0 可能把它写进 config.customDomain，那样连登录都发不出去，
+// 所以候选表里要把这类主机剔掉（曾经的报错：`接口打不开：HTTP 405 /mine/login/h5`）。
+var PAGE_HOSTS = ['https://d1q6v0m0fmxvl0.cloudfront.net'];
 var INTERFACE_KEY = '0a958fb9ac062420af6ba5f4caad779f';
 var PARAM_KEY = 'BxJand%xf5h3sycH';
 var IMAGE_HOST = 'https://zzzznnn.lkkwip.cn';
@@ -568,16 +572,30 @@ async function pingOne(base) {
   return reply.code === 200 && !!reply.data && String(reply.data.response || '') === 'pong';
 }
 
-async function pickBase(force) {
+function isPageHost(value) {
+  var text = String(value || '').replace(/\/+$/, '').toLowerCase();
+  if (!text) return false;
+  for (var index = 0; index < PAGE_HOSTS.length; index++) {
+    if (text === PAGE_HOSTS[index].toLowerCase()) return true;
+  }
+  return false;
+}
+
+async function pickBase(force, avoid) {
   var custom = customBase();
   var candidates = custom ? [custom].concat(DEFAULT_BASES.filter(function (item) { return item !== custom; })) : DEFAULT_BASES.slice();
+  // 页面域进候选表只会换来 405：直接剔掉（用户真的只能选它时，下面 ping 也会跳过）
+  candidates = candidates.filter(function (item) { return !isPageHost(item); });
+  if (avoid) candidates = candidates.filter(function (item) { return item !== avoid; }).concat([avoid]);
+  if (!candidates.length) candidates = DEFAULT_BASES.slice();
   if (!force) {
     if (baseCache) return baseCache;
     // 省一次往返：上次选中的主机直接信，没缓存就赌主站；真失败由 api() 走 force 分支逐台 ping
     try {
       var cached = await LumeSource.fs.readText('base.txt');
-      if (cached && String(cached).indexOf('http') === 0) {
-        candidates = [String(cached).trim()].concat(candidates.filter(function (item) { return item !== cached; }));
+      var saved = cached ? String(cached).trim() : '';
+      if (saved && saved.indexOf('http') === 0 && !isPageHost(saved)) {
+        candidates = [saved].concat(candidates.filter(function (item) { return item !== saved; }));
       }
     } catch (error) {
       /* 没缓存 */
@@ -643,25 +661,46 @@ async function ensureToken(base, force) {
   }
 }
 
-async function api(path, options) {
+/// 这台主机是否「根本不能当接口用」：405（页面域）、404、连不上 —— 值得换台重试。
+/// 业务报错（code 4001 / 内容不存在）不算，别为它多跑一轮。
+function baseFailure(error) {
+  var text = String((error && error.message) || '');
+  return /接口打不开：HTTP (403|404|405|5\d\d)|连不上接口|ping/.test(text);
+}
+
+/// 在「一台可用接口主机」上跑 task：挂了就换台再来一次。
+/// 登录（/mine/login/h5）也走这里 —— 以前它绕过了换台逻辑，一台页面域就能把首页打成
+/// `接口打不开：HTTP 405 /mine/login/h5`。
+async function withBase(task) {
   var base = await pickBase(false);
-  await ensureToken(base, false);
-  var reply;
   try {
-    reply = await call(base, path, options);
+    return await task(base);
   } catch (error) {
-    var next = await pickBase(true);
-    if (next !== base) reply = await call(next, path, options);
-    else throw error;
+    if (!baseFailure(error)) throw error;
+    var next;
+    try {
+      next = await pickBase(true, base);
+    } catch (switchError) {
+      throw error;
+    }
+    if (!next || next === base) throw error;
+    return await task(next);
   }
-  if (reply.code === 5009) {
-    await ensureToken(base, true);
-    reply = await call(base, path, options);
-  }
-  if (reply.code !== 200) {
-    throw new Error('接口报错：' + (reply.msg || 'code ' + reply.code) + '（' + path + '）');
-  }
-  return reply.data;
+}
+
+async function api(path, options) {
+  return await withBase(async function (base) {
+    await ensureToken(base, false);
+    var reply = await call(base, path, options);
+    if (reply.code === 5009) {
+      await ensureToken(base, true);
+      reply = await call(base, path, options);
+    }
+    if (reply.code !== 200) {
+      throw new Error('接口报错：' + (reply.msg || 'code ' + reply.code) + '（' + path + '）');
+    }
+    return reply.data;
+  });
 }
 
 /* ══════════════════════════ 数据整形 ══════════════════════════ */
@@ -738,7 +777,7 @@ async function fetchTags() {
 var LumeSource = {
   id: 'cf2_video',
   name: 'Butterfly 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://d1q6v0m0fmxvl0.cloudfront.net', 'https://d2m0k739byzwun.cloudfront.net', 'https://d1w3p997s8acw6.cloudfront.net'],
 
@@ -878,8 +917,11 @@ var LumeSource = {
     var settings = argument || {};
     var id = String(settings.chapterId || settings.id || '').trim();
     if (!id) throw new Error('缺少视频 id');
-    var base = await pickBase(false);
-    var jwt = await ensureToken(base, false);
+    var ticket = await withBase(async function (base) {
+      return { base: base, jwt: await ensureToken(base, false) };
+    });
+    var base = ticket.base;
+    var jwt = ticket.jwt;
 
     var source = '';
     try {

@@ -901,7 +901,7 @@
     {
       "id": "s618_video",
       "name": "618影院",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/618影院.js",
@@ -973,7 +973,7 @@
     {
       "id": "jiuxse_video",
       "name": "9sex 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/9sex.js",
@@ -1057,7 +1057,7 @@
     {
       "id": "cf2_video",
       "name": "Butterfly 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/Butterfly.js",
@@ -1345,7 +1345,7 @@
     {
       "id": "twitthub_video",
       "name": "TwittHub",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/TwittHub-2.js",
@@ -1741,7 +1741,7 @@
     {
       "id": "yuese_video",
       "name": "月色视频 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/月色视频.js",
@@ -1753,7 +1753,7 @@
     {
       "id": "sex8_video",
       "name": "杏吧",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/杏吧.js",
@@ -1789,7 +1789,7 @@
     {
       "id": "tangtoutiao_video",
       "name": "汤头条 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/汤头条.js",
@@ -1849,7 +1849,7 @@
     {
       "id": "aido8_video",
       "name": "爱豆 18+",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
       "path": "video/爱豆.js",

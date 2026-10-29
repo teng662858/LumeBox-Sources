@@ -1,4 +1,4 @@
-// LumeSource: {"id":"yuese_video","name":"月色视频 18+","version":"1.0.0","category":"video","mirrors":["https://ys.ph3ywdns.icu"]}
+// LumeSource: {"id":"yuese_video","name":"月色视频 18+","version":"1.0.1","category":"video","mirrors":["https://ys.ph3ywdns.icu"]}
 //
 // 站点：https://ys.ph3ywdns.icu （<title>月色视频</title>）
 // 2026-10-25 实测；**本站直连 200，不需要代理**（本机 7890 代理也能用，脚本不硬编码任何代理）。
@@ -61,9 +61,10 @@
 //
 // ── 四、封面（务必知道）
 //    封面/截图都是 `*.jpg.aes`：CDN 上就是 **AES 密文**（前 16 字节当 IV，key="yuese!niubia!666"，
-//    解开才是 ffd8ffe0 的 JPEG —— App 自己的 AesImageCache 就是本地这么解的）。
-//    App 的图片管线只会原样拉 URL，拿到密文 ⇒ 列表/详情会显示占位图。这是站点侧限制（脚本没有
-//    在图片管线里做解密的能力），本源如实返回原始加密地址，不假造图片。
+//    正文 AES-128-CBC/PKCS7，解开才是 ffd8ffe0 的 JPEG）。
+//    本源把「编码方式 + key + 文件头 IV」写进每条封面的 coverHeaders
+//    （`x-lume-image-encoding: aes-cbc-pkcs7-ivprefix`），由 App 图片管线用原生 AES 逐张解；
+//    列表层不跑纯 JS 解密，不会撞沙箱预算。
 //
 // ── 五、分类 / 标签（含涉未成年过滤）
 //    分类 79 个、标签 422 个，全部实时抓（不写死）。**涉未成年的分类/标签直接过滤掉**（见 MINOR_BLOCKLIST）：
@@ -89,6 +90,17 @@ var UA =
 
 // 涉未成年的分类 / 标签一律不接（命中就过滤，见头部「五」）
 var MINOR_BLOCKLIST = /萝莉|萝li|幼女|幼齿|幼交|未成年|正太|儿童|童颜|小学生|初中|高中|学生|校园|少女|少年|女童|男童/i;
+
+// 封面是 `*.jpg.aes`：**前 16 字节是 IV**，正文 AES-128-CBC/PKCS7，
+// key 固定（站点前端就是本地这么解的）。参数随 coverHeaders 交给 App 原生解密。
+var COVER_KEY = 'yuese!niubia!666';
+var COVER_HEADERS = {
+  'x-lume-image-encoding': 'aes-cbc-pkcs7-ivprefix',
+  'x-lume-image-key': COVER_KEY
+};
+function coverHeadersOf(url) {
+  return /\.aes($|[?#])/i.test(String(url || '')) ? COVER_HEADERS : {};
+}
 
 var SORT_OPTIONS = [
   { id: 'post_date', title: '最新' },
@@ -547,6 +559,7 @@ function itemOf(row) {
     id: String(row.video_id),
     title: text(row.title) || String(row.video_id),
     cover: String(row.video_img || ''),
+    coverHeaders: coverHeadersOf(row.video_img),
     subtitle: bits.join(' · ')
   };
 }
@@ -604,7 +617,7 @@ async function fetchTags(limit) {
 var LumeSource = {
   id: 'yuese_video',
   name: '月色视频 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://ys.ph3ywdns.icu'],
 
@@ -747,6 +760,7 @@ var LumeSource = {
       id: String(info.video_id),
       title: title,
       cover: String(info.video_img || ''),
+      coverHeaders: coverHeadersOf(info.video_img),
       subtitle: bits.join(' · '),
       description: lines.join('\n')
     };

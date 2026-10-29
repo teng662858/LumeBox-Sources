@@ -1,4 +1,4 @@
-// LumeSource: {"id":"tangtoutiao_video","name":"汤头条 18+","version":"1.0.0","category":"video","mirrors":["https://p1.wgbqoiqv.com","https://p2.wgbqoiqv.com","https://p3.wgbqoiqv.com"]}
+// LumeSource: {"id":"tangtoutiao_video","name":"汤头条 18+","version":"1.0.1","category":"video","mirrors":["https://p1.wgbqoiqv.com","https://p2.wgbqoiqv.com","https://p3.wgbqoiqv.com"]}
 //
 // 站点：汤头条（<title> 就是「汤头条」）——Nuxt 3 PWA（SSR 关掉：`<script id="__NUXT_DATA__">` 里
 // `serverRendered:false`，页面 HTML 只有一个 loading 骨架），数据全走自己的接口。2026-10-25 实测。
@@ -99,6 +99,14 @@ var UA =
 var PAGE_SIZE = 10; // /api/MvList/featured 实测每页 10 条
 var SEARCH_PAGE_SIZE = 20;
 var BANNED_WORDS = ['萝莉', '幼齿', '幼女', '未成年', '小学生', '中学生', '高中生', '学生', '校服', '童颜', '女童'];
+// 封面在 CDN 上是 AES-128-CBC/NoPadding 密文（站点 cropto-worker 用这对
+// key/iv 解成 WebP/JPEG 再 createObjectURL）。把参数放进 coverHeaders，
+// 由 App 图片管线用原生 AES 解，列表层不逐张跑纯 JS 解密。
+var COVER_HEADERS = {
+  'x-lume-image-encoding': 'aes-cbc-nopadding',
+  'x-lume-image-key': 'f5d965df75336270',
+  'x-lume-image-iv': '97b60394abc2fbe1'
+};
 // 付费条目的 source_* 统一指向这个占位路径（实测只有 1 段 / 2 秒），不能当正片
 var LOCKED_MARK = 'e7b72da296acb31bbaa0869dc1eaae5a';
 
@@ -576,6 +584,7 @@ function itemOf(row) {
     id: String(row.id),
     title: clean(row.title) || String(row.id),
     cover: coverOf(row.thumb_cover || row.thumb_cover_str),
+    coverHeaders: COVER_HEADERS,
     subtitle: bits.join(' · ')
   };
 }
@@ -633,7 +642,7 @@ async function tabOf(categoryId) {
 var LumeSource = {
   id: 'tangtoutiao_video',
   name: '汤头条 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   mirrors: ['https://p1.wgbqoiqv.com', 'https://p2.wgbqoiqv.com', 'https://p3.wgbqoiqv.com'],
 
@@ -727,6 +736,7 @@ var LumeSource = {
       id: String(row.id),
       title: clean(row.title) || String(row.id),
       cover: coverOf(row.thumb_cover || row.thumb_cover_str),
+      coverHeaders: COVER_HEADERS,
       subtitle: bits.join(' · '),
       description: description.join('\n')
     };
