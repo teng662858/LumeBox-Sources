@@ -1,4 +1,4 @@
-// LumeSource: {"id":"d9y1w_video","name":"四色视频 18+","version":"1.0.0","category":"video","contentCategory":"adult","mirrors":["https://www.d9y1w.top"],"network":"direct","icon":"https://www.d9y1w.top/favicon.ico"}
+// LumeSource: {"id":"d9y1w_video","name":"四色视频 18+","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://www.d9y1w.top"],"network":"direct","icon":"https://www.d9y1w.top/favicon.ico"}
 //
 // 站点：https://www.d9y1w.top/index/home.html（「maomi」模板成人站，2026-10-29 逐页实测）
 //
@@ -38,6 +38,7 @@ var SITE = 'https://www.d9y1w.top';
 var IMAGE_HOST = 'https://www.0734.la';
 var UA = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Mobile Safari/537.36';
 var PAGE_SIZE = 20;
+var SEARCH_PAGE = 10;
 
 var CHANNELS = { juqing: '剧情', shipin: '视频', jingpin: '精品' };
 var CHANNEL_ORDER = ['juqing', 'shipin', 'jingpin'];
@@ -563,7 +564,7 @@ function listPath(category, page) {
 var LumeSource = {
   id: 'd9y1w_video',
   name: '四色视频 18+',
-  version: '1.0.0',
+  version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
   mirrors: ['https://www.d9y1w.top'],
@@ -649,7 +650,7 @@ var LumeSource = {
       for (var i = 0; i < lists.length; i++) {
         var data = lists[i];
         if (!Array.isArray(data)) continue;
-        if (data.length >= 10) hasMore = true;
+        if (data.length >= SEARCH_PAGE) hasMore = true;
         for (var j = 0; j < data.length; j++) {
           var row = data[j] || {};
           var channel = String(row.channel || CHANNEL_ORDER[i]);
@@ -673,7 +674,7 @@ var LumeSource = {
         }
       }
       await remember(rows);
-      return { items: rows.map(toItem), hasMore: hasMore || rows.length >= PAGE_SIZE };
+      return { items: rows.map(toItem), hasMore: hasMore };
     }
 
     var category = parseCategory(args.categoryId);
