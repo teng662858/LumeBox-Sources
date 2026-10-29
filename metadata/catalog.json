@@ -5,7 +5,7 @@
     "comic": 47,
     "photo": 5,
     "movie": 14,
-    "video": 101,
+    "video": 100,
     "audiobook": 7
   },
   "verification": "Metadata inventory only; not a live cover or playback availability report.",
@@ -1038,18 +1038,6 @@
       "appSection": "video",
       "path": "video/BetaTok.js",
       "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/BetaTok.js",
-      "aliases": [],
-      "rating": "18+",
-      "iconDeclared": false
-    },
-    {
-      "id": "cf2_video",
-      "name": "Butterfly 18+",
-      "version": "1.0.1",
-      "kind": "video",
-      "appSection": "video",
-      "path": "video/Butterfly.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Butterfly.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false

@@ -20,7 +20,6 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/AsianStr
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/ASMR吧.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/AV仓库.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/BetaTok.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Butterfly.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Butterfly2.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Chaturbetter.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/FakeHub.js

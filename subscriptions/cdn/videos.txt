@@ -34,7 +34,6 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/AsianStreetMea
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/ASMR吧.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/AV仓库.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/BetaTok.js
-https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/Butterfly.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/Butterfly2.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/Chaturbetter.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/FakeHub.js

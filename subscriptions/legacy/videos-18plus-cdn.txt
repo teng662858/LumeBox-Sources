@@ -71,5 +71,4 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/海角.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/爱豆.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/汤头条.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/hxc.js
-https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/Butterfly.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/video/Butterfly2.js

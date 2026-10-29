@@ -71,5 +71,4 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/海角.j
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/爱豆.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/汤头条.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/hxc.js
-https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Butterfly.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/Butterfly2.js
