@@ -1384,8 +1384,8 @@
       "version": "1.0.1",
       "kind": "video",
       "appSection": "video",
-      "path": "video/UNCams.js",
-      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/UNCams.js",
+      "path": "video/UNCams-2.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/video/UNCams-2.js",
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
