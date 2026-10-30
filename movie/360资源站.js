@@ -1,4 +1,4 @@
-// LumeSource: {"id": "web-07a5a1a92631", "name": "360资源站", "category": "video", "version": "1.0.1", "mirrors": ["https://360zy.com/"], "mediaType": "video", "contentCategory": "movie"}
+// LumeSource: {"id": "web-07a5a1a92631", "name": "360资源站", "category": "video", "version": "1.0.2", "mirrors": ["https://360zy.com/", "https://360zy.net/", "https://360zy.vip/", "https://360zy.top/", "https://360zy.tv/", "https://360zy1.com/", "https://360zy2.com/", "https://360zy3.com/", "https://360zy4.com/", "https://360zy5.com/"], "mediaType": "video", "contentCategory": "movie", "network": "direct"}
 // LumeRuntime: javascript
 // Bounded HTML tree + a small, portable CSS subset for generated source files.
 // Supports tag, .class, #id, attributes, descendant, child and comma selectors.
@@ -330,7 +330,7 @@ function feedItems(html,base) {
 }
 
 // Standalone LumeBox runtime. No desktop tool or localhost server needed after export.
-var C = {"url": "https://360zy.com/", "id": "web-07a5a1a92631", "name": "360资源站", "category": "video", "mode": "maccms", "api": "https://360zy.com/api.php/provide/vod/", "list": "https://360zy.com/", "search": "https://360zy.com/vodsearch/-------------.html?wd={keyword}", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "version": "1.0.1"};
+var C = {"url": "https://360zy.com/", "id": "web-07a5a1a92631", "name": "360资源站", "category": "video", "mode": "maccms", "api": "https://360zy.com/api.php/provide/vod/", "list": "https://360zy.com/", "search": "https://360zy.com/vodsearch/-------------.html?wd={keyword}", "links": "", "chapters": "(?:/play/|/vodplay/|/chapter/|/read/|/\\d+/\\d+\\.html)", "contentId": "", "categoryLinks": "/(?:category|categories|catalog|type|genre)/", "filterFormIndex": -1, "filterAction": "", "filterKeys": [], "filterNames": {}, "target": "video", "media": "video", "version": "1.0.2"};
 var knownItems = {};
 var pageLinks = {};
 function remember(rows) {
