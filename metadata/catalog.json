@@ -2,7 +2,7 @@
   "format": "lume.source-catalog",
   "version": 1,
   "counts": {
-    "comic": 47,
+    "comic": 48,
     "photo": 5,
     "movie": 14,
     "video": 116,
@@ -93,6 +93,18 @@
       "aliases": [],
       "rating": "18+",
       "iconDeclared": false
+    },
+    {
+      "id": "ho5ho_comic",
+      "name": "ho5ho",
+      "version": "1.0.0",
+      "kind": "comic",
+      "appSection": "comic",
+      "path": "comic/ho5ho.js",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/comic/ho5ho.js",
+      "aliases": [],
+      "rating": "18+",
+      "iconDeclared": true
     },
     {
       "id": "hman8_comic",

@@ -7,6 +7,7 @@ https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/3Hentai.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/90漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/96漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/G社漫画.js
+https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/ho5ho.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/H漫黄漫天堂.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/JComic漫画.js
 https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/comic/K漫画.js
