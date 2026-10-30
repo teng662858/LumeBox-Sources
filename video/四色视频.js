@@ -1,41 +1,54 @@
-// LumeSource: {"id":"d9y1w_video","name":"四色视频 18+","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://www.d9y1w.top"],"network":"direct","icon":"https://www.d9y1w.top/favicon.ico"}
+// LumeSource: {"id":"d9y1w_video","name":"四色视频 18+","version":"1.0.2","category":"video","contentCategory":"adult","mirrors":["https://www.z8f0q.top","https://www.zie2.com"],"network":"direct","icon":"https://www.z8f0q.top/favicon.ico"}
 //
-// 站点：https://www.d9y1w.top/index/home.html（「maomi」模板成人站，2026-10-29 逐页实测）
+// 站点：https://www.z8f0q.top/index/home.html（「maomi」模板成人站，2026-10-30 逐页实测）
+//
+// ── 〇、域名与镜像
+//    主站 www.z8f0q.top（裸域 z8f0q.top 被污染成 127.0.1.1，只能走 www）。
+//    旧域 www.d9y1w.top 已整站下线（DNS 打成 127.0.1.1），不再可用。
+//    镜像 www.zie2.com 是站点 /help/help.html 自己公布的 https 主地址，本机 TLS 被劫持连不上，
+//    所以只放进 mirrors 供用户手选，脚本里一律用 LumeSource.config.domain。
 //
 // ── 一、页面形态（都不是 JSON 接口）
 //    首页   GET /index/home.html → 三个横滑板块（最新剧情 / 最新电影 / 最新精选），每块 10 张卡
 //    分类   GET /{juqing|shipin|jingpin}/lists.html?page=N（全部）
 //           GET /{juqing|shipin|jingpin}/list-<标签>.html?page=N（麻豆传媒 / 日系 AV / onlyfans …）
 //           分类来自首页顶部的菜单：`<a data-link="<AES>" ...><span class="…dec-ti" title="<AES>">`
+//           （2026-10-30 起 data-link 由明文 `/cYc…` 改成了 AES 密文，解开后仍是 `/cYc…`）
 //    搜索   GET /search/{juqing|shipin|jingpin}-<关键词>-<页码>.html → JSON 数组（10 条/页）
 //           {id, title:<AES>, thumb, tags:<AES>, channel, insert_time}
 //    详情   GET /{channel}/play-<id>.html —— 只有一个 <title>（AES）与两条线路，
 //           **没有简介、没有封面**（封面靠列表带出来缓存）
 //    播放   play 页内联 `var video = decodeString('<base64>')`（m3u8 相对路径）与
 //           `m3u8_host / m3u8_host1 = decodeString('<base64>')`；
-//           实测 road=1 的 www.0734.la 正常（m3u8 200 + AES-128 key + 分片 200），
-//           road=2 的 s5.sanheyiliao.xyz 已 NXDOMAIN，只作备用。
+//           2026-10-30 实测：站点给的 m3u8_host（www.0734.la）已经连不上，
+//           m3u8_host1（s5.sanheyiliao.xyz）NXDOMAIN，两条官方线路全废；
+//           同一批文件在 s4.dt188.site 上 m3u8 200 + key 200 + 分片 206，所以用内置媒体域名兜底。
 //
 // ── 二、两套编码（站点自己的 JS）
 //    decodeString(x)        = base64 → UTF-8 明文（m3u8 路径 / 线路域名 / 链接里的中文）
-//    Decrypt(x, "883346")   = AES-256-CBC / PKCS7（key、iv 写在 /assets/js/common/encrypt.js）
+//    Decrypt(x, "883346")   = AES-256-CBC / PKCS7（key、iv 写在 /assets/js/common/encrypt.js，
+//                             2026-10-30 起文件里改成 base64 包了一层，解出来还是同一对 key/iv）
 //    卡片链接               = `/cYc` + base64(明文路径) + `.html`（有的保留 `%3D%3D` 补齐，有的没有）
+//    菜单链接               = AES(同上「卡片链接」整串)，即多了一层，先 AES 再 base64
 //    纯明文路径（/juqing/play-438649.html、/juqing/list-麻豆传媒.html）直接可访问，
-//    所以本源只解不拼：卡片/菜单链接先 base64 还原，再按明文路径取页。
+//    所以本源只解不拼：卡片/菜单链接先还原，再按明文路径取页。
 //
 // ── 三、封面
 //    卡片封面是 `data-base64="/videos/…/poster2.jpg"`，站点自己经
 //    `fetchBase64Img(…, 'https://base4s.0827.la/')` 取回一段 `data:image/jpg;base64,…` 文本。
-//    App 的图片管线不吃「文本 body」，但**同一个路径在媒体 CDN（www.0734.la / s4.dt188.site）
+//    App 的图片管线不吃「文本 body」，但**同一个路径在媒体 CDN（s4.dt188.site）
 //    上就是真 JPEG**（实测 poster/poster2 全部 200 image/jpeg），所以封面直接用媒体域名拼。
-//    媒体域名从 play 页的 m3u8_host 现取并缓存，站点换 CDN 时封面自动跟着换。
+//    媒体域名优先用播放时探活成功的那台（缓存 6 小时），站点换 CDN 时封面自动跟着换。
 //
 // ── 四、成人向
 //    全站 18+；tupian（图集）/ meinv / xiaoshuo（小说）/ yousheng（有声）与赌博外链一律不做，
 //    只做三个视频频道。
 
-var SITE = 'https://www.d9y1w.top';
-var IMAGE_HOST = 'https://www.0734.la';
+var SITE = 'https://www.z8f0q.top';
+// 媒体 CDN：s4.dt188.site 是本机实测唯一「m3u8 / 分片 / 封面 JPEG 全 200」的一台，
+// 站点 play 页写死的老域名（www.0734.la）已经连不上，留作最后兜底。
+var IMAGE_HOST = 'https://s4.dt188.site';
+var MEDIA_HOSTS = ['https://s4.dt188.site', 'https://www.0734.la'];
 var UA = 'Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Mobile Safari/537.36';
 var PAGE_SIZE = 20;
 var SEARCH_PAGE = 10;
@@ -299,14 +312,18 @@ function decodeEntities(text) {
 }
 
 // 站点的 Decrypt()：AES-256-CBC + PKCS7；解不开就返回空串（调用方决定怎么兜底）
-function decTitle(cipher) {
+function decRaw(cipher) {
   var text = String(cipher == null ? '' : cipher).replace(/\\\//g, '/').trim();
   if (!text) return '';
   try {
-    return clean(aes256CbcDecrypt(text, TITLE_KEY, TITLE_IV));
+    return aes256CbcDecrypt(text, TITLE_KEY, TITLE_IV);
   } catch (error) {
     return '';
   }
+}
+
+function decTitle(cipher) {
+  return clean(decRaw(cipher));
 }
 
 // `/cYc<base64>.html` → 明文路径；广告跳转与站外链接返回空串
@@ -333,6 +350,16 @@ function decodeLink(href) {
     }
   }
   return '';
+}
+
+// 菜单/同行链接有两种形态：老的明文 `/cYc…`，新的 AES 密文（解出来还是 `/cYc…`）。
+// 认不出的一律返回空串，让调用方跳过，别把密文当路径去请求。
+function resolveLink(raw) {
+  var text = String(raw == null ? '' : raw).trim();
+  if (!text) return '';
+  if (text.charAt(0) === '/' || /^https?:\/\//i.test(text)) return decodeLink(text);
+  var plain = decRaw(text);
+  return plain ? decodeLink(plain) : '';
 }
 
 /* ══════════════════════════════════════ 宿主 / 网络 ══════════════════════════════════════ */
@@ -408,11 +435,12 @@ async function recall(id) {
   return (cached && cached.map && cached.map[id]) || null;
 }
 
-// 媒体 CDN 域名随站点轮换：play 页给的 m3u8_host 就是它，存下来给封面用
+// 媒体 CDN 域名随站点轮换：播放时探活成功的那台存下来给封面用；超过 7 天不用就当过期
 async function mediaHost() {
   var cached = await readJson('media.json');
   var host = cached && cached.host ? String(cached.host) : '';
   if (!host) return IMAGE_HOST;
+  if (Date.now() - Number(cached.at || 0) > 7 * 24 * 3600 * 1000) return IMAGE_HOST;
   return host.replace(/\/+$/, '') || IMAGE_HOST;
 }
 
@@ -515,7 +543,6 @@ async function playInfo(id) {
     var second = b64Text(backup[1]).replace(/\/+$/, '');
     if (second && hosts.indexOf(second) < 0) hosts.push(second);
   }
-  if (!hosts.length) hosts.push(IMAGE_HOST);
 
   var titleTag = /class="play-title"[\s\S]{0,240}?title="([^"]{8,})"/.exec(html);
   var channelTag = /data-channel="([a-z]+)"\s+data-tags="([^"]*)"/.exec(html);
@@ -528,8 +555,30 @@ async function playInfo(id) {
     tag: channelTag ? decTitle(channelTag[2]) : '',
   };
   await writeJson(cacheFile, info);
-  if (hosts[0] && hosts[0] !== IMAGE_HOST) await setMediaHost(hosts[0]);
   return info;
+}
+
+// 播放候选主机：记住的那台（真机验证过）→ 站点给的线路 → 内置媒体 CDN。
+// 站点两条线路都换过域名/挂掉过，所以不信任任何单一来源，按顺序探活取第一个能用的。
+async function playCandidates(info, lineIndex) {
+  var out = [];
+  function push(url) {
+    var text = String(url || '').trim().replace(/\/+$/, '');
+    if (!text || out.indexOf(text) >= 0) return;
+    out.push(text);
+  }
+  var cached = await readJson('media.json');
+  var remembered = cached && cached.host && Date.now() - Number(cached.at || 0) < 6 * 3600 * 1000
+    ? String(cached.host).replace(/\/+$/, '')
+    : '';
+  // 用户明确点了「线路二」就先把站点给的那条排前面
+  if (lineIndex > 0 && info.hosts[lineIndex]) push(info.hosts[lineIndex]);
+  push(remembered);
+  // 站点给的两条线路（www.0734.la / s5.sanheyiliao.xyz）当前都不可用，
+  // 内置 CDN 排它们前面，冷启动只要探一次；内置那台失效时再往下走到站点线路。
+  for (var j = 0; j < MEDIA_HOSTS.length; j++) push(MEDIA_HOSTS[j]);
+  for (var i = 0; i < info.hosts.length; i++) push(info.hosts[i]);
+  return { list: out, remembered: remembered };
 }
 
 function splitId(id) {
@@ -564,10 +613,10 @@ function listPath(category, page) {
 var LumeSource = {
   id: 'd9y1w_video',
   name: '四色视频 18+',
-  version: '1.0.1',
+  version: '1.0.2',
   category: 'video',
   contentCategory: 'adult',
-  mirrors: ['https://www.d9y1w.top'],
+  mirrors: ['https://www.z8f0q.top', 'https://www.zie2.com'],
 
   async categories() {
     var cached = await readJson('categories.json');
@@ -585,7 +634,7 @@ var LumeSource = {
       var pattern = /<a data-link="([^"]+)"[\s\S]{0,400}?<span class="menu-desktop-content-item dec-ti" title="([^"]+)"/g;
       var matched;
       while ((matched = pattern.exec(html)) !== null) {
-        var path = decodeLink(matched[1]);
+        var path = resolveLink(matched[1]);
         var parsed = /^\/([a-z]+)\/list-(.+)\.html$/.exec(path);
         if (!parsed) continue;
         var channel = parsed[1];
@@ -616,7 +665,7 @@ var LumeSource = {
       var nameTag = /<span>([\s\S]*?)<\/span>/.exec(head);
       var title = nameTag ? clean(decodeEntities(nameTag[1])) : '';
       var moreTag = /<a href="([^"]+)"/.exec(head);
-      var morePath = moreTag ? decodeLink(moreTag[1]) : '';
+      var morePath = moreTag ? resolveLink(moreTag[1]) : '';
       var moreParsed = /^\/([a-z]+)\/list(s)?\.html$/.exec(morePath);
       var moreUrl = moreParsed && CHANNELS[moreParsed[1]] ? moreParsed[1] + ':' : '';
       var items = await parseCards(chunk, host);
@@ -704,7 +753,7 @@ var LumeSource = {
     var tag = (info && info.tag) || (cached && cached.tag) || '';
     var lines = ['分类：' + channelName + (tag ? ' · ' + tag : '')];
     if (cached && cached.subtitle) lines.push('收录：' + cached.subtitle);
-    lines.push('来源：四色视频（d9y1w.top），单集视频，提供两条线路。');
+    lines.push('来源：四色视频（z8f0q.top），单集视频，提供两条线路。');
     return {
       id: id,
       title: title,
@@ -730,22 +779,33 @@ var LumeSource = {
     var index = Number(chapterId.replace(/[^0-9]/g, '')) - 1;
     if (!(index >= 0 && index < info.hosts.length)) index = 0;
     var headers = { 'User-Agent': UA, Referer: base() + '/' };
-    var host = info.hosts[index];
 
-    // 线路一（m3u8_host）是站点当前主用的 CDN，直接交出去，不再多花一次探测；
-    // 备用线路（m3u8_host1）历史上挂过（s5.sanheyiliao.xyz 已 NXDOMAIN），先探一次，
-    // 探不通就退回线路一——用户点「线路二」也不会拿到一个死地址。
-    if (index > 0) {
+    // 站点 play 页给的两条 m3u8_host 都换过域名（www.0734.la 连不上、s5.sanheyiliao.xyz NXDOMAIN），
+    // 所以按「记住的 → 站点线路 → 内置 CDN」顺序探活，第一个出 #EXTM3U 的胜出并记住；
+    // 已经在 6 小时内验证过的那台不重复探，省一次请求。
+    var picked = await playCandidates(info, index);
+    var candidates = picked.list;
+    var host = '';
+    for (var i = 0; i < candidates.length; i++) {
+      var candidate = candidates[i];
+      if (candidate === picked.remembered) {
+        host = candidate;
+        break;
+      }
       var ok = false;
       try {
-        var probe = await LumeSource.http.get(host + info.video, { headers: headers });
+        var probe = await LumeSource.http.get(candidate + info.video, { headers: headers });
         var body = probe && probe.body ? String(probe.body) : '';
         ok = probe && probe.status === 200 && body.indexOf('#EXTM3U') >= 0;
       } catch (error) {
         ok = false;
       }
-      if (!ok) host = info.hosts[0];
+      if (ok) {
+        host = candidate;
+        break;
+      }
     }
+    if (!host) throw new Error('所有播放线路都探不通（站点又换 CDN 了？）');
     await setMediaHost(host);
     return { kind: 'video', url: host + info.video, headers: headers };
   },
