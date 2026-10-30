@@ -1,4 +1,4 @@
-// LumeSource: {"id":"cf3_video","name":"Butterfly 2 18+","version":"1.0.1","category":"video","mirrors":["https://d17rhkrwip15vt.cloudfront.net","https://32sdhsudan.com","https://d32wxxub5gb7wa.cloudfront.net"]}
+// LumeSource: {"id":"cf3_video","name":"Butterfly 2 18+","version":"1.0.2","category":"video","mirrors":["https://d17rhkrwip15vt.cloudfront.net","https://32sdhsudan.com","https://d32wxxub5gb7wa.cloudfront.net"]}
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 一、d17rhkrwip15vt / d1q6v0m0fmxvl0 / d1nu1x3tadacmt —— 同一个 SDK，三个运营方
@@ -54,7 +54,11 @@
 //     所以本源只用站内代理地址，不给直连。
 //   · VIP：公开内容不锁；收银台（/vip/product、/mine/topay）仍在。没看到试看截断，
 //     分片总量与 /vid/info 的时长/体积相符。
-//   · 封面：cf230705/image/… 相对路径，拼 https://zzzznnn.lkkwip.cn/ 实测 200。
+//   · 封面：cf230705/image/… 相对路径，拼 https://zzzznnn.lkkwip.cn/ 回 200，
+//     但**字节是混淆过的**：站点前端 AppApi.imgDecypt 把图片前 100 字节与 Key.imgKey
+//     （2019ysapp7527）循环 XOR 再交给浏览器（main bundle 里 imgEncrypt 原文）——
+//     所以直接当图片交给 App 只会得到一张坏图（表现就是列表一片占位图）。
+//     源里用 coverHeaders 声明 `x-lume-image-encoding: xor-prefix` + key，App 侧按同样规则还原。
 //
 // ════════════════════════════════════════════════════════════════════════════
 // 四、分类与内容过滤
@@ -84,6 +88,13 @@ var PAGE_HOSTS = [
 var INTERFACE_KEY = 'vEukA&w15z4VAD3kAY#fkL#rBnU!WDhN';
 var PARAM_KEY = 'BxJand%xf5h3sycH';
 var IMAGE_HOST = 'https://zzzznnn.lkkwip.cn';
+// 站点把每张图的前 100 字节和 imgKey 循环 XOR 了（main bundle: imgEncrypt），
+// App 图片管线按这个声明还原；明文图（万一以后不再混淆）会被自动跳过。
+var IMG_KEY = '2019ysapp7527';
+var COVER_HEADERS = {
+  'x-lume-image-encoding': 'xor-prefix',
+  'x-lume-image-key': IMG_KEY
+};
 var PAGE_SIZE = 15;
 var DEVICE_ID = 'a1b2c3d4e5f64a1b9c8d7e6f5a4b3c2d';
 var APP_UA =
@@ -732,6 +743,7 @@ function itemOf(row) {
     id: String(row.id),
     title: String(row.title || row.id),
     cover: absoluteImage(row.cover || row.coverThumb || ''),
+    coverHeaders: COVER_HEADERS,
     subtitle: parts.join(' · ')
   };
 }
@@ -785,7 +797,7 @@ async function fetchModule(page, moduleId) {
 var LumeSource = {
   id: 'cf3_video',
   name: 'Butterfly 2 18+',
-  version: '1.0.1',
+  version: '1.0.2',
   category: 'video',
   mirrors: ['https://d17rhkrwip15vt.cloudfront.net', 'https://32sdhsudan.com', 'https://d32wxxub5gb7wa.cloudfront.net'],
 
@@ -912,6 +924,7 @@ var LumeSource = {
       id: String(data.id),
       title: String(data.title || id),
       cover: absoluteImage(data.cover || data.coverThumb || ''),
+      coverHeaders: COVER_HEADERS,
       subtitle: [tags.slice(0, 2).join('·'), coins > 0 ? coins + ' 金币' : '免费', data.resolution ? String(data.resolution).replace('*', '×') : '']
         .filter(Boolean)
         .join(' · '),

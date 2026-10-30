@@ -1069,7 +1069,7 @@
     {
       "id": "cf3_video",
       "name": "Butterfly 2 18+",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "kind": "video",
       "appSection": "video",
       "path": "video/Butterfly2.js",

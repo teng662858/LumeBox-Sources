@@ -1,15 +1,15 @@
-﻿// LumeSource: {"id":"kkav_video","name":"KKAV","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://www.92squr.com"],"network":"proxy","icon":"https://www.92squr.com/static/favicon.ico"}
+// LumeSource: {"id":"kkav_video","name":"KKAV","version":"1.0.1","category":"video","contentCategory":"adult","mirrors":["https://www.85fazc.com"],"network":"direct","icon":"https://www.85fazc.com/static/favicon.ico"}
 // LumeRuntime: javascript
 //
-// 站点：KKAV（https://www.73tfhk.com，原 37tmrj 的换域名目标；成人视频站，全站 18+）
+// 站点：KKAV（https://www.85fazc.com，原 37tmrj → 73tfhk → 85fazc；成人视频站，全站 18+）
 //
-// 一、域名沿革
-//   www.37tmrj.com / www.24nbfp.com / ttss66.com（"永久官网"）现在都只是一张「换域名」页，
-//   页内 url2 名单里只剩一个域名：73tfhk.com → 于是本站主站 = https://www.73tfhk.com，
-//   暂时没有别的镜像（跳板页名单就这一条，等它再出镜像时补进 mirrors 即可）。
-//   【2026-10-29 更新】73tfhk.com 也变成同一张换域名页，url2 现在只剩 92squr.com，
-//   所以主站改为 https://www.92squr.com（1.0.1）；老域名的 /api/* 一律回落到换域名 HTML，
-//   App 侧表现就是「接口打不开：HTTP 406」或 body 不是 JSON。
+// 一、域名沿革（每次换域都先从旧域的跳板页里读出来）
+//   www.37tmrj.com / www.24nbfp.com / ttss66.com（"永久官网"）都只是一张「换域名」页，
+//   页内 url2 名单给下一站。2026-10 的链条：73tfhk.com → 85fazc.com，
+//   www.73tfhk.com 现在**只回那张跳板页**（/api/* 也回同一张 HTML），所以主站已换到 85fazc。
+//   跳板页名单里就一条，暂时没有别的镜像（等它再出镜像时补进 mirrors）。
+//   ⚠ 站点**只收 https**：http:// 的 /api/* 直接 406（App 里「接口打不开：HTTP 406」就是这么来的），
+//   所以 base() 会把用户填的 http 域强制升到 https。
 //
 // 二、接口全部是 XOR2 加密（这就是旧源"渲染后没认出卡片"的原因）
 //   响应形如 {"enc":3,"alg":"XOR2","n":"<11 位随机>","d":"<base64url 密文>"}，
@@ -26,10 +26,10 @@
 //   GET /api/movie/list?page=1&pageSize=20[&tagid=][&tagCateChildId=][&keyword=]
 //        → {code:0, data:[{movieid, Topic, smallpic, h264mp4url, formatted_timesize, …}], total}
 //   列表项**自带 h264mp4url**，其中 down.baidu.com 这个域名在本机被 RST，
-//   换成 down.mm7878.com **并保留 /data/ 前缀** → 206 video/mp4（源里自动改写，2026-10-29 修正路径剥离 bug）。
+//   换配置里的 down 域 down.mm7878.com 同一路径 → 206 video/mp4（源里自动改写）。
 // 18+
 
-var BASE_URL = 'https://www.92squr.com';
+var BASE_URL = 'https://www.85fazc.com';
 var UA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
 var PAGE_SIZE = 20;
 var DEFAULT_KEY = 'Mumu2026#';
@@ -40,7 +40,9 @@ var NAV_TTL_MS = 6 * 3600 * 1000;
 
 function base() {
   var domain = LumeSource.config && LumeSource.config.domain ? LumeSource.config.domain : '';
-  return (domain || BASE_URL).replace(/\/+$/, '');
+  var text = String(domain || BASE_URL).replace(/\/+$/, '');
+  // 站点只收 https：http:// 的 /api/* 一律 406（用户手填域名 / 旧订阅里常有 http）
+  return /^http:\/\//i.test(text) ? 'https://' + text.substring(7) : text;
 }
 
 function readJson(file) {
@@ -205,8 +207,8 @@ async function call(path) {
 function playUrl(item) {
   var url = String((item && (item.h264mp4url || item.mp4url || item.m3u8url)) || '');
   if (!url) return '';
-  // down.baidu.com 这个域名在本机被 RST；只换主机名、保留完整路径（先去掉了 /data/ 会 404）
-  return url.replace(/^https?:\/\/down\.baidu\.com/i, DOWN_HOST);
+  // down.baidu.com 这个域名在本机被 RST，换同路径的 down 域
+  return url.replace(/^https?:\/\/down\.baidu\.com\//i, DOWN_HOST + '/');
 }
 
 function coverUrl(item) {
@@ -267,7 +269,7 @@ var LumeSource = {
   version: '1.0.1',
   category: 'video',
   contentCategory: 'adult',
-  mirrors: ['https://www.92squr.com'],
+  mirrors: ['https://www.85fazc.com'],
 
   async categories() {
     var list = [{ id: 'all', title: '全部' }];
