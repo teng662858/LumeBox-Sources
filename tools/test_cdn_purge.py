@@ -18,9 +18,10 @@ class CdnPurgeTests(unittest.TestCase):
         self.assertEqual(published_paths([
             'video/41看片.js', 'metadata/catalog.json', 'subscriptions/cdn/video.txt',
             'tools/test.js', '.github/workflows/purge.yml', '../video/private.js',
+            'web/听书合集.html',
             '/video/private.js', 'video\\private.js', 'videos', 'video/41看片.js',
         ], {'videos': 'subscriptions/videos.txt'}), [
-            'metadata/catalog.json', 'subscriptions/cdn/video.txt', 'video/41看片.js', 'videos',
+            'metadata/catalog.json', 'subscriptions/cdn/video.txt', 'video/41看片.js', 'videos', 'web/听书合集.html',
         ])
 
     def test_chinese_paths_use_utf8_url_encoding(self):

@@ -4,6 +4,7 @@ https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/360资�
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/A123TV.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/北觅影视.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/华视影院.js
+https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/咕噜咕噜.py
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/播剧网.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/欧乐影院.js
 https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/注视影视.js

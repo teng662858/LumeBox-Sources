@@ -4,7 +4,7 @@
   "counts": {
     "comic": 48,
     "photo": 5,
-    "movie": 14,
+    "movie": 15,
     "video": 116,
     "audiobook": 7
   },
@@ -693,6 +693,18 @@
       "aliases": [],
       "rating": "unknown",
       "iconDeclared": true
+    },
+    {
+      "id": "gulu_python_video",
+      "name": "咕噜咕噜",
+      "version": "1.0.1",
+      "kind": "movie",
+      "appSection": "video",
+      "path": "movie/咕噜咕噜.py",
+      "url": "https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/movie/咕噜咕噜.py",
+      "aliases": [],
+      "rating": "unknown",
+      "iconDeclared": false
     },
     {
       "id": "ysxq-boju",

@@ -41,7 +41,7 @@ def normalized_manifest(data):
 
 
 def identity(data):
-    match = re.search(r'^\s*//\s*@?LumeSource\s*[:=]\s*(\{[^\n]+\})',
+    match = re.search(r'^\s*(?://|#)\s*@?LumeSource\s*[:=]\s*(\{[^\n]+\})',
                       data.decode('utf-8-sig'), re.M)
     if not match:
         raise ValueError('Missing source identity header')

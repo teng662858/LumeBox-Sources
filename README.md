@@ -2,7 +2,7 @@
 
 订阅入口统一放在 `subscriptions/`，分类与分级数据放在 `metadata/`。根目录只保留说明和各功能目录。
 
-订阅格式：总入口是 JSON，分类 TXT 文件列出 JS 地址；TXT 是清单，不是 Python 或旧版脚本。实际源文件仍是 `.js`。
+订阅格式：总入口是 JSON，分类 TXT 文件列出 JS / Python 脚本地址；TXT 本身是地址清单。实际源文件为 `.js` 或 `.py`，由 App 按运行时标记加载。HTML 网页放在 `web/`，需从网页主页导入，不混入脚本订阅。
 
 ## 一次导入
 
@@ -17,11 +17,11 @@
 | --- | ---: | --- | --- |
 | 漫画 | 48 | [订阅](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/comic.txt) | [订阅](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/comic.txt) |
 | 美图 | 5 | [订阅](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/photo.txt) | [订阅](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/photo.txt) |
-| 影视 | 14 | [订阅](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/movie.txt) | [订阅](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/movie.txt) |
+| 影视 | 15 | [订阅](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/movie.txt) | [订阅](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/movie.txt) |
 | 视频与直播 | 116 | [订阅](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/video.txt) | [订阅](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/video.txt) |
 | 有声小说 | 7 | [订阅](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/audiobook.txt) | [订阅](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/audiobook.txt) |
 
-共 **190 个独立源**，同 ID 不重复收录。美图导入 APP 漫画板块，有声导入视频板块。
+共 **191 个独立源**，同 ID 不重复收录。美图导入 APP 漫画板块，有声导入视频板块。
 
 ## 仓库目录
 
@@ -31,6 +31,7 @@
 | `metadata/` | 唯一源目录、18+ 分级与旧地址迁移表 |
 | `comic/`、`photo/` | 漫画、美图源脚本 |
 | `movie/`、`video/`、`audiobook/` | 影视、视频、有声源脚本，分别存放 |
+| `web/` | 可下载导入的 HTML 网页主页（不进入脚本订阅） |
 | `docs/` | 使用与维护说明 |
 | `tools/`、`snapshots/`、`licenses/` | 工具、回归样本、授权 |
 

@@ -24,7 +24,7 @@ import shutil
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SOURCE_DIRS = ('comic', 'photo', 'movie', 'video', 'audiobook')
+SOURCE_DIRS = ('comic', 'photo', 'movie', 'video', 'audiobook', 'web')
 RAW = 'https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/'
 CDN = 'https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/'
 # 总订阅里只保留这几份清单
@@ -72,14 +72,15 @@ def build(base, out, clean=False):
         dst = out / folder
         dst.mkdir(parents=True, exist_ok=True)
         keep = set()
-        for path in sorted(src.glob('*.js')):
+        extensions = ('.html', '.htm') if folder == 'web' else ('.js', '.py')
+        for path in sorted(p for p in src.iterdir() if p.is_file() and p.suffix in extensions):
             # 统一成 LF：Windows 工作区的 CRLF 会让自建线路与 GitHub 线路的字节/md5 不一致。
             data = path.read_bytes().replace(b'\r\n', b'\n')
             (dst / path.name).write_bytes(data)
             keep.add(path.name)
             copied += 1
         # 仓库里删掉的源，自建线路上也不能继续提供旧文件
-        for stale in dst.glob('*.js'):
+        for stale in (p for p in dst.iterdir() if p.is_file() and p.suffix in extensions):
             if stale.name not in keep:
                 try:
                     stale.unlink()

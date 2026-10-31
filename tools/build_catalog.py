@@ -34,9 +34,10 @@ def url(path):
 def read_sources():
     found = {}
     for folder in KINDS:
-        for path in sorted((ROOT / folder).glob('*.js')):
+        scripts = [p for p in (ROOT / folder).glob('*') if p.is_file() and p.suffix in ('.js', '.py')]
+        for path in sorted(scripts):
             text = path.read_text(encoding='utf-8-sig')
-            match = re.search(r'^\s*//\s*@?LumeSource\s*[:=]\s*(\{[^\n]+\})', text, re.M)
+            match = re.search(r'^\s*(?://|#)\s*@?LumeSource\s*[:=]\s*(\{[^\n]+\})', text, re.M)
             if not match:
                 continue  # Legacy manifests with a .js suffix are not adapters.
             meta = json.loads(match[1])
@@ -147,7 +148,7 @@ def build():
         text = '\n'.join(line for line in text.splitlines() if not (line.startswith(RAW) and line.endswith('.js') and not (ROOT / urllib.parse.unquote(line[len(RAW):])).is_file())) + '\n'
         out['subscriptions/legacy/' + name + '.txt'] = text
         out['subscriptions/legacy/' + name + '-cdn.txt'] = text.replace(RAW, CDN)
-    out['README.md'] = '# LumeBox 源仓库\n\n订阅入口统一放在 `subscriptions/`，分类与分级数据放在 `metadata/`。根目录只保留说明和各功能目录。\n\n订阅格式：总入口是 JSON，分类 TXT 文件列出 JS 地址；TXT 是清单，不是 Python 或旧版脚本。实际源文件仍是 `.js`。\n\n## 一次导入\n\n- [国内 CDN 线路](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/all.json)\n- [GitHub 原站线路](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/all.json)\n\n在 APP 的“总订阅导入导出”中选择线路或粘贴链接。国内 CDN 线路的清单和脚本都走 CDN；能否直连取决于当前网络，更新可能有 CDN 缓存延迟。两条线路内容相同，选择一条即可。\n\n## 按需分类\n\n| 分类 | 独立源数 | 原站 | 国内 CDN |\n| --- | ---: | --- | --- |\n' + ''.join(f"| {KINDS[kind]} | {len(groups[kind])} | [订阅]({RAW}subscriptions/{kind}.txt) | [订阅]({CDN}subscriptions/cdn/{kind}.txt) |\n" for kind in KINDS) + f"\n共 **{len(rows)} 个独立源**，同 ID 不重复收录。美图导入 APP 漫画板块，有声导入视频板块。\n" + '\n## 仓库目录\n\n| 目录 | 内容 |\n| --- | --- |\n| `subscriptions/` | 所有订阅入口；`cdn/` 是国内 CDN 线路；`legacy/` 为迁移用旧子集 |\n| `metadata/` | 唯一源目录、18+ 分级与旧地址迁移表 |\n| `comic/`、`photo/` | 漫画、美图源脚本 |\n| `movie/`、`video/`、`audiobook/` | 影视、视频、有声源脚本，分别存放 |\n| `docs/` | 使用与维护说明 |\n| `tools/`、`snapshots/`、`licenses/` | 工具、回归样本、授权 |\n\n[完整源目录](docs/源目录.md) · [地址迁移说明](docs/源分类与兼容地址.md) · [维护说明](docs/README.md)\n\n旧根目录订阅文件已收起，需要配套新版 APP 自动迁移旧地址，或使用上方新入口。18+ 是内容分级；未分级不代表全年龄。目录整理与离线检查不代表所有封面、图标和播放当前可用。\n'
+    out['README.md'] = '# LumeBox 源仓库\n\n订阅入口统一放在 `subscriptions/`，分类与分级数据放在 `metadata/`。根目录只保留说明和各功能目录。\n\n订阅格式：总入口是 JSON，分类 TXT 文件列出 JS / Python 脚本地址；TXT 本身是地址清单。实际源文件为 `.js` 或 `.py`，由 App 按运行时标记加载。HTML 网页放在 `web/`，需从网页主页导入，不混入脚本订阅。\n\n## 一次导入\n\n- [国内 CDN 线路](https://cdn.jsdelivr.net/gh/teng662858/LumeBox-Sources@main/subscriptions/cdn/all.json)\n- [GitHub 原站线路](https://raw.githubusercontent.com/teng662858/LumeBox-Sources/main/subscriptions/all.json)\n\n在 APP 的“总订阅导入导出”中选择线路或粘贴链接。国内 CDN 线路的清单和脚本都走 CDN；能否直连取决于当前网络，更新可能有 CDN 缓存延迟。两条线路内容相同，选择一条即可。\n\n## 按需分类\n\n| 分类 | 独立源数 | 原站 | 国内 CDN |\n| --- | ---: | --- | --- |\n' + ''.join(f"| {KINDS[kind]} | {len(groups[kind])} | [订阅]({RAW}subscriptions/{kind}.txt) | [订阅]({CDN}subscriptions/cdn/{kind}.txt) |\n" for kind in KINDS) + f"\n共 **{len(rows)} 个独立源**，同 ID 不重复收录。美图导入 APP 漫画板块，有声导入视频板块。\n" + '\n## 仓库目录\n\n| 目录 | 内容 |\n| --- | --- |\n| `subscriptions/` | 所有订阅入口；`cdn/` 是国内 CDN 线路；`legacy/` 为迁移用旧子集 |\n| `metadata/` | 唯一源目录、18+ 分级与旧地址迁移表 |\n| `comic/`、`photo/` | 漫画、美图源脚本 |\n| `movie/`、`video/`、`audiobook/` | 影视、视频、有声源脚本，分别存放 |\n| `web/` | 可下载导入的 HTML 网页主页（不进入脚本订阅） |\n| `docs/` | 使用与维护说明 |\n| `tools/`、`snapshots/`、`licenses/` | 工具、回归样本、授权 |\n\n[完整源目录](docs/源目录.md) · [地址迁移说明](docs/源分类与兼容地址.md) · [维护说明](docs/README.md)\n\n旧根目录订阅文件已收起，需要配套新版 APP 自动迁移旧地址，或使用上方新入口。18+ 是内容分级；未分级不代表全年龄。目录整理与离线检查不代表所有封面、图标和播放当前可用。\n'
     directory = '# 源目录\n\n同一 ID 只列一次。[返回入口](../README.md)。分级“未分级”不是全年龄结论；本目录不是实时可用性报告。\n'
     for kind,label in KINDS.items():
         directory += f'\n## {label}（{len(groups[kind])}）\n\n| 源 | 版本 | 分级 |\n| --- | --- | --- |\n'
